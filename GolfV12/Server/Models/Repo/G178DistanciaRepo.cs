@@ -27,7 +27,7 @@ namespace GolfV12.Server.Models.Repo
             if (!string.IsNullOrEmpty(campo)) querry = querry.Where(e
                     => e.Bandera.Campo.Corto.Contains(campo) || e.Bandera.Campo.Nombre.Contains(campo));
             if (!string.IsNullOrEmpty(bandera)) querry = querry.Where(e => e.Bandera.Color.Contains(bandera));
-            if (hoyoN > -1) querry = querry.Where(e => e.Hoyo.Id == hoyoN);
+            if (hoyoN > -1) querry = querry.Where(e => e.Hoyo == hoyoN);
 
             return await querry.ToListAsync();
         }

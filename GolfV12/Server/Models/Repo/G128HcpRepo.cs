@@ -32,7 +32,7 @@ namespace GolfV12.Server.Models.Repo
             if(!string.IsNullOrEmpty(apellido)) querry = querry.Where(e =>
                                                     e.Player.Paterno.Contains(apellido));
             if(!string.IsNullOrEmpty(campo)) querry = querry.Where(e =>
-                                                    e.Campo.Nombre.Contains(campo));
+                                                    e.Bandera.Campo.Nombre.Contains(campo));
             return await querry.ToListAsync();
         }
 
@@ -59,7 +59,6 @@ namespace GolfV12.Server.Models.Repo
                 {
                     res.Player = hcp.Player;
                     res.Fecha = hcp.Fecha;
-                    res.Campo = hcp.Campo;
                     res.Bandera = hcp.Bandera;
                     res.Hcp = hcp.Hcp;
                     res.Estado = hcp.Estado;

@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GolfV12.Server", "GolfV12\Server\GolfV12.Server.csproj", "{9C321713-0D6E-41BD-8623-A37800B5CA51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GolfV12.Server", "GolfV12\Server\GolfV12.Server.csproj", "{9C321713-0D6E-41BD-8623-A37800B5CA51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GolfV12.Client", "GolfV12\Client\GolfV12.Client.csproj", "{E68AF2B2-2386-4707-8EE9-AFE3053E139E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GolfV12.Client", "GolfV12\Client\GolfV12.Client.csproj", "{E68AF2B2-2386-4707-8EE9-AFE3053E139E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GolfV12.Shared", "GolfV12\Shared\GolfV12.Shared.csproj", "{7CD2C3BB-4552-4768-9B0F-BBBB9A01DD1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GolfV12.Shared", "GolfV12\Shared\GolfV12.Shared.csproj", "{7CD2C3BB-4552-4768-9B0F-BBBB9A01DD1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Shared\GolfV12.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\admin\" />
+  </ItemGroup>
+
 </Project>

@@ -24,7 +24,7 @@ namespace GolfV12.Server.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, 
+                return StatusCode(StatusCodes.Status500InternalServerError,
                     "Error al leer la base de datos, buscando campos");
             }
         }
@@ -38,7 +38,7 @@ namespace GolfV12.Server.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, 
+                return StatusCode(StatusCodes.Status500InternalServerError,
                     "Error al leer la base de datos, listado de campos");
             }
         }
@@ -53,7 +53,7 @@ namespace GolfV12.Server.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, 
+                return StatusCode(StatusCodes.Status500InternalServerError,
                     "Error al leer la base de datos, buscando un campo");
             }
         }
@@ -68,7 +68,7 @@ namespace GolfV12.Server.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, 
+                return StatusCode(StatusCodes.Status500InternalServerError,
                     "Error al intentar crear un nuevo campo en la base de datos.");
             }
         }
@@ -77,13 +77,14 @@ namespace GolfV12.Server.Controllers
         {
             try
             {
-                return campo != null ? await _campoIFace.UpdateCampo(campo) : 
+                return campo != null ? await _campoIFace.UpdateCampo(campo) :
                     NotFound($"Campo {campo.Corto} {campo.Nombre} no fue encontrado");
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, 
+                return StatusCode(StatusCodes.Status500InternalServerError,
                     "Error al intentar actualizar la base de datos, del campo");
             }
         }
     }
+}

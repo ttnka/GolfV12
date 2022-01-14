@@ -13,7 +13,6 @@ namespace GolfV12.Shared
         public int Id { get; set; }
         public G120Player Player { get; set; }
         public DateTime Fecha { get; set; }
-        public G170Campo Campo { get; set; }
         public G172Bandera Bandera { get; set; }
         public Decimal Hcp { get; set; }
         public int Estado { get; set; } = 2;

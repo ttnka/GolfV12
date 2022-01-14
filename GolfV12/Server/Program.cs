@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using GolfV12.Server.Models.IFace;
+using GolfV12.Server.Models.Repo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,16 @@ builder.Services.AddIdentityServer()
 
 builder.Services.AddAuthentication()
     .AddIdentityServerJwt();
+
+builder.Services.AddScoped<IG120Player, G120PlayerRepo>();
+builder.Services.AddScoped<IG128Hcp, G128HcpRepo>();
+builder.Services.AddScoped<IG136Foto, G136FotoRepo>();
+builder.Services.AddScoped<IG170Campo, G170campoRepo>();
+builder.Services.AddScoped<IG172Bandera, G172BanderaRepo>();
+builder.Services.AddScoped<IG176Hoyo, G176HoyoRepo>();
+builder.Services.AddScoped<IG178Distancia, G178DistanciaRepo>();
+builder.Services.AddScoped<IG190Bitacora, G190BitacoraRepo>(); 
+builder.Services.AddScoped<IG194Cita, G194CitaRepo>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
