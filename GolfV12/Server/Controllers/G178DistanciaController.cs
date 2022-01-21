@@ -64,7 +64,7 @@ namespace GolfV12.Server.Controllers
             {
                 if (distancia == null) return BadRequest();
                 var newDistancia = await _distanciaIFace.AddDistancia(distancia);
-                return CreatedAtAction(nameof(GetDistancia), new { distancia = distancia.Id }, newDistancia);
+                return CreatedAtAction(nameof(GetDistancia), new { distanciaId = distancia.Id }, newDistancia);
             }
             catch (Exception)
             {

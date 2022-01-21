@@ -64,7 +64,7 @@ namespace GolfV12.Server.Controllers
             {
                 if (campo == null) return BadRequest();
                 var newCampo = await _campoIFace.AddCampo(campo);
-                return CreatedAtAction(nameof(GetCampo), new { campo = campo.Id }, newCampo);
+                return CreatedAtAction(nameof(GetCampo), new { campoId = campo.Id }, newCampo);
             }
             catch (Exception)
             {

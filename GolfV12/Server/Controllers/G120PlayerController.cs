@@ -64,7 +64,7 @@ namespace GolfV12.Server.Controllers
             {
                 if (player == null) return BadRequest();
                 var newPlayer = await _playerIFace.AddPlayer(player);
-                return CreatedAtAction(nameof(GetPlayer), new { player = player.Id }, newPlayer);
+                return CreatedAtAction(nameof(GetPlayer), new { playerId = player.Id }, newPlayer);
             }
             catch (Exception)
             {

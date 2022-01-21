@@ -1,0 +1,47 @@
+﻿@page "/admin/player"
+
+
+@inherits PlayerBase
+@using GolfV12.Shared
+
+<h3>Listado de Jugadores</h3>
+@if (LosJugadores == null)
+{
+    <div class="spinner"></div>
+} else
+{
+    
+<RadzenButton Click=@(args => OnClick(0)) 
+            Text="Nuevo Juegador" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
+
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" PageSize="50" AllowPaging="true" AllowSorting="true" 
+        Data="@LosJugadores" TItem="G120Player" LogicalFilterOperator="LogicalFilterOperator.Or">
+        <Columns>
+            <RadzenDataGridColumn TItem="G120Player" Property="Id" Title="Id" Width="50px" />
+            <RadzenDataGridColumn TItem="G120Player" Title="Nombre">
+                <Template Context="datos">
+                    @datos.Nombre &nbsp;
+                    @if (!string.IsNullOrEmpty(datos.Apodo)) { <label>"@datos.Apodo" &nbsp; </label> } 
+                    @datos.Paterno &nbsp;
+                    @datos.Materno
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G120Player" Property="Bday" Title="Bday" FormatString="{0:d}">
+                
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G120Player" Property="Nivel" Title="Nivel" />
+            <RadzenDataGridColumn TItem="G120Player" Property="Organizacion" Title="Organizacion" >
+                <Template Context="org">
+                    
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G120Player"  Title="Editar" >
+                <Template Context="data">
+                    <RadzenLink Icon="edit" Path=@($"/admin/playeredit/{data.Id}") />Editar
+                </Template>
+            </RadzenDataGridColumn>
+            
+        </Columns>
+</RadzenDataGrid>
+    
+}

@@ -46,11 +46,11 @@ namespace GolfV12.Server.Controllers
         }
 
         [HttpGet("{playerid:int}")]
-        public async Task<ActionResult<G128Hcp>> GetHcp(int playerid)
+        public async Task<ActionResult<G128Hcp>> GetHcp(int playerId)
         {
             try
             {
-                var resultado = await _hcpIFace.GetHcp(playerid);
+                var resultado = await _hcpIFace.GetHcp(playerId);
                 return resultado != null ? resultado : NotFound();
             }
             catch (Exception)
@@ -66,7 +66,7 @@ namespace GolfV12.Server.Controllers
             {
                 if (hcp == null) return BadRequest();
                 var newHcp = await _hcpIFace.AddHcp(hcp);
-                return CreatedAtAction(nameof(GetHcp), new { hcp = newHcp.Id }, newHcp);
+                return CreatedAtAction(nameof(GetHcp), new { playerId = newHcp.Id }, newHcp);
             }
             catch (Exception)
             {

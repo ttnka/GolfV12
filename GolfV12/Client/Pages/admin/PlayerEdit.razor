@@ -1,0 +1,22 @@
+﻿@page "/admin/playerEdit/{id:int}"
+
+@inherits PlayerEditBase
+@using GolfV12.Shared;
+
+<h3>Editar Jugador</h3>
+
+@if (ElPlayer == null)
+{
+    <div class="spinner"></div>
+} else
+{
+    <RadzenTemplateForm TItem="G120Player" Data=@ElPlayer>
+        <p>
+    <RadzenLabel Component="Nombre" Text="Nombre" />
+    <RadzenTextBox Name="Nombre" @bind-Value=@ElPlayer.Nombre />
+    <RadzenRequiredValidator Component="Nombre" Text="Nombre del jugador es requerido!" />
+  </p>
+  <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" />
+    </RadzenTemplateForm>
+}
+

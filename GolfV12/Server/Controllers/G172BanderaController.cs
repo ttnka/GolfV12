@@ -62,7 +62,7 @@ namespace GolfV12.Server.Controllers
             {
                 if (bandera == null) return BadRequest();
                 var newBandera = await _banderaIFace.AddBandera(bandera);
-                return CreatedAtAction(nameof(GetBandera), new { bandera = bandera.Id }, newBandera);
+                return CreatedAtAction(nameof(GetBandera), new { banderaId = bandera.Id }, newBandera);
             }
             catch (Exception)
             {

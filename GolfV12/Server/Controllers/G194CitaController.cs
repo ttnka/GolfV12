@@ -16,7 +16,7 @@ namespace GolfV12.Server.Controllers
         }
         [HttpGet("{filtro}")]
         public async Task<ActionResult<IEnumerable<G194Cita>>> Buscar(int creador, string desc, 
-                                                int masterId, DateTime fini, DateTime ffin)
+                                       int masterId, DateTime fini, DateTime ffin)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace GolfV12.Server.Controllers
             {
                 if (cita == null) return BadRequest();
                 var newCita = await _citaIFace.AddCita(cita);
-                return CreatedAtAction(nameof(GetCita), new { cita = cita.Id }, newCita);
+                return CreatedAtAction(nameof(GetCita), new { citaId = cita.Id }, newCita);
             }
             catch (Exception)
             {

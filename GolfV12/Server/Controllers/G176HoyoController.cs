@@ -65,7 +65,7 @@ namespace GolfV12.Server.Controllers
             {
                 if (hoyo == null) return BadRequest();
                 var newHoyo = await _hoyoIFace.AddHoyo(hoyo);
-                return CreatedAtAction(nameof(GetHoyo), new { hoyo = hoyo.Id }, newHoyo);
+                return CreatedAtAction(nameof(GetHoyo), new { hoyoId = hoyo.Id }, newHoyo);
             }
             catch (Exception)
             {

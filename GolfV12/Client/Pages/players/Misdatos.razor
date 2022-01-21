@@ -1,9 +1,86 @@
 ﻿@page "/players/misdatos"
+@using GolfV12.Client.Servicios.IFaceServ;
+@using GolfV12.Shared;
 
 <h3>Mis Datos</h3>
+
+@if(Midata == null)
+{
+    <div class=spinner></div>
+}
+else
+{
+    <RadzenTabs RenderMode="TabRenderMode.Client" @bind-SelectedIndex=@selectedIndex >
+    <Tabs>
+        <RadzenTabsItem Text="Customers">
+            Customers
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Favoritos">
+            Favoritos
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Mis Datos">
+            <EditForm Model="@Midata" OnSubmit="OnSubmit">
+                <div class="form-grup row">
+                    <label for="apodo" class="col-sm-2 col-form-label">Apodo</label>
+                    <div class="col-sm-10">
+                        <InputText @bind-Value="Midata.Apodo" class="form-control"></InputText>
+                    </div>
+                </div>
+                <div class="form-grup row">
+                    <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
+                    <div class="col-sm-10">
+                        <InputText @bind-Value="Midata.Nombre" class="form-control"></InputText>
+                    </div>
+                </div>
+                <div class="form-grup row">
+                    <label for="paterno" class="col-sm-2 col-form-label">Paterno</label>
+                    <div class="col-sm-10">
+                        <InputText @bind-Value="Midata.Paterno" class="form-control"></InputText>
+                    </div>
+                </div>
+                <div class="form-grup row">
+                    <label for="materno" class="col-sm-2 col-form-label">Materno</label>
+                    <div class="col-sm-10">
+                        <InputText @bind-Value="Midata.Materno" class="form-control"></InputText>
+                    </div>
+                </div>
+                
+                
+                <button class="btn btn-primary" type="submit">Actualizar</button>
+            </EditForm>
+        </RadzenTabsItem>
+        <RadzenTabsItem Text="Mi Historia">
+            Order Details
+        </RadzenTabsItem>
+    </Tabs>
+</RadzenTabs>
+
+}
+
 
 
 
 @code {
+    int selectedIndex = 0;
+
+    [Inject]
+    protected IG120PlayerServ playerServ { get; set; }
+    public NavigationManager NM { get; set; }
+
+    protected G120Player Midata { get; set; } 
+
+    protected override async Task OnInitializedAsync()
+    {
+        Midata = await playerServ.GetPlayer(2);
+
+    }
+    protected async Task OnSubmit()
+    {
+        var resultado = await playerServ.UpdatePlayer(Midata);
+        if (resultado != null) 
+        {
+            NM.NavigateTo("/playeres/misdatos", true);
+        }
+    }
 
 }

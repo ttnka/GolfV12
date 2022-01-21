@@ -1,0 +1,47 @@
+﻿@page "/admin/organizacionedit/{id:int}"
+
+@inherits OrganizacionEditBase
+@using GolfV12.Shared;
+
+<h3>OrganizacionEdit</h3>
+
+@if (LaOrganizacion == null)
+{
+    <div class="spinner"></div>
+} else
+{
+    <RadzenTemplateForm TItem="G110Organizacion" Data=@LaOrganizacion Submit=@OnSubmit>
+        <p>
+            <RadzenLabel Component="Clave" Text="Clave" />
+            <RadzenTextBox Name="Clave" @bind-Value=@LaOrganizacion.Clave />
+            <RadzenRequiredValidator Component="Clave" Text="La Clave es requeriada!" />
+        </p>
+        <p>
+            <RadzenLabel Component="Nombre" Text="Nombre de la Organizacion" />
+            <RadzenTextBox Name="Nombre" @bind-Value=@LaOrganizacion.Nombre />
+            <RadzenRequiredValidator Component="Nombre" Text="El Nombre es requerido!" />
+        </p>
+        <p>
+            <RadzenLabel Component="Desc" Text="Descripcion" />
+            <RadzenTextBox Name="Desc" @bind-Value=@LaOrganizacion.Desc />
+        </p>
+        <p>
+            <RadzenLabel Component="Domicilio" Text="Domicilio" />
+            <RadzenTextBox Name="Domicilio" @bind-Value=@LaOrganizacion.Domicilio />
+        </p>
+        <p>
+            <RadzenDropDown TValue="string" Data=@(customers.Select(c => c.CompanyName).Distinct()) Change="@OnChange" />
+            
+        </p>
+        <div class="row">
+            <div class="cols-sm-3">
+                <NavLink class="nav-link" href="/admin/organizacion">Cancelar</NavLink>
+            </div>
+            <div class="cols-sm-9"> 
+                <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" />
+            </div>
+        </div>
+        
+        
+    </RadzenTemplateForm>
+}

@@ -62,7 +62,7 @@ namespace GolfV12.Server.Controllers
             {
                 if (foto == null) return BadRequest();
                 var newFoto = await _fotoIFace.AddFoto(foto);
-                return CreatedAtAction(nameof(GetFoto), new { foto = foto.Id }, newFoto);
+                return CreatedAtAction(nameof(GetFoto), new { fotoId = foto.Id }, newFoto);
             }
             catch (Exception)
             {

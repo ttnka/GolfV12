@@ -37,7 +37,9 @@ namespace GolfV12.Server.Models.Repo
         } 
         public async Task<G120Player> GetPlayer(int playerId)
         {
-            var resultado = await _appDbContext.Players.FirstOrDefaultAsync(x => x.Id == playerId);
+            var resultado = await _appDbContext.Players
+                .Include(e => e.Organizacion)
+                .FirstOrDefaultAsync(x => x.Id == playerId);
             //return resultado != null ? resultado : await _appDbContext.Players.FirstOrDefaultAsync(x => x.Id == 1);
             return  resultado != null ? resultado : new G120Player();
         }
@@ -64,7 +66,7 @@ namespace GolfV12.Server.Models.Repo
                     res.Paterno = player.Paterno;
                     res.Materno = player.Materno;
                     res.Bday = player.Bday;
-                    res.Organizacion = player.Organizacion;
+                    //res.Organizacion = player.Organizacion;
                     res.Nivel = player.Nivel;
                     res.Status = player.Status;
                 }

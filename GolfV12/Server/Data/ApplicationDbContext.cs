@@ -16,6 +16,7 @@ namespace GolfV12.Server.Data
         }
 
         // Aqui van DBSET
+        public DbSet<G110Organizacion> Organizaciones { get; set; }
         public DbSet<G120Player> Players { get; set; }
         public DbSet<G128Hcp> Hcps { get; set; }
         public DbSet<G136Foto> Fotos { get; set; }
@@ -23,6 +24,7 @@ namespace GolfV12.Server.Data
         public DbSet<G172Bandera> Banderas { get; set; }
         public DbSet<G176Hoyo> Hoyos { get; set; }
         public DbSet<G178Distancia> Distancias { get; set; }
+        public DbSet<G180Estado> Estados { get; set; }
         public DbSet<G190Bitacora> Bitacoras { get; set; }
         public DbSet<G194Cita> Citas { get; set; }
         /*
