@@ -1,0 +1,30 @@
+﻿@page "/bitacora"
+
+@inherits BitacoraBase
+@using GolfV12.Shared;
+
+<h3>Bitacora</h3>
+
+@if (BitacoraAll == null)
+{
+    <div class="spinner"></div>
+} else
+{    
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" PageSize="50" AllowPaging="true" AllowSorting="true" 
+        Data="@BitacoraAll" TItem="G190Bitacora" LogicalFilterOperator="LogicalFilterOperator.Or">
+        <Columns>
+            <RadzenDataGridColumn TItem="G190Bitacora" Property="Id" Title="Id" Width="50px" />
+            <RadzenDataGridColumn TItem="G190Bitacora" Property="Fecha" Title="Fecha" />
+            <RadzenDataGridColumn TItem="G190Bitacora" Property="Accion" Title="Accion" />
+            <RadzenDataGridColumn TItem="G190Bitacora" Property="Usuario" Title="Usuario">
+                <Template Context="data">
+                    @data.Usuario.Nombre + " " @data.Usuario.Apodo
+                    @data.Usuario.Paterno + " " + @data.Usuario.Materno;
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G190Bitacora" Property="Desc" Title="Descripcion" />
+
+        </Columns>
+</RadzenDataGrid>
+}
+

@@ -19,6 +19,7 @@ else
             Favoritos
         </RadzenTabsItem>
         <RadzenTabsItem Text="Mis Datos">
+
             <EditForm Model="@Midata" OnSubmit="OnSubmit">
                 <div class="form-grup row">
                     <label for="apodo" class="col-sm-2 col-form-label">Apodo</label>
@@ -79,7 +80,7 @@ else
         var resultado = await playerServ.UpdatePlayer(Midata);
         if (resultado != null) 
         {
-            NM.NavigateTo("/playeres/misdatos", true);
+            NM.NavigateTo("/players/misdatos", true);
         }
     }
 

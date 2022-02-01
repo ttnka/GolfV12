@@ -7,10 +7,10 @@ namespace GolfV12.Client.Pages.admin
     public class OrganizacionBase : ComponentBase
     {
         [Inject]
-        public IG110OrganizacionServ organizacionIServ { get; set; }
+        public NavigationManager MN { get; set; }
         
         [Inject]
-        public NavigationManager MN { get; set; }
+        public IG110OrganizacionServ organizacionIServ { get; set; }
         public IEnumerable<G110Organizacion> LasOrganizaciones { get; set; }
         protected override async Task OnInitializedAsync()
         {

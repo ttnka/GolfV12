@@ -3,7 +3,7 @@
 @inherits OrganizacionEditBase
 @using GolfV12.Shared;
 
-<h3>OrganizacionEdit</h3>
+<h3>Organizacion Agergar / Editar</h3>
 
 @if (LaOrganizacion == null)
 {
@@ -11,37 +11,79 @@
 } else
 {
     <RadzenTemplateForm TItem="G110Organizacion" Data=@LaOrganizacion Submit=@OnSubmit>
-        <p>
-            <RadzenLabel Component="Clave" Text="Clave" />
-            <RadzenTextBox Name="Clave" @bind-Value=@LaOrganizacion.Clave />
-            <RadzenRequiredValidator Component="Clave" Text="La Clave es requeriada!" />
-        </p>
-        <p>
-            <RadzenLabel Component="Nombre" Text="Nombre de la Organizacion" />
-            <RadzenTextBox Name="Nombre" @bind-Value=@LaOrganizacion.Nombre />
-            <RadzenRequiredValidator Component="Nombre" Text="El Nombre es requerido!" />
-        </p>
-        <p>
-            <RadzenLabel Component="Desc" Text="Descripcion" />
-            <RadzenTextBox Name="Desc" @bind-Value=@LaOrganizacion.Desc />
-        </p>
-        <p>
-            <RadzenLabel Component="Domicilio" Text="Domicilio" />
-            <RadzenTextBox Name="Domicilio" @bind-Value=@LaOrganizacion.Domicilio />
-        </p>
-        <p>
-            <RadzenDropDown TValue="string" Data=@(customers.Select(c => c.CompanyName).Distinct()) Change="@OnChange" />
-            
-        </p>
         <div class="row">
-            <div class="cols-sm-3">
+            <div class="col-md-4">
+                <RadzenLabel Component="Clave" Text="Clave" />
+            </div>
+            <div class="col-md-8 align-items-center d-flex">
+                <RadzenTextBox Name="Clave" @bind-Value=@LaOrganizacion.Clave />
+                <RadzenRequiredValidator Component="Clave" Text="La Clave es requeriada!" />
+            </div>
+        </div>
+   
+       <div class="row">
+           <div class="col-md-4">
+                <RadzenLabel Component="Nombre" Text="Nombre de la Organizacion" />
+            </div>
+            <div class="col-md-8 align-items-center d-flex">
+                <RadzenTextBox Name="Nombre" @bind-Value=@LaOrganizacion.Nombre />
+            <RadzenRequiredValidator Component="Nombre" Text="El Nombre es requerido!" />
+            </div>
+        </div>
+<div class="row">
+            <div class="col-md-4">
+                <RadzenLabel Component="Desc" Text="Descripcion" />
+            </div>
+            <div class="col-md-8 align-items-center d-flex">
+                <RadzenTextArea Name="Desc" @bind-Value=@LaOrganizacion.Desc />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <RadzenLabel Component="Domicilio" Text="Domicilio" />
+            </div>
+            <div class="col-md-8 align-items-center d-flex">
+                <RadzenTextArea Name="Domicilio" @bind-Value=@LaOrganizacion.Domicilio />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <RadzenLabel Component="Estado" Text="Estado" />
+            </div>
+            <div class="col-md-8 align-items-center d-flex">
+                <RadzenDropDown Name="Estado" @bind-Value=@ElEstado AllowFiltering="true" 
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                Data=@LosEstados TextProperty="Titulo" ValueProperty="Id"/>
+            </div>
+        </div>
+
+        
+        @if(Id > 0) 
+        {
+            <div class="row">
+                <div class="col-md-4">
+                    <RadzenLabel Component="Status" Text="Borrar este registro?" />
+                </div>
+                <div class="col-md-8 align-items-center d-flex">
+                    <RadzenSwitch  Name="Status" @bind-Value=@LaOrganizacion.Status/>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="cols-sm-3 cols-md-3">
                 <NavLink class="nav-link" href="/admin/organizacion">Cancelar</NavLink>
             </div>
-            <div class="cols-sm-9"> 
+            <div class="cols-sm-9 cols-md-9"> 
                 <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" />
             </div>
         </div>
         
-        
+ <div class="row">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-8 align-items-center d-flex">
+                
+            </div>
+        </div>
     </RadzenTemplateForm>
 }

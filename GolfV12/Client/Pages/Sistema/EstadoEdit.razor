@@ -1,0 +1,52 @@
+﻿@page "/sistema/estadoedit/{id:int}"
+@inherits EstadoEditBase
+@using GolfV12.Shared;
+
+<h3>@ButtonTexto Estados</h3>
+@if (ElEstado == null)
+{
+    <div class="spinner"></div>
+} else
+{
+    <RadzenTemplateForm TItem="G180Estado" Data=@ElEstado Submit=@OnSubmit>
+        <p>
+            <RadzenLabel Component="Indice" Text="Indice" />
+            <RadzenNumeric Name="Indice" @bind-Value=@ElEstado.Indice />
+            <RadzenRequiredValidator Component="Indice" Text="El indice es requeriada!" />
+        </p>
+        <p>
+            <RadzenLabel Component="Titulo" Text="Titulo del Estado" />
+            <RadzenTextBox Name="Titulo" @bind-Value=@ElEstado.Titulo />
+            <RadzenRequiredValidator Component="Titulo" Text="El Titulo es requerido!" />
+        </p>
+         <p>
+            <RadzenLabel Component="Grupo" Text="Grupo al que pertenece del Estado" />
+            <RadzenTextBox Name="Grupo" @bind-Value=@ElEstado.Grupo />
+            <RadzenRequiredValidator Component="Grupo" Text="El Grupo es requerido!" />
+        </p>
+        <p>
+            <RadzenLabel Component="Estado" Text="Estado" />
+            <RadzenNumeric Name="Estado" @bind-Value=@ElEstado.Estado Min=1 Max=10 Step=1 />
+        </p>
+        @if(Id > 0) 
+        {
+            <p>
+                <RadzenLabel Component="Status" Text="Status" />
+                <RadzenSwitch  Name="Status" @bind-Value=@ElEstado.Status />
+            </p>
+        }
+        <p>
+            
+        </p>
+        <div class="row">
+            <div class="cols-sm-3">
+                <NavLink class="nav-link" href="/sistema/estado">Cancelar</NavLink>
+            </div>
+            <div class="cols-sm-9"> 
+                <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" />
+            </div>
+        </div>
+        
+        
+    </RadzenTemplateForm>
+}

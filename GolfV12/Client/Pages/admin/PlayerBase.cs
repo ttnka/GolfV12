@@ -15,11 +15,8 @@ namespace GolfV12.Client.Pages.admin
         {
             LosJugadores = await iG120PlayerServ.GetPlayers();
         }
-        protected void OnClick(int playerId)
-        {
-            if (playerId != 0) MN.NavigateTo($"/admin/playerEdit/{playerId}");
-            MN.NavigateTo("/admin/playerEdit");
-        }
+        //protected void OnClick(int playerId)
+        //{    MN.NavigateTo($"/admin/playerEdit/{playerId}");        }
 
     }
 }

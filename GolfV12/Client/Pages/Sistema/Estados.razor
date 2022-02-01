@@ -1,0 +1,36 @@
+﻿@page "/sistema/estado"
+@inherits EstadosBase
+@using GolfV12.Shared;
+
+<h3>Listado de estados</h3>
+
+@if(LosEstados  == null)
+{
+    <div class="spinner"></div>
+} else
+{
+    <NavLink class="nav-link" href="/sistema/estadoedit/0">
+            <span class="oi oi-plus" aria-hidden="true"></span> Nuevo Estado
+    </NavLink>
+    <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" 
+        AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+        Data="@LosEstados" TItem="G180Estado" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
+        <Columns>
+            <RadzenDataGridColumn TItem="G180Estado" Property="Id" Filterable="false" Title="Id" Frozen="true" 
+                Width="25px" TextAlign="TextAlign.Right" />
+            <RadzenDataGridColumn TItem="G180Estado" Property="Indice" Filterable="false" Title="Indice" 
+                Width="25px" TextAlign="TextAlign.Right" />
+            <RadzenDataGridColumn TItem="G180Estado" Property="Titulo" Filterable="false" Title="Titulo" 
+                Width="70px" TextAlign="TextAlign.Right" />
+                <RadzenDataGridColumn TItem="G180Estado" Property="Grupo" Filterable="true" Title="Titulo" 
+                Width="70px" TextAlign="TextAlign.Right" />
+            <RadzenDataGridColumn TItem="G180Estado" Title="Editar" 
+                Width="70px" TextAlign="TextAlign.Right" >
+                <Template Context="data">
+                    <RadzenLink Icon="edit" Path=@($"/sistema/estadoedit/{data.Id}") />Editar
+                    @if(data.Status == false) {<label> Borrado </label>}
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+}

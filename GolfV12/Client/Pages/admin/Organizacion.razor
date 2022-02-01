@@ -18,14 +18,19 @@
 <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" PageSize="50" AllowPaging="true" AllowSorting="true" 
         Data="@LasOrganizaciones" TItem="G110Organizacion" LogicalFilterOperator="LogicalFilterOperator.Or">
         <Columns>
-            <RadzenDataGridColumn TItem="G110Organizacion" Property="Id" Title="Id" Width="50px" />
+            <RadzenDataGridColumn TItem="G110Organizacion" Property="Id" Title="Id" Width="100px" Frozen="true">
+                <Template Context="data">
+                    <label>@data.Id</label>
+                    <RadzenLink Icon="edit" Path=@($"/admin/organizacionedit/{data.Id}") />
+                </Template>
+            </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="G110Organizacion" Property="Clave" Title="Clave" />
             <RadzenDataGridColumn TItem="G110Organizacion" Property="Nombre" Title="Nombre" />
             <RadzenDataGridColumn TItem="G110Organizacion" Property="Desc" Title="Descripcion" />
             
-            <RadzenDataGridColumn TItem="G110Organizacion"  Title="Editar" >
+            <RadzenDataGridColumn TItem="G110Organizacion"  Title="Estado" >
                 <Template Context="data">
-                    <RadzenLink Icon="edit" Path=@($"/admin/organizacionedit/{data.Id}") />Editar
+                    @if(data.Status == false) {<div style:"color-font:Red"><label style:"color:red"> Registro Borrado </label></div>}
                 </Template>
             </RadzenDataGridColumn>
             

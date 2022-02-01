@@ -16,7 +16,7 @@ namespace GolfV12.Server.Controllers
         }
         [HttpGet("{filtro}")]
         public async Task<ActionResult<IEnumerable<G110Organizacion>>> Buscar(
-            string clave, string nombre, string desc)
+            string? clave, string? nombre, string? desc)
         {
             try
             {

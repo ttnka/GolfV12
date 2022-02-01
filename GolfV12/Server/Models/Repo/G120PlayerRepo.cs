@@ -21,7 +21,7 @@ namespace GolfV12.Server.Models.Repo
         }
 
         public async Task<IEnumerable<G120Player>> Buscar(string org,
-            string apodo, string nombre, string paterno, DateTime bday)
+            string apodo, string nombre, string paterno)
         {
             IQueryable<G120Player> querry = _appDbContext.Players;
             if (!string.IsNullOrWhiteSpace(org)) querry = querry.Where(e =>
@@ -32,7 +32,7 @@ namespace GolfV12.Server.Models.Repo
                 e.Nombre.Contains(nombre));
             if (!string.IsNullOrWhiteSpace(paterno)) querry = querry.Where(e =>
                 e.Paterno.Contains(paterno));
-            if (bday > DateTime.MinValue) querry = querry.Where(e => e.Bday.Date == bday.Date);
+            
             return await querry.ToListAsync();
         } 
         public async Task<G120Player> GetPlayer(int playerId)
@@ -66,7 +66,7 @@ namespace GolfV12.Server.Models.Repo
                     res.Paterno = player.Paterno;
                     res.Materno = player.Materno;
                     res.Bday = player.Bday;
-                    //res.Organizacion = player.Organizacion;
+                    res.Organizacion = player.Organizacion;
                     res.Nivel = player.Nivel;
                     res.Status = player.Status;
                 }

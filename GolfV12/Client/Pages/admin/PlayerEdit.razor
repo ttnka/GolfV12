@@ -10,13 +10,104 @@
     <div class="spinner"></div>
 } else
 {
-    <RadzenTemplateForm TItem="G120Player" Data=@ElPlayer>
-        <p>
-    <RadzenLabel Component="Nombre" Text="Nombre" />
-    <RadzenTextBox Name="Nombre" @bind-Value=@ElPlayer.Nombre />
-    <RadzenRequiredValidator Component="Nombre" Text="Nombre del jugador es requerido!" />
-  </p>
-  <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" />
+  <RadzenTemplateForm TItem="G120Player" Data=@ElPlayer Submit=@OnSubmit>
+  <div class="row">
+      <div class="cols-md-3">
+            <RadzenLabel Component="User" Text="Usuario" />
+      </div>
+      <div class="cols-md-9">
+            <RadzenNumeric Name="User" @bind-Value=@ElPlayer.User />
+      </div>
+  </div>
+  <div class="row">
+      <div class="cols-md-3">
+            <RadzenLabel Component="Nombre" Text="Nombre" />
+      </div>
+      <div class="col-md-9 align-items-center d-flex">
+            <RadzenTextBox Name="Nombre" @bind-Value=@ElPlayer.Nombre />
+            <RadzenRequiredValidator Component="Nombre" Text="Nombre del jugador es requerido!" />
+      </div>
+  </div>
+  <div class="row">
+      <div class="cols-md-3">
+            <RadzenLabel Component="Paterno" Text="Apellido" />
+      </div>
+      <div class="col-md-9 align-items-center d-flex">
+            <RadzenTextBox Name="Paterno" @bind-Value=@ElPlayer.Paterno />
+            <RadzenRequiredValidator Component="Nombre" Text="Apellido del jugador es requerido!" />
+      </div>
+  </div>
+  <div class="row">
+      <div class="cols-md-3">
+           <RadzenLabel Component="Materno" Text="Materno" />
+      </div>
+      <div class="col-md-9 align-items-center d-flex">
+            <RadzenTextBox Name="Materno" @bind-Value=@ElPlayer.Materno />
+      </div>
+  </div>
+  <div class="row">
+      <div class="cols-md-3">
+           <RadzenLabel Component="Apodo" Text="Apodo" />
+      </div>
+      <div class="col-md-9 align-items-center d-flex">
+            <RadzenTextBox Name="Apodo" @bind-Value=@ElPlayer.Apodo />
+      </div>
+  </div>
+    
+    <div class="row">
+      <div class="cols-md-3">
+           <RadzenLabel Component="Bday" Text="Nacimiento" />
+      </div>
+      <div class="col-md-9 align-items-center d-flex">
+            <RadzenDatePicker TValue="DateTime?" DateRender=@DateRender DateFormat="d" class="w-50" />
+      </div>
+  </div>
+  <div class="row">
+      <div class="cols-md-3">
+           <RadzenLabel Component="Nivel" Text="Nivel" />
+      </div>
+      <div class="col-md-9 align-items-center d-flex">
+           <RadzenDropDown Name="Nivel" @bind-Value=@ElPlayer.Nivel AllowFiltering="true" 
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                Data=@LosNiveles />
+      </div>
+  </div>
+  <div class="row">
+      <div class="cols-md-3">
+           <RadzenLabel Component="Organizacion" Text="Organizacion" />
+      </div>
+      <div class="col-md-9 align-items-center d-flex">
+           <RadzenDropDown Name="Organizacion" @bind-Value=@UnaOrg AllowFiltering="true" 
+            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+            Data=@LasOrg TextProperty="Clave" ValueProperty="Id" />
+      </div>
+  </div>
+   <div class="row">
+      <div class="cols-md-3">
+           <RadzenLabel Component="Estado" Text="Estado" />
+      </div>
+      <div class="col-md-9 align-items-center d-flex">
+            <RadzenDropDown Name="Estado" @bind-Value=@ElEstado AllowFiltering="true" 
+            FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+            Data=@LosEstados TextProperty="Titulo" ValueProperty="Id" />
+      </div>
+  </div>
+   <div class="row">
+      <div class="cols-md-3">
+           <RadzenLabel Component="Status" Text="Borrar Registro?" />
+      </div>
+      <div class="col-md-9 align-items-center d-flex">
+            <RadzenSwitch Name="Status" @bind-Value=@ElPlayer.Status />
+      </div>
+  </div>
+  <div class="row">
+      <div class="cols-md-3">
+           <NavLink class="nav-link" href="/admin/player">Cancelar</NavLink>
+      </div>
+      <div class="col-md-9 align-items-left d-flex">
+            <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" />
+      </div>
+  </div>
     </RadzenTemplateForm>
 }
 

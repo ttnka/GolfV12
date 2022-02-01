@@ -16,11 +16,11 @@ namespace GolfV12.Server.Controllers
         }
         [HttpGet("{filtro}")]
         public async Task<ActionResult<IEnumerable<G120Player>>> Buscar(
-            string org, string apodo, string nombre, string paterno, DateTime bday)
+            string? org, string? apodo, string? nombre, string? paterno)
         {
             try
             {
-                var resultado = await _playerIFace.Buscar(org, apodo, nombre, paterno, bday);
+                var resultado = await _playerIFace.Buscar(org, apodo, nombre, paterno);
                 return resultado.Any() ? Ok(resultado) : NotFound();
             }
             catch (Exception)
@@ -76,8 +76,13 @@ namespace GolfV12.Server.Controllers
         {
             try
             {
-                return player != null ? await _playerIFace.UpdatePlayer(player) : 
-                    NotFound($"Jugador {player.Nombre} {player.Paterno} no fue encontrado");
+               if (player != null)
+                {
+                   return await _playerIFace.UpdatePlayer(player);
+                } else { 
+                   return NotFound($"Jugador {player.Nombre} {player.Paterno} no fue encontrado"); }
+                //return player != null ? await _playerIFace.UpdatePlayer(player) : 
+                //    NotFound($"Jugador {player.Nombre} {player.Paterno} no fue encontrado");
             }
             catch (Exception)
             {

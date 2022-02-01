@@ -10,14 +10,21 @@
     <div class="spinner"></div>
 } else
 {
-    
-<RadzenButton Click=@(args => OnClick(0)) 
-            Text="Nuevo Juegador" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
+   <NavLink class="nav-link" href="/admin/playeredit/0">
+            <span class="oi oi-plus" aria-hidden="true"></span> Nueva jugador
+   </NavLink> 
+
 
 <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" PageSize="50" AllowPaging="true" AllowSorting="true" 
         Data="@LosJugadores" TItem="G120Player" LogicalFilterOperator="LogicalFilterOperator.Or">
         <Columns>
-            <RadzenDataGridColumn TItem="G120Player" Property="Id" Title="Id" Width="50px" />
+            <RadzenDataGridColumn TItem="G120Player" Property="Id" Title="Id" Width="100px" Frozen="true"> 
+                <Template Context="data">
+                    <label>@data.Id</label>
+                    <RadzenLink Icon="edit" Path=@($"/admin/playeredit/{data.Id}") />
+                </Template>
+            </RadzenDataGridColumn>
+
             <RadzenDataGridColumn TItem="G120Player" Title="Nombre">
                 <Template Context="datos">
                     @datos.Nombre &nbsp;
@@ -26,18 +33,29 @@
                     @datos.Materno
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="G120Player" Property="Bday" Title="Bday" FormatString="{0:d}">
+            <RadzenDataGridColumn TItem="G120Player" Property="Bday" Title="Nacimiento" FormatString="{0:d}">
                 
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="G120Player" Property="Nivel" Title="Nivel" />
             <RadzenDataGridColumn TItem="G120Player" Property="Organizacion" Title="Organizacion" >
                 <Template Context="org">
-                    
+                    @if (org.Organizacion != null )
+                    {
+                        @org.Organizacion.Clave
+                        @org.Organizacion.Nombre
+                    }
+
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="G120Player"  Title="Editar" >
+            <RadzenDataGridColumn TItem="G120Player" Property="Estado" Title="Estado" >
                 <Template Context="data">
-                    <RadzenLink Icon="edit" Path=@($"/admin/playeredit/{data.Id}") />Editar
+                    
+
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G120Player"  Title="Registro" >
+                <Template Context="data">
+                    @if (data.Status == false) {<label> Registro Borrado! </label>}
                 </Template>
             </RadzenDataGridColumn>
             

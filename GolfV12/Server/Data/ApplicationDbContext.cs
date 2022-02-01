@@ -27,17 +27,7 @@ namespace GolfV12.Server.Data
         public DbSet<G180Estado> Estados { get; set; }
         public DbSet<G190Bitacora> Bitacoras { get; set; }
         public DbSet<G194Cita> Citas { get; set; }
-        /*
-        public DbSet<G200Torneo> Torneos { get; set; }
-        public DbSet<G202CapturaTorneo> CapturasTorneo { get; set; }
-        public DbSet<G204FechaTorneo> FechasTorneo { get; set; }
-        public DbSet<G208CategoriaTorneo> CategoriasTorneo { get; set; }
-        public DbSet<G220TeamTorneo> TeamsTorneo { get; set; }
-        public DbSet<G222PlayerTorneo> PlayerTorneo { get; set; }
-        public DbSet<G224RolTorneo> RolesTorneo { get; set; }
-        public DbSet<G240Score> Scores { get; set; }
-        public DbSet<G280FormatoTorneo> FormatosTorneo { get; set; }
-        */
+       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

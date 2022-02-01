@@ -16,8 +16,8 @@ namespace GolfV12.Server.Controllers
         }
 
         [HttpGet("{filtro}")]
-        public async Task<ActionResult<IEnumerable<G128Hcp>>> Buscar(int PlayerId, string apodo, string nombre,
-            string apellido, string campo)
+        public async Task<ActionResult<IEnumerable<G128Hcp>>> Buscar(int PlayerId, string? apodo, string? nombre,
+            string? apellido, string? campo)
         {
             try
             {

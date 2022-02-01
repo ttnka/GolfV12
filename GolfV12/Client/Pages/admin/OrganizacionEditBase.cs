@@ -9,7 +9,7 @@ namespace GolfV12.Client.Pages.admin
         [Inject]
         public IG110OrganizacionServ iOrgServ { get; set; }
         [Inject]
-        public G180EstadoServ iEstadoServ { get; set; }
+        public IG180EstadoServ iEstadoServ { get; set; }
         [Inject]
         public NavigationManager NM { get; set; }
         [Parameter]
@@ -17,40 +17,40 @@ namespace GolfV12.Client.Pages.admin
         public G110Organizacion LaOrganizacion { get; set; }
         public string ButtonTexto { get; set; } = "Actualizar";
         public IEnumerable<G180Estado> LosEstados { get; set; }
-
-        protected override async Task OnInitializedAsync()
+        public int ElEstado { get; set; }
+        protected async override Task OnInitializedAsync()
         {
             
             if (Id == 0)
-            {
+            {   
+                ButtonTexto = "Agregar Nuevo";
                 LaOrganizacion = new G110Organizacion
                 {
                     Clave = "Nueva organizacion",
                     Nombre = "Nueva",
                     Desc = " ",
                     Domicilio = "Conocido",
-                    Estado = 1,
+                    Estado = 2,
                     Status = true
                 };
             } else
             {
-                LaOrganizacion = await iOrgServ.GetOrganizacion(Id);
+                LaOrganizacion = await iOrgServ.GetOrganizacion(Id);   
             }
-            LosEstados = await iEstadoServ.get
+            LosEstados = await iEstadoServ.Buscar(titulo:"Vacio", grupo: "Organizacion");
+            ElEstado = LaOrganizacion.Estado;
         }
-        public void ActualizarTexto()
-        {
-            
-            if (Id == 0) ButtonTexto = "Agregar";
-        }
+        
         public async Task OnSubmit(G110Organizacion LaOrg)
         {
             G110Organizacion res = null;
+            LaOrg.Estado = ElEstado;
             if (LaOrg.Id !=0 )
             {
                 res = await iOrgServ.UpdateOrganizacion(LaOrg);
             } else
             {
+                
                 res = await iOrgServ.AddOrganizacion(LaOrg);
             }
             

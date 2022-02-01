@@ -21,10 +21,10 @@ namespace GolfV12.Server.Models.Repo
             return res.Entity;
         }
 
-        public async Task<IEnumerable<G180Estado>> Buscar(string titulo, string grupo)
+        public async Task<IEnumerable<G180Estado>> Buscar(string? titulo, string? grupo)
         {
             IQueryable<G180Estado> querry = _appDbContext.Estados;
-            if (!string.IsNullOrEmpty(titulo)) querry = querry.Where(e => e.Titulo.Contains(titulo));
+            //if (!string.IsNullOrEmpty(titulo)) querry = querry.Where(e => e.Titulo.Contains(titulo));
             if(!string.IsNullOrEmpty(grupo)) querry = querry.Where(e => e.Grupo.Contains(grupo));
             return await querry.ToListAsync();
         }

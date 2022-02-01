@@ -15,7 +15,7 @@ namespace GolfV12.Server.Controllers
             this._estadoIFace = estadoIFace;
         }
         [HttpGet("{filtro}")]
-        public async Task<ActionResult<IEnumerable<G180Estado>>> Buscar(string titulo, string grupo)
+        public async Task<ActionResult<IEnumerable<G180Estado>>> Buscar(string? titulo, string? grupo)
         {
             try
             {

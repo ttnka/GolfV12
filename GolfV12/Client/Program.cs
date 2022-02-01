@@ -21,7 +21,10 @@ builder.Services.AddHttpClient<IG110OrganizacionServ, G110OrganizacionServ>(clie
 { client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
 builder.Services.AddHttpClient<IG120PlayerServ, G120PlayerServ>(client =>
 { client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
-
+builder.Services.AddHttpClient<IG180EstadoServ, G180EstadoServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+builder.Services.AddHttpClient<IG190BitacoraServ, G190BitacoraServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
 
 
 builder.Services.AddApiAuthorization();

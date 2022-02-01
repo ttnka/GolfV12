@@ -21,11 +21,10 @@ namespace GolfV12.Server.Models.Repo
             return res.Entity;
         }
 
-        public async Task<IEnumerable<G190Bitacora>> Buscar(int bitacoraId, int playerId, 
+        public async Task<IEnumerable<G190Bitacora>> Buscar(int playerId, 
             bool sitema, BitaAcciones? accion, string texto, DateTime fini, DateTime ffin)
         {
             IQueryable<G190Bitacora> querry = _appDbContext.Bitacoras;
-            if (bitacoraId > -1) querry = querry.Where(e => e.Id == bitacoraId);
             if (playerId > -1) querry = querry.Where (e => e.Usuario.Id == playerId);
             if (sitema) querry = querry.Where(e => e.Sistema == true);
             if (accion != null) querry = querry.Where(e => e.Accion == accion);
