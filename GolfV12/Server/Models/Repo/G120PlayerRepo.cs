@@ -20,12 +20,14 @@ namespace GolfV12.Server.Models.Repo
             return newPlayer.Entity;
         }
 
-        public async Task<IEnumerable<G120Player>> Buscar(string org,
-            string apodo, string nombre, string paterno)
+        /*
+        public async Task<IEnumerable<G120Player>> Buscar(string? userId, int org,
+            string? apodo, string? nombre, string? paterno)
         {
             IQueryable<G120Player> querry = _appDbContext.Players;
-            if (!string.IsNullOrWhiteSpace(org)) querry = querry.Where(e =>
-                e.Organizacion.Clave.Contains(org) || e.Organizacion.Nombre.Contains(org));
+
+            if (!string.IsNullOrEmpty(userId)) querry = querry.Where(x => x.UserId == userId);
+            if (org > -1) querry = querry.Where(e => e.OrganizacionId == org);
             if (!string.IsNullOrWhiteSpace(apodo)) querry = querry.Where(e =>
                  e.Apodo.Contains(apodo));
             if (!string.IsNullOrWhiteSpace(nombre)) querry = querry.Where(e =>
@@ -35,15 +37,15 @@ namespace GolfV12.Server.Models.Repo
             
             return await querry.ToListAsync();
         } 
-        public async Task<G120Player> GetPlayer(int playerId)
+        */
+        public async Task<G120Player> GetPlayer(string userId)
         {
             var resultado = await _appDbContext.Players
-                .Include(e => e.Organizacion)
-                .FirstOrDefaultAsync(x => x.Id == playerId);
+                .FirstOrDefaultAsync(x => x.UserId == userId);
             //return resultado != null ? resultado : await _appDbContext.Players.FirstOrDefaultAsync(x => x.Id == 1);
             return  resultado != null ? resultado : new G120Player();
         }
-
+        
         public async Task<IEnumerable<G120Player>> GetPlayers()
         {
             return await _appDbContext.Players.ToListAsync();
@@ -66,7 +68,7 @@ namespace GolfV12.Server.Models.Repo
                     res.Paterno = player.Paterno;
                     res.Materno = player.Materno;
                     res.Bday = player.Bday;
-                    res.Organizacion = player.Organizacion;
+                    res.OrganizacionId = player.OrganizacionId;
                     res.Nivel = player.Nivel;
                     res.Status = player.Status;
                 }

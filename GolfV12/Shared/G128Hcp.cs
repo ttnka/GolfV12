@@ -11,9 +11,9 @@ namespace GolfV12.Shared
     {
         [Key]
         public int Id { get; set; }
-        public G120Player Player { get; set; }
+        public int PlayerId { get; set; }
         public DateTime Fecha { get; set; }
-        public G172Bandera Bandera { get; set; }
+        public int BanderaId { get; set; }
         public Decimal Hcp { get; set; }
         public int Estado { get; set; } = 2;
         public bool Status { get; set; } = true;

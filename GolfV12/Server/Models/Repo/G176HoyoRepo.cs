@@ -21,10 +21,10 @@ namespace GolfV12.Server.Models.Repo
             return res.Entity;
         }
 
-        public async Task<IEnumerable<G176Hoyo>> Buscar(string campo, string ruta, int hoyoN)
+        public async Task<IEnumerable<G176Hoyo>> Buscar(int campo, string ruta, int hoyoN)
         {
             IQueryable<G176Hoyo> querry = _appDbContext.Hoyos;
-            if (!string.IsNullOrEmpty(campo)) querry = querry.Where(e => e.Campo.Nombre.Contains(campo));
+            if (campo > -1) querry = querry.Where(e => e.CampoId == campo);
             if (!string.IsNullOrEmpty(ruta)) querry = querry.Where(e => e.Ruta.Contains(ruta));
             if (hoyoN > -1) querry = querry.Where(e => e.Hoyo == hoyoN);
 
@@ -52,7 +52,7 @@ namespace GolfV12.Server.Models.Repo
                     res.Status = false;
                 } else
                 {
-                    res.Campo = hoyo.Campo;
+                    res.CampoId = hoyo.CampoId;
                     res.Ruta = hoyo.Ruta;
                     res.Hoyo = hoyo.Hoyo;
                     res.Par = hoyo.Par;

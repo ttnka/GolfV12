@@ -11,7 +11,7 @@ namespace GolfV12.Shared
     {
         [Key]
         public int Id { get; set; }
-        public G170Campo Campo { get; set; }
+        public int CampoId { get; set; }
         public string Color { get; set; }
         public int Estado { get; set; } = 2;
         public bool Status { get; set; } = true;

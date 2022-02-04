@@ -22,11 +22,10 @@ namespace GolfV12.Server.Models.Repo
             return res.Entity;
         }
 
-        public async Task<IEnumerable<G172Bandera>> Buscar(string campo, string color)
+        public async Task<IEnumerable<G172Bandera>> Buscar(int campo, string? color)
         {
             IQueryable<G172Bandera> querry = _appDbContext.Banderas;
-            if (!string.IsNullOrEmpty(campo)) querry = querry.Where(e => 
-                                    e.Campo.Corto.Contains(campo) || e.Campo.Nombre.Contains(campo));
+            if (campo > -1 ) querry = querry.Where(e => e.CampoId == campo);
             if (string.IsNullOrEmpty(color)) querry = querry.Where(e =>
                                     e.Color.Contains(color));
             return await querry.ToListAsync();
@@ -53,7 +52,7 @@ namespace GolfV12.Server.Models.Repo
                     res.Status = bandera.Status;
                 } else
                 {
-                    res.Campo = bandera.Campo;
+                    res.CampoId = bandera.CampoId;
                     res.Color = bandera.Color;
                     res.Estado = bandera.Estado;
                     res.Status = bandera.Status;

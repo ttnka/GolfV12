@@ -14,7 +14,7 @@ namespace GolfV12.Shared
         public DateTime FIni { get; set; }
         public DateTime FFin { get; set; }
         public string Desc { get; set; }
-        public G120Player Creador { get; set; }
+        public int Creador { get; set; }
         public int MasterId { get; set; } = 0;
         public int Estado { get; set; } = 2;
         public bool Status { get; set; } = true;

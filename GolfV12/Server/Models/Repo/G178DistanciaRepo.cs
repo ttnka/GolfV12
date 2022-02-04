@@ -21,12 +21,11 @@ namespace GolfV12.Server.Models.Repo
             return res.Entity;
         }
 
-        public async Task<IEnumerable<G178Distancia>> Buscar(string campo, string bandera, int hoyoN)
+        public async Task<IEnumerable<G178Distancia>> Buscar(int bandera, int hoyoN)
         {
             IQueryable<G178Distancia> querry = _appDbContext.Distancias;
-            if (!string.IsNullOrEmpty(campo)) querry = querry.Where(e
-                    => e.Bandera.Campo.Corto.Contains(campo) || e.Bandera.Campo.Nombre.Contains(campo));
-            if (!string.IsNullOrEmpty(bandera)) querry = querry.Where(e => e.Bandera.Color.Contains(bandera));
+            
+            if (bandera > -1) querry = querry.Where(e => e.BanderaId ==  bandera);
             if (hoyoN > -1) querry = querry.Where(e => e.Hoyo == hoyoN);
 
             return await querry.ToListAsync();
@@ -54,7 +53,7 @@ namespace GolfV12.Server.Models.Repo
                 } else
                 {
                     res.Fecha = distancia.Fecha;
-                    res.Bandera = distancia.Bandera;
+                    res.BanderaId = distancia.BanderaId;
                     res.Hoyo = distancia.Hoyo;
                     res.Estado = distancia.Estado;
                     res.Status = distancia.Status;

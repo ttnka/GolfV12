@@ -14,13 +14,14 @@ namespace GolfV12.Server.Controllers
         {
             this._playerIFace = playerIFace;
         }
+        /*
         [HttpGet("{filtro}")]
-        public async Task<ActionResult<IEnumerable<G120Player>>> Buscar(
-            string? org, string? apodo, string? nombre, string? paterno)
+        public async Task<ActionResult<IEnumerable<G120Player>>> Buscar(string? userId,
+            int org, string? apodo, string? nombre, string? paterno)
         {
             try
             {
-                var resultado = await _playerIFace.Buscar(org, apodo, nombre, paterno);
+                var resultado = await _playerIFace.Buscar(userId, org, apodo, nombre, paterno);
                 return resultado.Any() ? Ok(resultado) : NotFound();
             }
             catch (Exception)
@@ -29,7 +30,7 @@ namespace GolfV12.Server.Controllers
                     "buscando jugadores");
             }
         }
-        
+        */
         [HttpGet]
         public async Task<ActionResult> GetPlayers()
         {
@@ -43,13 +44,13 @@ namespace GolfV12.Server.Controllers
                     "Error al leer la base de datos, buscando jugadores");
             }
         }
-
-        [HttpGet("{playerid:int}")]
-        public async Task<ActionResult<G120Player>> GetPlayer(int playerId)
+        
+        [HttpGet("{userid}")]
+        public async Task<ActionResult<G120Player>> GetPlayer(string userId)
         {
             try
             {
-                var resultado = await _playerIFace.GetPlayer(playerId);
+                var resultado = await _playerIFace.GetPlayer(userId);
                 return resultado != null ? resultado : NotFound();
             }
             catch (Exception)
@@ -57,6 +58,7 @@ namespace GolfV12.Server.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error al leer la base de datos, buscando un jugador");
             }
         }
+        
         [HttpPost]
         public async Task<ActionResult<G120Player>> NewPlayer(G120Player player)
         {
@@ -64,7 +66,7 @@ namespace GolfV12.Server.Controllers
             {
                 if (player == null) return BadRequest();
                 var newPlayer = await _playerIFace.AddPlayer(player);
-                return CreatedAtAction(nameof(GetPlayer), new { playerId = player.Id }, newPlayer);
+                return CreatedAtAction(nameof(GetPlayer), new { userId = player.UserId }, newPlayer);
             }
             catch (Exception)
             {

@@ -9,35 +9,56 @@
 } else
 {
     <RadzenTemplateForm TItem="G180Estado" Data=@ElEstado Submit=@OnSubmit>
-        <p>
-            <RadzenLabel Component="Indice" Text="Indice" />
-            <RadzenNumeric Name="Indice" @bind-Value=@ElEstado.Indice />
-            <RadzenRequiredValidator Component="Indice" Text="El indice es requeriada!" />
-        </p>
-        <p>
-            <RadzenLabel Component="Titulo" Text="Titulo del Estado" />
-            <RadzenTextBox Name="Titulo" @bind-Value=@ElEstado.Titulo />
-            <RadzenRequiredValidator Component="Titulo" Text="El Titulo es requerido!" />
-        </p>
-         <p>
-            <RadzenLabel Component="Grupo" Text="Grupo al que pertenece del Estado" />
-            <RadzenTextBox Name="Grupo" @bind-Value=@ElEstado.Grupo />
-            <RadzenRequiredValidator Component="Grupo" Text="El Grupo es requerido!" />
-        </p>
-        <p>
-            <RadzenLabel Component="Estado" Text="Estado" />
-            <RadzenNumeric Name="Estado" @bind-Value=@ElEstado.Estado Min=1 Max=10 Step=1 />
-        </p>
+         <div class="row">
+            <div class="col-md-4">
+                <RadzenLabel Component="Indice" Text="Indice" />
+            </div>
+            <div class="col-md-8 align-items-center d-flex">
+                <RadzenNumeric Name="Indice" @bind-Value=@ElEstado.Indice />
+                <RadzenRequiredValidator Component="Indice" Text="El indice es requeriada!" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <RadzenLabel Component="Titulo" Text="Titulo del Estado" />
+            </div>
+            <div class="col-md-8 align-items-center d-flex">
+                <RadzenTextBox Name="Titulo" @bind-Value=@ElEstado.Titulo />
+                <RadzenRequiredValidator Component="Titulo" Text="El Titulo es requerido!" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <RadzenLabel Component="Grupo" Text="Grupo al que pertenece del Estado" />
+            </div>
+            <div class="col-md-8 align-items-center d-flex">
+                <RadzenTextBox Name="Grupo" @bind-Value=@ElEstado.Grupo />
+                <RadzenRequiredValidator Component="Grupo" Text="El Grupo es requerido!" />
+            </div>
+        </div>
+         <div class="row">
+            <div class="col-md-4">
+                <RadzenLabel Component="Estado" Text="Estado" />
+            </div>
+            <div class="col-md-8 align-items-center d-flex">
+                
+                <RadzenDropDown Name="Estado" @bind-Value=@ElEstado.Estado AllowFiltering="true" 
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                Data=@LosEstados TextProperty="Titulo" ValueProperty="Id"/>
+            </div>
+        </div>
         @if(Id > 0) 
         {
-            <p>
-                <RadzenLabel Component="Status" Text="Status" />
-                <RadzenSwitch  Name="Status" @bind-Value=@ElEstado.Status />
-            </p>
+            <div class="row">
+                <div class="col-md-4">
+                    <RadzenLabel Component="Status" Text="Status" />
+                </div>
+                <div class="col-md-8 align-items-center d-flex">
+                    <RadzenSwitch  Name="Status" @bind-Value=@ElEstado.Status />
+                </div>
+            </div>
         }
-        <p>
-            
-        </p>
+      
         <div class="row">
             <div class="cols-sm-3">
                 <NavLink class="nav-link" href="/sistema/estado">Cancelar</NavLink>

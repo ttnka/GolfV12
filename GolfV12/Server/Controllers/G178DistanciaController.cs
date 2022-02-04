@@ -15,11 +15,11 @@ namespace GolfV12.Server.Controllers
             this._distanciaIFace = distanciaIFace;
         }
         [HttpGet("{filtro}")]
-        public async Task<ActionResult<IEnumerable<G178Distancia>>> Buscar(string campo, string bandera, int hoyoN)
+        public async Task<ActionResult<IEnumerable<G178Distancia>>> Buscar(int banderaId, int hoyoN)
         {
             try
             {
-                var resultado = await _distanciaIFace.Buscar( campo, bandera, hoyoN);
+                var resultado = await _distanciaIFace.Buscar(banderaId, hoyoN);
                 return resultado.Any() ? Ok(resultado) : NotFound();
             }
             catch (Exception)

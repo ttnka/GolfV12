@@ -4,6 +4,8 @@ using GolfV12.Client.Servicios.Serv;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Radzen;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -21,6 +23,8 @@ builder.Services.AddHttpClient<IG110OrganizacionServ, G110OrganizacionServ>(clie
 { client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
 builder.Services.AddHttpClient<IG120PlayerServ, G120PlayerServ>(client =>
 { client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+builder.Services.AddHttpClient<IG121ElPlayerServ, G121ElPlayerServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
 builder.Services.AddHttpClient<IG180EstadoServ, G180EstadoServ>(client =>
 { client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
 builder.Services.AddHttpClient<IG190BitacoraServ, G190BitacoraServ>(client =>
@@ -28,6 +32,8 @@ builder.Services.AddHttpClient<IG190BitacoraServ, G190BitacoraServ>(client =>
 
 
 builder.Services.AddApiAuthorization();
+builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddHttpContextAccessor();
 
 // Servicios REDZAD
 builder.Services.AddScoped<DialogService>();

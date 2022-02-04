@@ -1,6 +1,8 @@
 ﻿@page "/players/misdatos"
 @using GolfV12.Client.Servicios.IFaceServ;
 @using GolfV12.Shared;
+@inject NotificationService NS
+@inherits MisdatosBase
 
 <h3>Mis Datos</h3>
 
@@ -10,7 +12,7 @@
 }
 else
 {
-    <RadzenTabs RenderMode="TabRenderMode.Client" @bind-SelectedIndex=@selectedIndex >
+    <RadzenTabs RenderMode="TabRenderMode.Client" @bind-SelectedIndex=selectedIndex >
     <Tabs>
         <RadzenTabsItem Text="Customers">
             Customers
@@ -20,7 +22,7 @@ else
         </RadzenTabsItem>
         <RadzenTabsItem Text="Mis Datos">
 
-            <EditForm Model="@Midata" OnSubmit="OnSubmit">
+            <EditForm Model="@Midata" OnSubmit="actualizarMisDatos">
                 <div class="form-grup row">
                     <label for="apodo" class="col-sm-2 col-form-label">Apodo</label>
                     <div class="col-sm-10">
@@ -59,29 +61,18 @@ else
 }
 
 
-
-
 @code {
+
     int selectedIndex = 0;
 
-    [Inject]
-    protected IG120PlayerServ playerServ { get; set; }
-    public NavigationManager NM { get; set; }
-
-    protected G120Player Midata { get; set; } 
-
-    protected override async Task OnInitializedAsync()
+    async void actualizarMisDatos()
     {
-        Midata = await playerServ.GetPlayer(2);
-
+        await MisDatosUpdate();
+        ShowNotification(elMesage);
     }
-    protected async Task OnSubmit()
+    public void ShowNotification(NotificationMessage message)
     {
-        var resultado = await playerServ.UpdatePlayer(Midata);
-        if (resultado != null) 
-        {
-            NM.NavigateTo("/players/misdatos", true);
-        }
+        NS.Notify(message);
     }
 
 }

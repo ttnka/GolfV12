@@ -19,11 +19,12 @@ namespace GolfV12.Client.Servicios.Serv
             return newPlayer.IsSuccessStatusCode ? await newPlayer.Content.ReadFromJsonAsync<G120Player>() :
              null;
         }
-
-        public async Task<IEnumerable<G120Player>> Buscar(string org, string apodo, string nombre, string paterno, DateTime bday)
+        /*
+        public async Task<IEnumerable<G120Player>> Buscar(string? userId, int org, string? apodo, string? nombre, string? paterno)
         {
             var resultado = "";
-            if (!string.IsNullOrEmpty(org)) { resultado = resultado + "org=" + org + "&"; }
+            if (!string.IsNullOrEmpty(userId)) resultado = "userId=" + userId + "&";
+            if (org > -1)  resultado = resultado + "org=" + org + "&"; 
             if (!string.IsNullOrEmpty(apodo)) { resultado = resultado + "apodo=" + apodo + "&"; }
             if (!string.IsNullOrEmpty(nombre)) { resultado = resultado + "nombre=" + nombre + "&"; }
             if (!string.IsNullOrEmpty(paterno)) { resultado = resultado + "paterno=" + paterno + "&"; }
@@ -31,11 +32,12 @@ namespace GolfV12.Client.Servicios.Serv
             return await _httpClient.GetFromJsonAsync<IEnumerable<G120Player>>(resultado);
         }
 
-        public async Task<G120Player> GetPlayer(int playerId)
+        */
+        public async Task<G120Player> GetPlayer(string userId)
         {
-            return await _httpClient.GetFromJsonAsync<G120Player>($"/api/G120player/{playerId}");
+            return await _httpClient.GetFromJsonAsync<G120Player>($"/api/G120player/{userId}");
         }
-
+        
         public async Task<IEnumerable<G120Player>> GetPlayers()
         {
             return await _httpClient.GetFromJsonAsync<IEnumerable<G120Player>>("/api/G120player/");
@@ -43,7 +45,7 @@ namespace GolfV12.Client.Servicios.Serv
 
         public async Task<G120Player> UpdatePlayer(G120Player player)
         {
-            var newPlayer = await _httpClient.PutAsJsonAsync<G120Player>("/api/G120player", player);
+            var newPlayer = await _httpClient.PutAsJsonAsync<G120Player>("/api/G120player/", player);
             if (newPlayer.IsSuccessStatusCode)
             {
                 return await newPlayer.Content.ReadFromJsonAsync<G120Player>();

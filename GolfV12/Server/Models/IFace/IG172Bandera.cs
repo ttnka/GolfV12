@@ -4,7 +4,7 @@ namespace GolfV12.Server.Models.IFace
 {
     public interface IG172Bandera
     {
-        Task<IEnumerable<G172Bandera>> Buscar(string campo, string color);
+        Task<IEnumerable<G172Bandera>> Buscar(int campo, string? color);
         Task<IEnumerable<G172Bandera>> GetBanderas();
         Task<G172Bandera> GetBandera(int banderaId);
         Task<G172Bandera> AddBandera(G172Bandera bandera);

@@ -2,6 +2,9 @@
 using GolfV12.Shared;
 using Microsoft.AspNetCore.Components;
 using Radzen;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Components.Authorization;
+
 
 namespace GolfV12.Client.Pages.admin
 {
@@ -12,60 +15,69 @@ namespace GolfV12.Client.Pages.admin
         [Inject]
         public IG120PlayerServ iPlayerServ { get; set; }
         [Inject]
+        public IG121ElPlayerServ elPlayerServ { get; set; }
+        [Inject]
         public IG180EstadoServ iEstadoServ { get; set; }
+        
         [Inject]
         public NavigationManager NM { get; set; }
+        
         public IEnumerable<G110Organizacion> LasOrg { get; set; }
         public int UnaOrg { get; set; }  
-        public IEnumerable<G180Estado> LosEstados { get; set; }  
-         
-        [Parameter]
-        public int Id { get; set; }
-        public int ElEstado { get; set; }
-        public G120Player ElPlayer { get; set; }
-        public string ButtonTexto { get; set; } = "Actualizar";
+        public IEnumerable<G180Estado> LosEstados { get; set; } 
+        //public int ElEstado { get; set; } 
+        public IEnumerable<Niveles> LosNiveles  { get; set; } = Enum.GetValues(typeof(Niveles)).Cast<Niveles>().ToList();
+        //public int ElNivel { get; set; }
 
+        [Parameter]
+        public string userId { get; set; }
+
+        public G120Player ElPlayer { get; set; } = new G120Player();
+        public string ButtonTexto { get; set; } = "Actualizar";
         protected async override Task OnInitializedAsync()
         {
+            var autState = await authStateTask;
+            var user = autState.User;
+            if (user.Identity.IsAuthenticated) userIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
+
             LasOrg = await iOrgServ.GetOrganizaciones();
-            if (Id == 0)
+            if (userId.Contains("Temp"))
             {
                 ElPlayer = new G120Player
                 {
-                    User = 3,
-                    Nombre = "Nuevo", Paterno = "Apellido", Materno ="",Apodo = "",
-                    Bday = DateTime.Parse("1974-09-12 00:00:00"),
-                    //Date.("1974-09-12 00:00:00"),
-                    Nivel = (Niveles)3,
-                    Organizacion = await iOrgServ.GetOrganizacion(2),
-                    Estado = 2,
-                    Status = true,
-                    Temporal = false
+                    UserId = "Temp" + DateTime.Now.ToString(),
+                    Nombre = "Nombre Jugador Temporal", Paterno = "Paterno Jugador Temporal",
+                    Materno = "", Apodo = " ",
+                    Bday = DateTime.Now, Nivel=0, 
+                    Estado = 1, Status = true, Temporal = true
                 };
-                ButtonTexto = "Agregar";
+                await EscribirBitacoraUno(2, BitaAcciones.Agregar, true,
+                    "El usuario agrego un jugador temporal");
             } else
             {
-                ElPlayer = await iPlayerServ.GetPlayer(Id);
+                ElPlayer = await elPlayerServ.GetPlayer(userId);
             }
-            LosEstados = await iEstadoServ.GetEstados();
-            ElEstado = ElPlayer.Estado;
+            LosEstados = await iEstadoServ.Buscar("V", "Player");
+            //ElEstado = ElPlayer.Estado;
         }
         
         protected async Task OnSubmit(G120Player updatePlayer)
         {
             G120Player resultado = null;
-            ElPlayer.Organizacion = await iOrgServ.GetOrganizacion(UnaOrg);
-            if (Id == 0)
+            
+            if (userId.Contains("Temp"))
             {
                 resultado = await iPlayerServ.AddPlayer(updatePlayer);
+                await EscribirBitacoraUno(2, BitaAcciones.Agregar, false, 
+                    $"Agrego un nuevo registro {updatePlayer.Nombre} {updatePlayer.Apodo} {updatePlayer.Paterno} {updatePlayer.Materno}");
             } else
             {
                 resultado = await iPlayerServ.UpdatePlayer(updatePlayer);
+                await EscribirBitacoraUno(2, BitaAcciones.Editar, false,
+                    $"Edito registro {updatePlayer.Id} {updatePlayer.Apodo} {updatePlayer.Paterno} {updatePlayer.Materno}");
             }
             if( resultado != null) NM.NavigateTo("/admin/player");
         }
-        public IEnumerable<Niveles> LosNiveles = (IEnumerable<Niveles>)
-                Enum.GetValues(typeof(Niveles));
 
         IEnumerable<DateTime> dates = new DateTime[] {DateTime.Today};    
         protected void DateRender(DateRenderEventArgs args)
@@ -74,6 +86,23 @@ namespace GolfV12.Client.Pages.admin
                 { dates.Append<DateTime>(DateTime.Today.AddDays(-i)); }
             
             args.Disabled = dates.Contains(args.Date);
+        }
+        
+        [CascadingParameter]
+        public Task<AuthenticationState> authStateTask { get; set; }
+        public string userIdLog { get; set; }
+        [Inject]
+        public IG190BitacoraServ bitacoraServ { get; set; }
+        private G190Bitacora writeBitacora { get; set; } = new G190Bitacora();
+        public async Task EscribirBitacoraUno(int usuario, BitaAcciones accion, bool Sistema, string desc)
+        {
+            writeBitacora.Fecha = DateTime.Now;
+            writeBitacora.Accion = accion;
+            writeBitacora.Sistema = Sistema;
+            writeBitacora.UsuarioId = usuario;
+            writeBitacora.Desc = desc;
+            await bitacoraServ.AddBitacora(writeBitacora);
+
         }
         
 

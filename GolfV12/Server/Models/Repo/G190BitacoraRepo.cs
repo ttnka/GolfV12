@@ -25,7 +25,7 @@ namespace GolfV12.Server.Models.Repo
             bool sitema, BitaAcciones? accion, string texto, DateTime fini, DateTime ffin)
         {
             IQueryable<G190Bitacora> querry = _appDbContext.Bitacoras;
-            if (playerId > -1) querry = querry.Where (e => e.Usuario.Id == playerId);
+            if (playerId > -1) querry = querry.Where (e => e.UsuarioId == playerId);
             if (sitema) querry = querry.Where(e => e.Sistema == true);
             if (accion != null) querry = querry.Where(e => e.Accion == accion);
             if (!string.IsNullOrEmpty(texto)) querry = querry.Where(e => e.Desc.Contains(texto));
@@ -43,7 +43,7 @@ namespace GolfV12.Server.Models.Repo
 
         public async Task<IEnumerable<G190Bitacora>> GetBitacoraAll()
         {
-            return await _appDbContext.Bitacoras.ToListAsync();
+            return await _appDbContext.Bitacoras.OrderByDescending(e => e.Id).ToListAsync();
         }
     }
 }

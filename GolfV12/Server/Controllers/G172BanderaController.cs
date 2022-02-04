@@ -13,7 +13,7 @@ namespace GolfV12.Server.Controllers
             this._banderaIFace = banderaIFace;
         }
         [HttpGet("{filtro}")]
-        public async Task<ActionResult<IEnumerable<G172Bandera>>> Buscar(string campo, string color)
+        public async Task<ActionResult<IEnumerable<G172Bandera>>> Buscar(int campo, string? color)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace GolfV12.Server.Controllers
             try
             {
                 return bandera != null ? await _banderaIFace.UpdateBandera(bandera) : 
-                    NotFound($"La bandera {bandera.Color} del campo {bandera.Campo}  no puedo actualizarce");
+                    NotFound($"La bandera {bandera.Color} del campo no puedo actualizarce");
             }
             catch (Exception)
             {

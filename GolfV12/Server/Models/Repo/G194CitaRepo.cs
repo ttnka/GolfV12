@@ -25,7 +25,7 @@ namespace GolfV12.Server.Models.Repo
                                         int masterId, DateTime fini, DateTime ffin)
         {
             IQueryable<G194Cita> querry = _appDbContet.Citas;
-            if (creador > -1) querry = querry.Where(e => e.Creador.Id == creador);
+            if (creador > -1) querry = querry.Where(e => e.Creador == creador);
             if (!string.IsNullOrEmpty(desc)) querry = querry.Where(e => e.Desc.Contains(desc));
             if (masterId > -1) querry = querry.Where(e => e.MasterId == masterId);
             if (fini > DateTime.MinValue) querry = querry.Where(e => e.FIni.Date > fini.Date);

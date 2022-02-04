@@ -20,19 +20,11 @@ namespace GolfV12.Server.Models.Repo
             return newHcp.Entity;
         }
 
-        public async Task<IEnumerable<G128Hcp>> Buscar(int PlayerId, string apodo, 
-                                    string nombre, string apellido, string campo)
+        public async Task<IEnumerable<G128Hcp>> Buscar(int playerId, int banderaId)
         {
             IQueryable<G128Hcp> querry = _appDBContext.Hcps;
-            if (PlayerId > -1) querry = querry.Where(e => e.Player.Id == PlayerId);
-            if(!string.IsNullOrEmpty(apodo)) querry = querry.Where(e => 
-                                                    e.Player.Apodo.Contains(apodo)); 
-            if(!string.IsNullOrEmpty(nombre)) querry = querry.Where(e =>
-                                                    e.Player.Nombre.Contains(nombre));
-            if(!string.IsNullOrEmpty(apellido)) querry = querry.Where(e =>
-                                                    e.Player.Paterno.Contains(apellido));
-            if(!string.IsNullOrEmpty(campo)) querry = querry.Where(e =>
-                                                    e.Bandera.Campo.Nombre.Contains(campo));
+            if (playerId > -1) querry = querry.Where(e => e.PlayerId == playerId);
+            if (banderaId > -1) querry = querry.Where(e => e.BanderaId == banderaId);
             return await querry.ToListAsync();
         }
 
@@ -57,9 +49,9 @@ namespace GolfV12.Server.Models.Repo
                     res.Status = false;
                 } else
                 {
-                    res.Player = hcp.Player;
+                    res.PlayerId = hcp.PlayerId;
                     res.Fecha = hcp.Fecha;
-                    res.Bandera = hcp.Bandera;
+                    res.BanderaId = hcp.BanderaId;
                     res.Hcp = hcp.Hcp;
                     res.Estado = hcp.Estado;
                     res.Status = hcp.Status;

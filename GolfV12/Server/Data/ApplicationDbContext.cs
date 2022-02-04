@@ -31,7 +31,7 @@ namespace GolfV12.Server.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            
         }
     }
 }

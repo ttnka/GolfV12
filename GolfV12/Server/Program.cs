@@ -26,6 +26,7 @@ builder.Services.AddAuthentication()
 
 builder.Services.AddScoped<IG110Organizacion, G110OrganizacionRepo>();
 builder.Services.AddScoped<IG120Player, G120PlayerRepo>();
+builder.Services.AddScoped<IG121ElPlayer, G121ElPlayerRepo>();
 builder.Services.AddScoped<IG128Hcp, G128HcpRepo>();
 builder.Services.AddScoped<IG136Foto, G136FotoRepo>();
 builder.Services.AddScoped<IG170Campo, G170campoRepo>();

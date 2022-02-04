@@ -11,7 +11,7 @@ namespace GolfV12.Shared
     {
         [Key]
         public int Id { get; set; }
-        public G170Campo Campo { get; set; }
+        public int CampoId { get; set; }
         public string Ruta { get; set; }
         public int Hoyo { get; set; }
         public int Par { get; set; }

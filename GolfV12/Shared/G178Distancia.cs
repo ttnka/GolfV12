@@ -12,7 +12,7 @@ namespace GolfV12.Shared
         [Key]
         public int Id { get; set; }
         public DateTime Fecha { get; set; }
-        public G172Bandera Bandera { get; set; }
+        public int BanderaId { get; set; }
         public int Hoyo { get; set; }
         public int Distancia { get; set; }
         public int Estado { get; set; } = 1;

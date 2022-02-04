@@ -16,11 +16,11 @@ namespace GolfV12.Server.Controllers
         }
 
         [HttpGet("{filtro}")]
-        public async Task<ActionResult<IEnumerable<G176Hoyo>>> Buscar(string campo, string ruta, int hoyoN)
+        public async Task<ActionResult<IEnumerable<G176Hoyo>>> Buscar(int campo, string ruta, int hoyoN)
         {
             try
             {
-                var resultado = await _hoyoIFace.Buscar( campo, ruta, hoyoN);
+                var resultado = await _hoyoIFace.Buscar(campo, ruta, hoyoN);
                 return resultado.Any() ? Ok(resultado) : NotFound();
             }
             catch (Exception)
@@ -79,7 +79,7 @@ namespace GolfV12.Server.Controllers
             try
             {
                 return hoyo != null ? await _hoyoIFace.UpdateHoyo(hoyo) : 
-                    NotFound($"En el campo {hoyo.Campo.Corto} el hoyo {hoyo.Hoyo} no fue encontrado para actualizar");
+                    NotFound($"En el hoyo {hoyo.Hoyo} no fue encontrado para actualizar");
             }
             catch (Exception)
             {
