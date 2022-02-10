@@ -14,7 +14,7 @@ namespace GolfV12.Shared
         public DateTime Fecha { get; set; }
         public BitaAcciones Accion { get; set; }
         public bool Sistema { get; set; } = false;
-        public int UsuarioId { get; set; } 
+        public string UsuarioId { get; set; } 
         public string Desc { get; set; }
     }
 }

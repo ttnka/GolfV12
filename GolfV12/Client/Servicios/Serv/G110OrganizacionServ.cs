@@ -27,7 +27,7 @@ namespace GolfV12.Client.Servicios.Serv
             if (!string.IsNullOrEmpty(clave)) { resultado = resultado + "clave=" + clave + "&"; }
             if (!string.IsNullOrEmpty(nombre)) { resultado = resultado + "nombre=" + nombre + "&"; }
             if (!string.IsNullOrEmpty(desc)) { resultado = resultado + "desc=" + desc + "&"; }
-            if (resultado != "") { resultado = "/api/G110Organizacion/filtro?" + resultado; }
+            if (resultado != "") { resultado = "/api/G110Organizacion/filtro/" + resultado; }
             return await _httpClient.GetFromJsonAsync<IEnumerable<G110Organizacion>>(resultado);
         }
 

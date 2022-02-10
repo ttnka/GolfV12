@@ -16,11 +16,11 @@ namespace GolfV12.Server.Controllers
         }
 
         [HttpGet("{filtro}")]
-        public async Task<ActionResult<IEnumerable<G128Hcp>>> Buscar(int playerId,  int banderaId)
+        public async Task<ActionResult<IEnumerable<G128Hcp>>> Buscar(string playerId)
         {
             try
             {
-                var resultado = await _hcpIFace.Buscar(playerId, banderaId);
+                var resultado = await _hcpIFace.Buscar(playerId);
                 return resultado.Any() ? Ok(resultado) : NotFound();
             }
             catch (Exception)

@@ -15,12 +15,12 @@ namespace GolfV12.Server.Controllers
             this._bitacoraIFace = bitacoraIFace;
         }
         [HttpGet("{filtro}")]
-        public async Task<ActionResult<IEnumerable<G190Bitacora>>> Buscar(int playerId, bool sitema,
+        public async Task<ActionResult<IEnumerable<G190Bitacora>>> Buscar(string userId, bool sitema,
             BitaAcciones? accion, string texto, DateTime fini, DateTime ffin)
         {
             try
             {
-                var resultado = await _bitacoraIFace.Buscar(playerId, sitema, accion, texto, fini, ffin);
+                var resultado = await _bitacoraIFace.Buscar(userId, sitema, accion, texto, fini, ffin);
                 return resultado.Any() ? Ok(resultado) : NotFound();
             }
             catch (Exception)

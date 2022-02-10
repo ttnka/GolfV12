@@ -25,7 +25,7 @@ namespace GolfV12.Client.Pages.Sistema
 
         public G120Player elUsuario { get; set; } = new G120Player();
 
-        public Dictionary<int, string> todosPlayer { get; set; } = new Dictionary<int, string>();
+        public Dictionary<string, string> todosPlayer { get; set; } = new Dictionary<string, string>();
 
         public IEnumerable<G190Bitacora> bitacoraAll { get; set; }
         //private G190Bitacora writeBitacora { get; set; } = new G190Bitacora();
@@ -40,31 +40,31 @@ namespace GolfV12.Client.Pages.Sistema
 
             elUsuario = await playerServ.GetPlayer(userIdLog);
             await NombresEscritore();
-            await EscribirBitacoraUno(elUsuario.Id, BitaAcciones.Consultar, false,
+            await EscribirBitacoraUno(elUsuario.UserId, BitaAcciones.Consultar, false,
                 "Consulto el listado de la bitacora."); 
             bitacoraAll = (await bitacoraServ.GetBitacoraAll()).ToList(); 
         }
 
         public async Task NombresEscritore()
         {
-            todosPlayer.Add(0, "No hay nombre");
+            todosPlayer.Add("", "No hay nombre");
             var AllNames =  await playerServ.GetPlayers();
             foreach( var nombres in AllNames )
             {
-                if (!todosPlayer.ContainsKey(nombres.Id))
-                { todosPlayer.Add(nombres.Id, $"{nombres.Nombre} {nombres.Apodo} {nombres.Paterno}"); }
+                if (!todosPlayer.ContainsKey(nombres.UserId))
+                { todosPlayer.Add(nombres.UserId, $"{nombres.Nombre} {nombres.Apodo} {nombres.Paterno}"); }
             }
         }
 
         //[Inject]
         //public IG190BitacoraServ bitacoraServ { get; set; }
         private G190Bitacora writeBitacora { get; set; } = new G190Bitacora();
-        public async Task EscribirBitacoraUno(int usuario, BitaAcciones accion, bool Sistema, string desc)
+        public async Task EscribirBitacoraUno(string userId, BitaAcciones accion, bool Sistema, string desc)
         {
             writeBitacora.Fecha = DateTime.Now;
             writeBitacora.Accion = accion;
             writeBitacora.Sistema = Sistema;
-            writeBitacora.UsuarioId = usuario;
+            writeBitacora.UsuarioId = userId;
             writeBitacora.Desc = desc;
             await bitacoraServ.AddBitacora(writeBitacora);
 

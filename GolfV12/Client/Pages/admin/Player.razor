@@ -48,6 +48,8 @@
                     <Template Context="data">
 
                         @if (data.Status == false) {<label> Registro Borrado! </label>}
+                        @if (data.Nivel <= Niveles.Cliente_Master) {<RadzenLink  Path=@($"/admin/hcp/{data.UserId}") Text="Hcp" />}
+                        
                     </Template>
                 </RadzenDataGridColumn>
             

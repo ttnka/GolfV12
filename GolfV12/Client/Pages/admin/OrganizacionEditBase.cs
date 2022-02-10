@@ -2,6 +2,8 @@
 using GolfV12.Shared;
 using GolfV12.Client.Shared;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+
 
 namespace GolfV12.Client.Pages.admin
 {
@@ -22,6 +24,10 @@ namespace GolfV12.Client.Pages.admin
         //protected WBita WB { get; set; } = new WBita();
         protected async override Task OnInitializedAsync()
         {
+            var autState = await authStateTask;
+            var user = autState.User;
+            if (user.Identity.IsAuthenticated) userIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
+
             if (Id == 0)
             {   
                 ButtonTexto = "Agregar Nuevo";
@@ -38,7 +44,7 @@ namespace GolfV12.Client.Pages.admin
             } else
             {
                 LaOrganizacion = await iOrgServ.GetOrganizacion(Id);
-                await EscribirBitacoraUno(2, BitaAcciones.Consultar, false,
+                await EscribirBitacoraUno(userIdLog, BitaAcciones.Consultar, false,
                     $"Consulto el registro {LaOrganizacion.Id} de la organizacion {LaOrganizacion.Clave}");
             }
             LosEstados = await iEstadoServ.Buscar(titulo:"Vacio", grupo: "Organizacion");
@@ -53,26 +59,29 @@ namespace GolfV12.Client.Pages.admin
             if (LaOrg.Id !=0 )
             {
                 res = await iOrgServ.UpdateOrganizacion(LaOrg);
-                await EscribirBitacoraUno(2, BitaAcciones.Editar, false,
+                await EscribirBitacoraUno(userIdLog, BitaAcciones.Editar, false,
                     $"Actualizo el registro {LaOrg.Id} con clave {LaOrg.Clave} titulo {LaOrg.Nombre}");
             } else
             {
                 res = await iOrgServ.AddOrganizacion(LaOrg);
-                await EscribirBitacoraUno(2, BitaAcciones.Agregar, false,
+                await EscribirBitacoraUno(userIdLog, BitaAcciones.Agregar, false,
                     $"Agrego un registro {LaOrg.Clave} titulo {LaOrg.Nombre}");
             }
             
             if (res != null) NM.NavigateTo("/admin/organizacion");
         }
+        [CascadingParameter]
+        public Task<AuthenticationState> authStateTask { get; set; }
+        public string userIdLog { get; set; }
         [Inject]
         public IG190BitacoraServ bitacoraServ { get; set; }
         private G190Bitacora writeBitacora { get; set; } = new G190Bitacora();
-        public async Task EscribirBitacoraUno(int usuario, BitaAcciones accion, bool Sistema, string desc)
+        public async Task EscribirBitacoraUno(string userId, BitaAcciones accion, bool Sistema, string desc)
         {
             writeBitacora.Fecha = DateTime.Now;
             writeBitacora.Accion = accion;
             writeBitacora.Sistema = Sistema;
-            writeBitacora.UsuarioId = usuario;
+            writeBitacora.UsuarioId = userId;
             writeBitacora.Desc = desc;
             await bitacoraServ.AddBitacora(writeBitacora);
 

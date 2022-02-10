@@ -8,6 +8,7 @@
     <div class="spinner"></div>
 } else
 {
+    <RadzenCard class="m-9">
     <RadzenTemplateForm TItem="G180Estado" Data=@ElEstado Submit=@OnSubmit>
          <div class="row">
             <div class="col-md-4">
@@ -58,7 +59,7 @@
                 </div>
             </div>
         }
-      
+
         <div class="row">
             <div class="cols-sm-3">
                 <NavLink class="nav-link" href="/sistema/estado">Cancelar</NavLink>
@@ -66,8 +67,7 @@
             <div class="cols-sm-9"> 
                 <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" />
             </div>
-        </div>
-        
-        
+        </div>  
     </RadzenTemplateForm>
+    </RadzenCard>
 }

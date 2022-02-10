@@ -27,7 +27,7 @@ namespace GolfV12.Client.Servicios.Serv
             if (!string.IsNullOrEmpty(titulo))  resultado = resultado + "titulo=" + titulo + "&"; 
             if (!string.IsNullOrEmpty(grupo))  resultado = resultado + "grupo=" + grupo + "&"; 
             
-            if (resultado != "") { resultado = "/api/G180estado/filtro?" + resultado; }
+            if (resultado != "") { resultado = "/api/G180estado/filtro/" + resultado; }
             return await _httpClient.GetFromJsonAsync<IEnumerable<G180Estado>>(resultado);
         }
 

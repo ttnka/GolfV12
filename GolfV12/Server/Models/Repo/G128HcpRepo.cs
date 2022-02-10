@@ -20,11 +20,11 @@ namespace GolfV12.Server.Models.Repo
             return newHcp.Entity;
         }
 
-        public async Task<IEnumerable<G128Hcp>> Buscar(int playerId, int banderaId)
+        public async Task<IEnumerable<G128Hcp>> Buscar(string playerId)
         {
             IQueryable<G128Hcp> querry = _appDBContext.Hcps;
-            if (playerId > -1) querry = querry.Where(e => e.PlayerId == playerId);
-            if (banderaId > -1) querry = querry.Where(e => e.BanderaId == banderaId);
+            if (!string.IsNullOrEmpty(playerId)) querry = querry.Where(e => e.PlayerId.Contains(playerId));
+            
             return await querry.ToListAsync();
         }
 

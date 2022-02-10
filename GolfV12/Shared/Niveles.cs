@@ -9,10 +9,10 @@ namespace GolfV12.Shared
     public enum Niveles
     {
         Invitado,
-        Usuario,
+        Jugador,
+        Capturista,
         Cliente,
         Cliente_Master,
-        Capturista,
         Administrador
     }
 }

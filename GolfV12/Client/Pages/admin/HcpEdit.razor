@@ -1,0 +1,67 @@
+﻿@page "/admin/hcpedit/{playerid,hcpid}"
+@inherits HcpEditBase
+@inject NotificationService NS
+@using GolfV12.Shared;
+
+<h3>Editar Hcp</h3>
+
+@if (ElHcp == null)
+{
+    <div class="spinner"></div>
+} else
+{
+  <RadzenCard>   
+  <RadzenTemplateForm TItem="G128Hcp" Data=@ElHcp Submit=@addHcp >
+      <div class="form-grup row">
+          <label for="apodo" class="col-sm-3 col-form-label">Fecha</label>
+          <div class="col-sm-9">
+                <RadzenDatePicker TValue="DateTime" @bind-Value=@ElHcp.Fecha DateFormat="d"  />
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="apodo" class="col-sm-3 col-form-label">Bandera</label>
+          <div class="col-sm-9">
+                <RadzenNumeric Name="BanderaId" @bind-Value=@ElHcp.BanderaId />
+          </div>
+      </div>
+      
+      <div class="form-grup row">
+          <label for="apodo" class="col-sm-3 col-form-label">HcP</label>
+          <div class="col-sm-9">
+                <RadzenNumeric Name="Hcp" @bind-Value=@ElHcp.Hcp />
+                <RadzenRequiredValidator Component="Nombre" Text="Nombre del jugador es requerido!" />
+          </div>
+      </div>
+  
+    @if (@hcpid > 0)
+        {
+            <div class="form-grup row">
+                <label for="apodo" class="col-sm-3 col-form-label">Borrar este registro?</label>
+                <div class="col-sm-9">
+                    <RadzenSwitch Name="Status" @bind-Value=@ElHcp.Status />         
+                </div>
+            </div>   
+        }
+
+        <div class="form-grup row">
+            <div class="col-sm-12 oi-align-right">
+                <NavLink class="nav-link" href="/admin/player">Cancelar</NavLink>
+                <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" /> 
+            </div>
+      </div>
+        
+    </RadzenTemplateForm>
+    </RadzenCard>
+}
+
+@code {
+    async void addHcp()
+    {
+        await saveHcp();
+        ShowNotification(elMesage);
+    }
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+}

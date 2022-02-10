@@ -3,6 +3,7 @@ using GolfV12.Shared;
 using GolfV12.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using Radzen;
+using Microsoft.AspNetCore.Components.Authorization;
 
 
 namespace GolfV12.Client.Pages.players
@@ -18,8 +19,12 @@ namespace GolfV12.Client.Pages.players
         //protected WBita WB { get; set; } = new WBita();
         protected override async Task OnInitializedAsync()
         {
-            Midata = await elPlayerServ.GetPlayer("2");
-            await EscribirBitacoraUno(2, BitaAcciones.Consultar, false,
+            var autState = await authStateTask;
+            var user = autState.User;
+            if (user.Identity.IsAuthenticated) userIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
+
+            Midata = await elPlayerServ.GetPlayer(userIdLog);
+            await EscribirBitacoraUno(userIdLog, BitaAcciones.Consultar, false,
                 "Consulto sus datos");
         }
 
@@ -28,7 +33,7 @@ namespace GolfV12.Client.Pages.players
             var resultado = await playerServ.UpdatePlayer(Midata);
             if (resultado != null)
             {
-                await EscribirBitacoraUno(2, BitaAcciones.Editar, false,
+                await EscribirBitacoraUno(userIdLog, BitaAcciones.Editar, false,
                     $"Actualizo sus datos Nombre {Midata.Nombre} Apellido {Midata.Paterno} {Midata.Materno} " +
                     $"Apodo {Midata.Apodo} {Midata.Estado}");
                 elMesage.Summary = "Registro Actualizado ";
@@ -36,21 +41,24 @@ namespace GolfV12.Client.Pages.players
             }
         }
 
-    // Mensaje de Actualizacion
-     public NotificationMessage elMesage { get; set; } = new NotificationMessage() { 
+        // Mensaje de Actualizacion
+        public NotificationMessage elMesage { get; set; } = new NotificationMessage() { 
                 Severity = NotificationSeverity.Success, Summary = "Cuerpo", Detail = "Detalles ", Duration = 3000 };
     
-    // Bitacora
+        [CascadingParameter]
+        public Task<AuthenticationState> authStateTask { get; set; }
+        public string userIdLog { get; set; }
+        // Bitacora
 
-    [Inject]
+        [Inject]
         public IG190BitacoraServ bitacoraServ { get; set; }
         private G190Bitacora writeBitacora { get; set; } = new G190Bitacora();
-        public async Task EscribirBitacoraUno(int usuario, BitaAcciones accion, bool Sistema, string desc)
+        public async Task EscribirBitacoraUno(string userId, BitaAcciones accion, bool Sistema, string desc)
         {
             writeBitacora.Fecha = DateTime.Now;
             writeBitacora.Accion = accion;
             writeBitacora.Sistema = Sistema;
-            writeBitacora.UsuarioId = usuario;
+            writeBitacora.UsuarioId = userId;
             writeBitacora.Desc = desc;
             await bitacoraServ.AddBitacora(writeBitacora);
         }
