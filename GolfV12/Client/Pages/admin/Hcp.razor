@@ -13,7 +13,7 @@
 {
     
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href=@($"/admin/hcpedit?playerid={playerid}&hcpid=0")>
+            <NavLink class="nav-link" href=@($"/admin/hcpedit/{PlayerId}")>
                 <span class="oi oi-plus" aria-hidden="true"></span> Nuevo HCP para un jugador 
             </NavLink>
        </div>
@@ -22,23 +22,25 @@
         PageSize="50" AllowPaging="true" AllowSorting="true" LogicalFilterOperator="LogicalFilterOperator.Or"
         Data="@LosHcps" TItem="G128Hcp" >
         <Columns>
-            <RadzenDataGridColumn TItem="G128Hcp" Property="Id" Title="Id" Width="100px" Frozen="true">
+            <RadzenDataGridColumn TItem="G128Hcp" Property="Id" Title="Id" Width="60px" Frozen="true">
                 <Template Context="data">
                     <label>@data.Id</label>
-                    <RadzenLink Icon="edit" Path=@($"/admin/hcpedit?playerid={data.PlayerId}&hcpid={data.Id}") />
+                    <RadzenLink Icon="edit" Path=@($"/admin/hcpedit/{data.PlayerId}/{data.Id}") />
                 </Template>
             </RadzenDataGridColumn>
-                        <RadzenDataGridColumn TItem="G128Hcp" Property="PlayerId" Title="Jugador" Width="100px" Frozen="true">
+                        <RadzenDataGridColumn TItem="G128Hcp" Property="PlayerId" Title="Jugador" Width="200px" Frozen="true">
                 <Template Context="data">
-                    @if (@LosPlayers.ContainsKey(data.PlayerId)) {<label>@LosPlayers[data.PlayerId]</label> } else {<label>@LosPlayers["vacio"]</label>} 
-                    
-                    <RadzenLink Icon="edit" Path=@($"/admin/hcpedit?playerid={data.PlayerId}&hcpid={data.Id}") />
+                    @if (@LosPlayers.ContainsKey(data.PlayerId)) {<label>@LosPlayers[data.PlayerId]</label> } else {<label>@LosPlayers["Vacio"]</label>} 
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="G128Hcp" Property="Fecha" Title="Fecha" FormatString="{0:d}" />
-            <RadzenDataGridColumn TItem="G128Hcp" Property="Bandera" Title="Bandera" />
+            <RadzenDataGridColumn TItem="G128Hcp" Property="BanderaId" Title="Bandera" >
+                <Template Context="data">
+                    @data.BanderaId
+                </Template>
+            </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="G128Hcp" Property="Hcp" Title="Hcp" />
-            
+
+            <RadzenDataGridColumn TItem="G128Hcp" Property="Fecha" Title="Fecha" FormatString="{0:d}" />
             <RadzenDataGridColumn TItem="G128Hcp"  Title="Estado" >
                 <Template Context="data">
                     @if(data.Status == false) {<div style:"color-font:Red"><label style:"color:red"> Registro Borrado </label></div>}

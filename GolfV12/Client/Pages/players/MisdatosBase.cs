@@ -11,29 +11,29 @@ namespace GolfV12.Client.Pages.players
     public class MisdatosBase : ComponentBase
     {
         [Inject]
-        protected IG121ElPlayerServ elPlayerServ { get; set; }
+        protected IG121ElPlayerServ ElPlayerServ { get; set; }
         [Inject]
-        protected IG120PlayerServ playerServ { get; set; }
+        protected IG120PlayerServ PlayerIServ { get; set; }
         public NavigationManager NM { get; set; }
         protected G120Player Midata { get; set; }
         //protected WBita WB { get; set; } = new WBita();
         protected override async Task OnInitializedAsync()
         {
-            var autState = await authStateTask;
+            var autState = await AuthStateTask;
             var user = autState.User;
-            if (user.Identity.IsAuthenticated) userIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
+            if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
-            Midata = await elPlayerServ.GetPlayer(userIdLog);
-            await EscribirBitacoraUno(userIdLog, BitaAcciones.Consultar, false,
+            Midata = await ElPlayerServ.GetPlayer(UserIdLog);
+            await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
                 "Consulto sus datos");
         }
 
         public async Task MisDatosUpdate()
         {
-            var resultado = await playerServ.UpdatePlayer(Midata);
+            var resultado = await PlayerIServ.UpdatePlayer(Midata);
             if (resultado != null)
             {
-                await EscribirBitacoraUno(userIdLog, BitaAcciones.Editar, false,
+                await EscribirBitacoraUno(UserIdLog, BitaAcciones.Editar, false,
                     $"Actualizo sus datos Nombre {Midata.Nombre} Apellido {Midata.Paterno} {Midata.Materno} " +
                     $"Apodo {Midata.Apodo} {Midata.Estado}");
                 elMesage.Summary = "Registro Actualizado ";
@@ -46,21 +46,21 @@ namespace GolfV12.Client.Pages.players
                 Severity = NotificationSeverity.Success, Summary = "Cuerpo", Detail = "Detalles ", Duration = 3000 };
     
         [CascadingParameter]
-        public Task<AuthenticationState> authStateTask { get; set; }
-        public string userIdLog { get; set; }
+        public Task<AuthenticationState> AuthStateTask { get; set; }
+        public string UserIdLog { get; set; }
         // Bitacora
 
         [Inject]
-        public IG190BitacoraServ bitacoraServ { get; set; }
-        private G190Bitacora writeBitacora { get; set; } = new G190Bitacora();
+        public IG190BitacoraServ BitacoraServ { get; set; }
+        private G190Bitacora WriteBitacora { get; set; } = new G190Bitacora();
         public async Task EscribirBitacoraUno(string userId, BitaAcciones accion, bool Sistema, string desc)
         {
-            writeBitacora.Fecha = DateTime.Now;
-            writeBitacora.Accion = accion;
-            writeBitacora.Sistema = Sistema;
-            writeBitacora.UsuarioId = userId;
-            writeBitacora.Desc = desc;
-            await bitacoraServ.AddBitacora(writeBitacora);
+            WriteBitacora.Fecha = DateTime.Now;
+            WriteBitacora.Accion = accion;
+            WriteBitacora.Sistema = Sistema;
+            WriteBitacora.UsuarioId = userId;
+            WriteBitacora.Desc = desc;
+            await BitacoraServ.AddBitacora(WriteBitacora);
         }
     }
 }

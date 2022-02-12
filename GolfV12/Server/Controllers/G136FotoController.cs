@@ -14,7 +14,7 @@ namespace GolfV12.Server.Controllers
             this._fotoIFace = fotoIFace;
         }
         [HttpGet("{filtro}")]
-        public async Task<ActionResult<IEnumerable<G136Foto>>> Buscar(int playerId, string titulo, DateTime bday)
+        public async Task<ActionResult<IEnumerable<G136Foto>>> Buscar(string? playerId, string? titulo, DateTime bday)
         {
             try
             {

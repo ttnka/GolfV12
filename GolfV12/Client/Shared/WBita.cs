@@ -7,17 +7,17 @@ namespace GolfV12.Client.Shared
     public class WBita
     {
         [Inject]
-        public IG190BitacoraServ bitacoraServ { get; set; }
-        private G190Bitacora writeBitacora { get; set; } = new G190Bitacora();
+        public IG190BitacoraServ BitacoraServ { get; set; }
+        private G190Bitacora WriteBitacora { get; set; } = new G190Bitacora();
         
         public async Task EscribirBitacoraAll(string userId, BitaAcciones accion, bool Sistema, string desc)
         {
-            writeBitacora.Fecha = DateTime.Now;
-            writeBitacora.Accion = accion;
-            writeBitacora.Sistema = Sistema;
-            writeBitacora.UsuarioId = userId;
-            writeBitacora.Desc = desc;
-            await bitacoraServ.AddBitacora(writeBitacora);
+            WriteBitacora.Fecha = DateTime.Now;
+            WriteBitacora.Accion = accion;
+            WriteBitacora.Sistema = Sistema;
+            WriteBitacora.UsuarioId = userId;
+            WriteBitacora.Desc = desc;
+            await BitacoraServ.AddBitacora(WriteBitacora);
             
         }
     }

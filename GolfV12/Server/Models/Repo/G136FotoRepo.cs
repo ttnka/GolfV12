@@ -20,10 +20,10 @@ namespace GolfV12.Server.Models.Repo
             return res.Entity;
         }
 
-        public async Task<IEnumerable<G136Foto>> Buscar(int playerId, string titulo, DateTime bday)
+        public async Task<IEnumerable<G136Foto>> Buscar(string? playerId, string? titulo, DateTime bday)
         {
             IQueryable<G136Foto> querry = _appDbContext.Fotos;
-            if (playerId > -1) querry = querry.Where(e => e.PlayerId == playerId);
+            if (!string.IsNullOrEmpty(playerId)) querry = querry.Where(e => e.PlayerId == playerId);
             if (!string.IsNullOrEmpty(titulo)) querry = querry.Where(e => e.Titulo.Contains(titulo));
             
             return await querry.ToListAsync();

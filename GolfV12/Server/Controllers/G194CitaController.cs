@@ -15,7 +15,7 @@ namespace GolfV12.Server.Controllers
             this._citaIFace = citaIFace;
         }
         [HttpGet("{filtro}")]
-        public async Task<ActionResult<IEnumerable<G194Cita>>> Buscar(int creador, string desc, 
+        public async Task<ActionResult<IEnumerable<G194Cita>>> Buscar(string? creador, string? desc, 
                                        int masterId, DateTime fini, DateTime ffin)
         {
             try

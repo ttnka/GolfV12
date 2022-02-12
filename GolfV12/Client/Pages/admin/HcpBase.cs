@@ -8,84 +8,86 @@ namespace GolfV12.Client.Pages.admin
     public class HcpBase : ComponentBase 
     {
         [Inject]
-        public IG128HcpServ hcpIServ { get; set; }
+        public IG128HcpServ HcpIServ { get; set; }
         [Inject]
-        public IG120PlayerServ playerServ { get; set; }
+        public IG120PlayerServ PlayerServ { get; set; }
 
         public IEnumerable<G128Hcp> LosHcps { get; set; }
         public Dictionary<string, string> LosPlayers { get; set; } = new Dictionary<string, string>();
 
         [Parameter]
-        public string playerid { get; set; } 
+        public string PlayerId { get; set; } 
 
         protected async override Task OnInitializedAsync()
         {
-            var autState = await authStateTask;
+            var autState = await AuthStateTask;
             var user = autState.User;
-            if (user.Identity.IsAuthenticated) userIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
+            if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
-            await EscribirBitacoraUno(userIdLog, BitaAcciones.Borrar, false, $"elplayerid es{playerid} ");
+            await EscribirBitacoraUno(UserIdLog, BitaAcciones.Borrar, false, $"elplayerid es{PlayerId} ");
 
             await LeerLosPlayers();
             var textoTemp1 = string.Empty;
 
-            if (string.IsNullOrEmpty(playerid)) 
+            if (string.IsNullOrEmpty(PlayerId)) 
             { 
-                LosHcps = await hcpIServ.GetHcps();
+                LosHcps = await HcpIServ.GetHcps();
                 textoTemp1 = "Consulto listado de Hcp de los jugadores";
             }
             else
             {
-                LosHcps = await hcpIServ.GetHcps();
-                //LosHcps = await hcpIServ.Buscar(playerid);
+                //LosHcps = await HcpIServ.GetHcps();
+                LosHcps = await HcpIServ.Buscar(PlayerId);
 
-                textoTemp1 = $"Consulto el Hcp de {LosPlayers[playerid]}";
+                textoTemp1 = $"Consulto el Hcp de {LosPlayers[PlayerId]}";
             }
-                await EscribirBitacoraUno(userIdLog, BitaAcciones.Consultar, false,
+                await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
                     textoTemp1);
         }
 
         public async Task LeerLosPlayers()
         {
-            if (string.IsNullOrEmpty(playerid)) 
+            //LosPlayers.Add("Vacio", "No se encontro nombre de registro");
+            if (string.IsNullOrEmpty(PlayerId)) 
             { 
-                var Allplayers = await playerServ.GetPlayers();
+                var Allplayers = await PlayerServ.GetPlayers();
                 foreach (var player in Allplayers)
                 {
                     if (!LosPlayers.ContainsKey(player.UserId)) LosPlayers.Add(player.UserId, player.Nombre + player.Paterno + player.Materno);
                 }
+                LosPlayers.Add("Vacio", "1No se encontro nombre de registro");
             } 
             else
             { 
-                var Oneplayer = await playerServ.GetPlayer(playerid); 
+                var Oneplayer = await PlayerServ.GetPlayer(PlayerId); 
                 var textTemp = string.Empty;
                 if(Oneplayer != null) 
                     { 
-                        textTemp = Oneplayer.Nombre + Oneplayer.Paterno + Oneplayer.Materno;
+                        textTemp = Oneplayer.Nombre + " " + Oneplayer.Paterno + " " + Oneplayer.Materno;
                     } 
                 else
                     {
-                textTemp = "No se encontro nombre";
+                        textTemp = "No se encontro nombre";
                     }
-                LosPlayers.Add(playerid, textTemp);
+                LosPlayers.Add(PlayerId, textTemp);
+                LosPlayers.Add("Vacio", "2No se encontro nombre de registro");
             }
-            
         }
 
         [CascadingParameter]
-        public Task<AuthenticationState> authStateTask { get; set; }
-        public string userIdLog { get; set; }
+        public Task<AuthenticationState> AuthStateTask { get; set; }
+        public string UserIdLog { get; set; }
         [Inject]
-        public IG190BitacoraServ bitacoraServ { get; set; }
-        private G190Bitacora writeBitacora { get; set; } = new G190Bitacora();
+        public IG190BitacoraServ BitacoraServ { get; set; }
+        private G190Bitacora WriteBitacora { get; set; } = new G190Bitacora();
         public async Task EscribirBitacoraUno(string userId, BitaAcciones accion, bool Sistema, string desc)
         {
-            writeBitacora.Fecha = DateTime.Now;
-            writeBitacora.Accion = accion;
-            writeBitacora.Sistema = Sistema;
-            writeBitacora.UsuarioId = userId;
-            writeBitacora.Desc = desc;
-            await bitacoraServ.AddBitacora(writeBitacora);
+            WriteBitacora.Fecha = DateTime.Now;
+            WriteBitacora.Accion = accion;
+            WriteBitacora.Sistema = Sistema;
+            WriteBitacora.UsuarioId = userId;
+            WriteBitacora.Desc = desc;
+            await BitacoraServ.AddBitacora(WriteBitacora);
         }
     }
 }

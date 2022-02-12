@@ -13,7 +13,7 @@ namespace GolfV12.Shared
         public int Id { get; set; }
         public DateTime Fecha { get; set; }
         public string Titulo { get; set; }
-        public int PlayerId { get; set; }
+        public string PlayerId { get; set; }
         public string Grupo { get; set; }
         public string Foto { get; set; }
         public bool Privada { get; set; } = false;

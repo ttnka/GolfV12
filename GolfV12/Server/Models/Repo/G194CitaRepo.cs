@@ -21,11 +21,11 @@ namespace GolfV12.Server.Models.Repo
             return res.Entity;
         }
 
-        public async Task<IEnumerable<G194Cita>> Buscar(int creador, string desc, 
+        public async Task<IEnumerable<G194Cita>> Buscar(string? creador, string? desc, 
                                         int masterId, DateTime fini, DateTime ffin)
         {
             IQueryable<G194Cita> querry = _appDbContet.Citas;
-            if (creador > -1) querry = querry.Where(e => e.Creador == creador);
+            if (!string.IsNullOrEmpty(creador)) querry = querry.Where(e => e.Creador == creador);
             if (!string.IsNullOrEmpty(desc)) querry = querry.Where(e => e.Desc.Contains(desc));
             if (masterId > -1) querry = querry.Where(e => e.MasterId == masterId);
             if (fini > DateTime.MinValue) querry = querry.Where(e => e.FIni.Date > fini.Date);
