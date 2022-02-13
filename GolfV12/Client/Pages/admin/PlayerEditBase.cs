@@ -11,13 +11,13 @@ namespace GolfV12.Client.Pages.admin
     public class PlayerEditBase : ComponentBase
     {
         [Inject]
-        public IG110OrganizacionServ iOrgServ { get; set; }
+        public IG110OrganizacionServ OrgIServ { get; set; }
         [Inject]
-        public IG120PlayerServ iPlayerServ { get; set; }
+        public IG120PlayerServ PlayerIServ { get; set; }
         [Inject]
-        public IG121ElPlayerServ elPlayerServ { get; set; }
+        public IG121ElPlayerServ ElPlayerServ { get; set; }
         [Inject]
-        public IG180EstadoServ iEstadoServ { get; set; }
+        public IG180EstadoServ EstadoIServ { get; set; }
         
         [Inject]
         public NavigationManager NM { get; set; }
@@ -30,18 +30,18 @@ namespace GolfV12.Client.Pages.admin
         //public int ElNivel { get; set; }
 
         [Parameter]
-        public string userId { get; set; }
+        public string UserId { get; set; }
 
         public G120Player ElPlayer { get; set; } = new G120Player();
         public string ButtonTexto { get; set; } = "Actualizar";
         protected async override Task OnInitializedAsync()
         {
-            var autState = await authStateTask;
+            var autState = await AuthStateTask;
             var user = autState.User;
-            if (user.Identity.IsAuthenticated) userIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
+            if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
-            LasOrg = await iOrgServ.GetOrganizaciones();
-            if (userId.Contains("Temp"))
+            LasOrg = await OrgIServ.GetOrganizaciones();
+            if (UserId.Contains("Temp"))
             {
                 ElPlayer = new G120Player
                 {
@@ -53,15 +53,16 @@ namespace GolfV12.Client.Pages.admin
                     Bday = DateTime.Now, OrganizacionId = 2, Nivel=0,
                     Estado = 1, Status = true, Temporal = true
                 };
-                await EscribirBitacoraUno(userIdLog, BitaAcciones.Agregar, true,
+
+                await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, true,
                     "El usuario agrego un jugador temporal");
             } else
             {
-                ElPlayer = await elPlayerServ.GetPlayer(userId);
-                await EscribirBitacoraUno(userIdLog, BitaAcciones.Consultar, false,
+                ElPlayer = await ElPlayerServ.GetPlayer(UserId);
+                await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
                     $"El usuario consulto un jugador {ElPlayer.Nombre} {ElPlayer.Paterno} {ElPlayer.Materno}");
             }
-            LosEstados = await iEstadoServ.Buscar("V", "Player");
+            LosEstados = await EstadoIServ.Buscar("", "Player");
             //ElEstado = ElPlayer.Estado;
         }
 
@@ -69,15 +70,15 @@ namespace GolfV12.Client.Pages.admin
         {
             G120Player resultado = null;
             
-            if (userId.Contains("Temp"))
+            if (UserId.Contains("Temp"))
             {
-                resultado = await iPlayerServ.AddPlayer(updatePlayer);
-                await EscribirBitacoraUno(userIdLog, BitaAcciones.Agregar, false, 
+                resultado = await PlayerIServ.AddPlayer(updatePlayer);
+                await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false, 
                     $"Agrego un nuevo registro {updatePlayer.Nombre} {updatePlayer.Apodo} {updatePlayer.Paterno} {updatePlayer.Materno}");
             } else
             {
-                resultado = await iPlayerServ.UpdatePlayer(updatePlayer);
-                await EscribirBitacoraUno(userIdLog, BitaAcciones.Editar, false,
+                resultado = await PlayerIServ.UpdatePlayer(updatePlayer);
+                await EscribirBitacoraUno(UserIdLog, BitaAcciones.Editar, false,
                     $"Edito registro {updatePlayer.Id} {updatePlayer.Apodo} {updatePlayer.Paterno} {updatePlayer.Materno}");
             }
             if( resultado != null) NM.NavigateTo("/admin/player");
@@ -93,19 +94,19 @@ namespace GolfV12.Client.Pages.admin
         }
         
         [CascadingParameter]
-        public Task<AuthenticationState> authStateTask { get; set; }
-        public string userIdLog { get; set; }
+        public Task<AuthenticationState> AuthStateTask { get; set; }
+        public string UserIdLog { get; set; }
         [Inject]
-        public IG190BitacoraServ bitacoraServ { get; set; }
-        private G190Bitacora writeBitacora { get; set; } = new G190Bitacora();
+        public IG190BitacoraServ BitacoraServ { get; set; }
+        private G190Bitacora WriteBitacora { get; set; } = new G190Bitacora();
         public async Task EscribirBitacoraUno(string userId, BitaAcciones accion, bool Sistema, string desc)
         {
-            writeBitacora.Fecha = DateTime.Now;
-            writeBitacora.Accion = accion;
-            writeBitacora.Sistema = Sistema;
-            writeBitacora.UsuarioId = userId;
-            writeBitacora.Desc = desc;
-            await bitacoraServ.AddBitacora(writeBitacora);
+            WriteBitacora.Fecha = DateTime.Now;
+            WriteBitacora.Accion = accion;
+            WriteBitacora.Sistema = Sistema;
+            WriteBitacora.UsuarioId = userId;
+            WriteBitacora.Desc = desc;
+            await BitacoraServ.AddBitacora(WriteBitacora);
         }
         
     }

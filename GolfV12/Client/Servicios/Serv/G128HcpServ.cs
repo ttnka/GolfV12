@@ -24,15 +24,11 @@ namespace GolfV12.Client.Servicios.Serv
         public async Task<IEnumerable<G128Hcp>> Buscar(string playerId)
         {
             //var resultado = "";
-
             //if (!string.IsNullOrEmpty(playerId)) { resultado = "playerId=" + playerId; }
-
-            //if (resultado != "") { resultado = "/api/G128Hcp/filtro/" + resultado; }
-            
+            //if (resultado != "") { resultado = "/api/G128Hcp/filtro?" + resultado; }
             //return await _httpClient.GetFromJsonAsync<IEnumerable<G128Hcp>>(resultado);
-            var res2 = await _httpClient.GetFromJsonAsync<IEnumerable<G128Hcp>>($"/api/G128Hcp/filtro?playerid={playerId}");
-            return res2.ToList();
-
+            return await _httpClient.GetFromJsonAsync<IEnumerable<G128Hcp>>($"/api/G128Hcp/filtro?playerid={playerId}");
+            
             //return await _httpClient.GetFromJsonAsync<IEnumerable<G128Hcp>>($"/api/G128Hcp/filtro/{playerId}");
         }
 

@@ -22,7 +22,8 @@ namespace GolfV12.Server.Controllers
             try
             {
                 var resultado = await _playerIFace.Buscar(userId, org, apodo, nombre, paterno);
-                return resultado.Any() ? Ok(resultado) : NotFound();
+                
+                //return resultado.Any() ? Ok(resultado) : NotFound();
             }
             catch (Exception)
             {

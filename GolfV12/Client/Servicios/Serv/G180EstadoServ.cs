@@ -21,13 +21,13 @@ namespace GolfV12.Client.Servicios.Serv
                 null;
         }
 
-        public async Task<IEnumerable<G180Estado>> Buscar(string titulo, string grupo)
+        public async Task<IEnumerable<G180Estado>> Buscar(string? titulo, string? grupo)
         {
             var resultado = "";
             if (!string.IsNullOrEmpty(titulo))  resultado = resultado + "titulo=" + titulo + "&"; 
             if (!string.IsNullOrEmpty(grupo))  resultado = resultado + "grupo=" + grupo + "&"; 
             
-            if (resultado != "") { resultado = "/api/G180estado/filtro/" + resultado; }
+            if (resultado != "") { resultado = "/api/G180estado/filtro?" + resultado; }
             return await _httpClient.GetFromJsonAsync<IEnumerable<G180Estado>>(resultado);
         }
 

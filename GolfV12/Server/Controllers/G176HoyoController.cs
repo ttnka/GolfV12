@@ -16,12 +16,13 @@ namespace GolfV12.Server.Controllers
         }
 
         [HttpGet("{filtro}")]
-        public async Task<ActionResult<IEnumerable<G176Hoyo>>> Buscar(int campo, string ruta, int hoyoN)
+        public async Task<ActionResult<IEnumerable<G176Hoyo>>> Buscar(int campo, string? ruta, int hoyoN)
         {
             try
             {
                 var resultado = await _hoyoIFace.Buscar(campo, ruta, hoyoN);
-                return resultado.Any() ? Ok(resultado) : NotFound();
+                return Ok(resultado);
+                //return resultado.Any() ? Ok(resultado) : NotFound();
             }
             catch (Exception)
             {

@@ -1,5 +1,5 @@
 ﻿@page "/admin/hcpedit/{playerid}"
-@page "/admin/hcpedit/{playerid}/{hcpid}"
+@page "/admin/hcpedit/{playerid}/{hcpid:int}"
 @inherits HcpEditBase
 @inject NotificationService NS
 @using GolfV12.Shared;
@@ -12,7 +12,7 @@
 } else
 {
   <RadzenCard>   
-  <RadzenTemplateForm TItem="G128Hcp" Data=@ElHcp Submit=@addHcp >
+  <RadzenTemplateForm TItem="G128Hcp" Data=@ElHcp Submit=@AddHcp >
       <div class="form-grup row">
           <label for="apodo" class="col-sm-3 col-form-label">Fecha</label>
           <div class="col-sm-9">
@@ -34,7 +34,7 @@
           </div>
       </div>
   
-    @if (@hcpid > 0)
+    @if (@HcpId > 0)
         {
             <div class="form-grup row">
                 <label for="apodo" class="col-sm-3 col-form-label">Borrar este registro?</label>
@@ -45,7 +45,7 @@
         }
 
         <div class="form-grup row">
-            <div class="col-sm-12 oi-align-right">
+            <div class="col-sm-12">
                 <NavLink class="nav-link" href="/admin/player">Cancelar</NavLink>
                 <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" /> 
             </div>
@@ -56,10 +56,10 @@
 }
 
 @code {
-    async void addHcp()
+    async void AddHcp()
     {
-        await saveHcp();
-        ShowNotification(elMesage);
+        await SaveHcp();
+        ShowNotification(ElMesage);
     }
     public void ShowNotification(NotificationMessage message)
     {

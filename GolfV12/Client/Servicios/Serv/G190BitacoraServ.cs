@@ -21,8 +21,8 @@ namespace GolfV12.Client.Servicios.Serv
         }
 
 
-        public async Task<IEnumerable<G190Bitacora>> Buscar(string userId, bool sitema,
-           BitaAcciones? accion, string texto, DateTime fini, DateTime ffin)
+        public async Task<IEnumerable<G190Bitacora>> Buscar(string? userId, bool sitema,
+           BitaAcciones? accion, string? texto, DateTime fini, DateTime ffin)
         {
             var resultado = "";
             if (!string.IsNullOrEmpty(userId)) resultado = "userId=" + userId + "&";
@@ -31,7 +31,7 @@ namespace GolfV12.Client.Servicios.Serv
             if (!string.IsNullOrEmpty(texto))  resultado = resultado + "texto=" + texto + "&"; 
             if (fini > DateTime.MinValue) resultado = resultado + "fini=" + fini + "&";
             if (ffin > DateTime.MinValue) resultado = resultado + "fini=" + fini + "&";
-            if (resultado != "") { resultado = "/api/G190Bitacora/filtro/" + resultado; }
+            if (resultado != "") { resultado = "/api/G190Bitacora/filtro?" + resultado; }
             return await _httpClient.GetFromJsonAsync<IEnumerable<G190Bitacora>>(resultado);
         }
 

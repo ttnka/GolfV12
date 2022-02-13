@@ -9,7 +9,6 @@ namespace GolfV12.Server.Controllers
     public class G128HcpController : ControllerBase 
     {
         private readonly IG128Hcp _hcpIFace;
-
         public G128HcpController(IG128Hcp hcpIFace)
         {
             this._hcpIFace = hcpIFace;
@@ -21,7 +20,8 @@ namespace GolfV12.Server.Controllers
             try
             {
                 var resultado = await _hcpIFace.Buscar(playerId);
-                return resultado.Any() ? Ok(resultado) : NotFound();
+                return Ok(resultado);
+                //return resultado.Any() ? Ok(resultado) : NotFound();
             }
             catch (Exception)
             {

@@ -30,7 +30,7 @@
           <label for="apodo" class="col-sm-3 col-form-label">Paterno</label>
           <div class="col-sm-9">
                 <RadzenTextBox Name="Paterno" @bind-Value=@ElPlayer.Paterno />
-                <RadzenRequiredValidator Component="Nombre" Text="Apellido del jugador es requerido!" />
+                <RadzenRequiredValidator Component="Paterno" Text="Apellido del jugador es requerido!" />
           </div>
       </div>
       
@@ -83,7 +83,7 @@
                     Data=@LosEstados TextProperty="Titulo" ValueProperty="Indice" />
           </div>
       </div>
-    @if (!userId.Contains("Temp"))
+    @if (!UserId.Contains("Temp"))
         {
             <div class="form-grup row">
                 <label for="apodo" class="col-sm-3 col-form-label">Borrar este registro?</label>

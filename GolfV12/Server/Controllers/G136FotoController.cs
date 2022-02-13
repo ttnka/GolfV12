@@ -19,7 +19,8 @@ namespace GolfV12.Server.Controllers
             try
             {
                 var resultado = await _fotoIFace.Buscar(playerId, titulo, bday);
-                return resultado.Any() ? Ok(resultado) : NotFound();
+                return Ok(resultado);
+                //return resultado.Any() ? Ok(resultado) : NotFound();
             }
             catch (Exception)
             {

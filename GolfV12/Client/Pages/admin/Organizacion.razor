@@ -21,7 +21,10 @@
             <RadzenDataGridColumn TItem="G110Organizacion" Property="Id" Title="Id" Width="100px" Frozen="true">
                 <Template Context="data">
                     <label>@data.Id</label>
-                    <RadzenLink Icon="edit" Path=@($"/admin/organizacionedit/{data.Id}") />
+                    @if (data.Id > 1)
+                    {
+                        <RadzenLink Icon="edit" Path=@($"/admin/organizacionedit/{data.Id}") />
+                    }
                 </Template>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="G110Organizacion" Property="Clave" Title="Clave" />

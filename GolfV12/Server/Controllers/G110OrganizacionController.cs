@@ -21,7 +21,8 @@ namespace GolfV12.Server.Controllers
             try
             {
                 var resultado = await _orgIFace.Buscar(clave, nombre, desc);
-                return resultado.Any() ? Ok(resultado) : NotFound();
+                return Ok(resultado);
+                //return resultado.Any() ? Ok(resultado) : NotFound();
             }
             catch (Exception)
             {

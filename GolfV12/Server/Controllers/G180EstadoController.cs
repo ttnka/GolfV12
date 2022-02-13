@@ -20,7 +20,8 @@ namespace GolfV12.Server.Controllers
             try
             {
                 var resultado = await _estadoIFace.Buscar(titulo, grupo);
-                return resultado.Any() ? Ok(resultado) : NotFound();
+                return Ok(resultado);
+                //return resultado.Any() ? Ok(resultado) : NotFound();
             }
             catch (Exception)
             {
