@@ -20,7 +20,8 @@ namespace GolfV12.Server.Models.Repo
             return res.Entity;
         }
 
-        public async Task<IEnumerable<G110Organizacion>> Buscar(string clave, string nombre, string desc)
+        public async Task<IEnumerable<G110Organizacion>> Buscar(string? clave, string? nombre, 
+            string? desc)
         {
             IQueryable<G110Organizacion> querry = _appDbContext.Organizaciones;
             if (!string.IsNullOrEmpty(clave)) querry = querry.Where(e => e.Clave.Contains(clave));

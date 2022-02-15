@@ -26,8 +26,7 @@ namespace GolfV12.Server.Models.Repo
         {
             IQueryable<G172Bandera> querry = _appDbContext.Banderas;
             if (campo > -1 ) querry = querry.Where(e => e.CampoId == campo);
-            if (string.IsNullOrEmpty(color)) querry = querry.Where(e =>
-                                    e.Color.Contains(color));
+            if (!string.IsNullOrEmpty(color)) querry = querry.Where(e => e.Color.Contains(color));
             return await querry.ToListAsync();
         }
 

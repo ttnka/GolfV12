@@ -1,8 +1,8 @@
 ﻿using GolfV12.Shared;
 
-namespace GolfV12.Server.Models.IFace
+namespace GolfV12.Client.Servicios.IFaceServ
 {
-    public interface IG170Campo
+    public interface IG170CampoServ
     {
         Task<IEnumerable<G170Campo>> Buscar(string? corto, string? nombre, string? ciudad, string? pais);
         Task<IEnumerable<G170Campo>> GetCampos();

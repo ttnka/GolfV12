@@ -5,7 +5,7 @@
 @using GolfV12.Shared;
 
 
-<h3>Hcp</h3>
+<h3>Listado de Hcp @if (@LosPlayers.ContainsKey(PlayerId)) {<label> de @LosPlayers[PlayerId]</label> } </h3>
 @if (LosHcps == null)
 {
     <div class="spinner"></div>

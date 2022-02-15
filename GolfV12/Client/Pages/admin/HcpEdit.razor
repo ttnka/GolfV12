@@ -14,20 +14,20 @@
   <RadzenCard>   
   <RadzenTemplateForm TItem="G128Hcp" Data=@ElHcp Submit=@AddHcp >
       <div class="form-grup row">
-          <label for="apodo" class="col-sm-3 col-form-label">Fecha</label>
+          <label for="fecha" class="col-sm-3 col-form-label">Fecha</label>
           <div class="col-sm-9">
                 <RadzenDatePicker TValue="DateTime" @bind-Value=@ElHcp.Fecha DateFormat="d"  />
           </div>
       </div>
       <div class="form-grup row">
-          <label for="apodo" class="col-sm-3 col-form-label">Bandera</label>
+          <label for="bandera" class="col-sm-3 col-form-label">Bandera</label>
           <div class="col-sm-9">
                 <RadzenNumeric Name="BanderaId" @bind-Value=@ElHcp.BanderaId />
           </div>
       </div>
       
       <div class="form-grup row">
-          <label for="apodo" class="col-sm-3 col-form-label">HcP</label>
+          <label for="hcp" class="col-sm-3 col-form-label">HcP</label>
           <div class="col-sm-9">
                 <RadzenNumeric Name="Hcp" @bind-Value=@ElHcp.Hcp />
                 <RadzenRequiredValidator Component="Hcp" Text="El Hcp va 0 a 40 y es requerido!" />
@@ -37,7 +37,7 @@
     @if (@HcpId > 0)
         {
             <div class="form-grup row">
-                <label for="apodo" class="col-sm-3 col-form-label">Borrar este registro?</label>
+                <label for="status" class="col-sm-3 col-form-label">Borrar este registro?</label>
                 <div class="col-sm-9">
                     <RadzenSwitch Name="Status" @bind-Value=@ElHcp.Status />         
                 </div>
@@ -46,7 +46,7 @@
 
         <div class="form-grup row">
             <div class="col-sm-12">
-                <NavLink class="nav-link" href="/admin/player">Cancelar</NavLink>
+                <NavLink class="nav-link" href="@($"/admin/hcp/{PlayerId}")">Cancelar</NavLink>
                 <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" /> 
             </div>
       </div>

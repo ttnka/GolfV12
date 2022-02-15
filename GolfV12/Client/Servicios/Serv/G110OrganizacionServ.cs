@@ -21,7 +21,8 @@ namespace GolfV12.Client.Servicios.Serv
                 null;
         }
 
-        public async Task<IEnumerable<G110Organizacion>> Buscar(string clave, string nombre, string desc)
+        public async Task<IEnumerable<G110Organizacion>> Buscar(string? clave, string? nombre, 
+            string? desc)
         {
             var resultado = "";
             if (!string.IsNullOrEmpty(clave)) { resultado = resultado + "clave=" + clave + "&"; }

@@ -1,0 +1,85 @@
+﻿@page "/admin/campoedit/"
+@page "/admin/campoedit/{campoid:int}"
+@inject NotificationService NS
+@inherits CampoEditBase
+@using GolfV12.Shared;
+
+<h3>@ButtonTexto Campo</h3>
+
+@if (ElCampo == null)
+{
+    <div class="spinner"></div>
+} else
+{
+  <RadzenCard>   
+  <RadzenTemplateForm TItem="G170Campo" Data=@ElCampo Submit=@AddCampo >
+      
+      <div class="form-grup row">
+          <label for="corto" class="col-sm-3 col-form-label">Corto</label>
+          <div class="col-sm-9">
+                <RadzenTextBox Name="Corto" @bind-Value=@ElCampo.Corto />
+          </div>
+      </div>
+      
+      <div class="form-grup row">
+          <label for="nombre" class="col-sm-3 col-form-label">Nombre</label>
+          <div class="col-sm-9">
+                <RadzenTextBox Name="Nombre" @bind-Value=@ElCampo.Nombre />
+                <RadzenRequiredValidator Component="Nombre" Text="El Nombre del Campo es requerido!" />
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="desc" class="col-sm-3 col-form-label">Descripcion del Campo, domicilio etc.</label>
+          <div class="col-sm-9">
+                <RadzenTextArea Name="Desc" @bind-Value=@ElCampo.Desc />
+                
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="ciudad" class="col-sm-3 col-form-label">Ciudad</label>
+          <div class="col-sm-9">
+                <RadzenTextBox Name="Ciudad" @bind-Value=@ElCampo.Ciudad />
+                
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="pais" class="col-sm-3 col-form-label">Pais</label>
+          <div class="col-sm-9">
+                <RadzenTextBox Name="Pais" @bind-Value=@ElCampo.Pais />
+                
+          </div>
+      </div>
+
+    @if (@CampoId > 0)
+        {
+            <div class="form-grup row">
+                <label for="status" class="col-sm-3 col-form-label">Borrar este registro?</label>
+                <div class="col-sm-9">
+                    <RadzenSwitch Name="Status" @bind-Value=@ElCampo.Status />         
+                </div>
+            </div>   
+        }
+
+        <div class="form-grup row">
+            <div class="col-sm-12">
+                <NavLink class="nav-link" href="/admin/campo/">Cancelar</NavLink>
+                <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" /> 
+            </div>
+      </div>
+        
+    </RadzenTemplateForm>
+    </RadzenCard>
+}
+
+@code {
+    async void AddCampo()
+    {
+        await SaveCampo();
+        ShowNotification(ElMesage);
+    }
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+
+}

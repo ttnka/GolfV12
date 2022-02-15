@@ -6,65 +6,58 @@ using Radzen;
 
 namespace GolfV12.Client.Pages.admin
 {
-    public class HcpEditBase : ComponentBase
+    public class CampoEditBase : ComponentBase 
     {
         [Parameter]
-        public string PlayerId { get; set; }
-        [Parameter]
-        public int HcpId { get; set; }
+        public int CampoId { get; set; }
+        public G170Campo ElCampo { get; set; } = new G170Campo();
+
         [Inject]
-        public IG128HcpServ HcpIServ { get; set; }
+        public IG170CampoServ CampoIServ { get; set; }
         [Inject]
         public NavigationManager NM { get; set; }
-        public G128Hcp ElHcp { get; set; } = new G128Hcp();
         public string ButtonTexto { get; set; } = "Actualizar";
+
         protected async override Task OnInitializedAsync()
         {
-            var autState = await AuthStateTask;
-            var user = autState.User;
-            if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
-            
-            if (string.IsNullOrEmpty(PlayerId)) NM.NavigateTo("/admin/player");
-
-            if (HcpId > 0)
+            if (CampoId > 0)
             {
-                ElHcp = await HcpIServ.GetHcp(HcpId);
+                ElCampo = await CampoIServ.GetCampo(CampoId);
                 await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
                 "El usuario intento modificar el Hcp");
             } else
             {
-                ElHcp.PlayerId = PlayerId;
-                ElHcp.Fecha = DateTime.Now;
-                ElHcp.BanderaId = 0;
-                ElHcp.Hcp = 0;
-                ElHcp.Estado = 1;
-                ElHcp.Status = true;
+                ElCampo.Corto = "Corto";
+                ElCampo.Nombre = "Nombre";
+                ElCampo.Desc = "Des";
+                ElCampo.Ciudad = "Ciudad";
+                ElCampo.Pais = "Pais";
                 ButtonTexto = "Agregar";
             }
         }
-        public async Task SaveHcp()
+
+        public async Task SaveCampo()
         {
-            G128Hcp resultado = new G128Hcp();
-            if (HcpId == 0)
+            G170Campo resultado = null;
+            if (CampoId == 0)
             {
-                resultado = await HcpIServ.AddHcp(ElHcp);
+                resultado = await CampoIServ.AddCampo(ElCampo);
                 await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false,
-                    $"El usuario agrego un nuevo registro Hcp {resultado.Id} {resultado.PlayerId}");
+                    $"El usuario agrego un nuevo campo {resultado.Id} {resultado.Corto}");
                 ElMesage.Summary = "Registro AGREGADO!";
                 ElMesage.Detail = "Exitosamente";
 
             }
             else
             {
-               resultado = await HcpIServ.UpdateHcp(ElHcp);
+                resultado = await CampoIServ.UpdateCampo(ElCampo);
                 await EscribirBitacoraUno(UserIdLog, BitaAcciones.Editar, false,
-                    $"El usuario actualizo el Hcp del registro{resultado.Id} {resultado.PlayerId}");
+                    $"El usuario actualizo la info del Campo {resultado.Id} {resultado.Corto}");
                 ElMesage.Summary = "Registro ACTUALIZADO!";
                 ElMesage.Detail = "Exitosamente";
             }
-            if (resultado != null) NM.NavigateTo($"/admin/hcp/{PlayerId}");
+            if (resultado != null) NM.NavigateTo($"/admin/campo/");
         }
-
         public NotificationMessage ElMesage { get; set; } = new NotificationMessage()
         {
             Severity = NotificationSeverity.Success,

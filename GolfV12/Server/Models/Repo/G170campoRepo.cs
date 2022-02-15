@@ -21,7 +21,8 @@ namespace GolfV12.Server.Models.Repo
             return res.Entity;
         }
 
-        public async Task<IEnumerable<G170Campo>> Buscar(string corto, string nombre, string ciudad, string pais)
+        public async Task<IEnumerable<G170Campo>> Buscar(string? corto, string? nombre, string? ciudad, 
+            string? pais)
         {
             IQueryable<G170Campo> querrey = _appDbContext.Campos;
             if (!string.IsNullOrEmpty(corto)) querrey = querrey.Where(e => e.Corto.Contains(corto));

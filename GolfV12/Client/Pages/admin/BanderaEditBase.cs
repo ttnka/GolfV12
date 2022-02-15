@@ -6,63 +6,58 @@ using Radzen;
 
 namespace GolfV12.Client.Pages.admin
 {
-    public class HcpEditBase : ComponentBase
+    public class BanderaEditBase : ComponentBase
     {
-        [Parameter]
-        public string PlayerId { get; set; }
-        [Parameter]
-        public int HcpId { get; set; }
         [Inject]
-        public IG128HcpServ HcpIServ { get; set; }
+        public IG170CampoServ CampoIServ { get; set; }
+        [Inject]
+        public IG172BanderaServ BanderaIServ { get; set;}
+        [Parameter]
+        public int CampoId { get; set; } 
+        [Parameter]
+        public int BanderaId { get; set; } 
+        public G170Campo ElCampo { get; set; } = new G170Campo();
+        public G172Bandera LaBandera { get; set; } = new G172Bandera();
         [Inject]
         public NavigationManager NM { get; set; }
-        public G128Hcp ElHcp { get; set; } = new G128Hcp();
         public string ButtonTexto { get; set; } = "Actualizar";
         protected async override Task OnInitializedAsync()
         {
             var autState = await AuthStateTask;
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
-            
-            if (string.IsNullOrEmpty(PlayerId)) NM.NavigateTo("/admin/player");
 
-            if (HcpId > 0)
-            {
-                ElHcp = await HcpIServ.GetHcp(HcpId);
-                await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
-                "El usuario intento modificar el Hcp");
-            } else
-            {
-                ElHcp.PlayerId = PlayerId;
-                ElHcp.Fecha = DateTime.Now;
-                ElHcp.BanderaId = 0;
-                ElHcp.Hcp = 0;
-                ElHcp.Estado = 1;
-                ElHcp.Status = true;
-                ButtonTexto = "Agregar";
-            }
+
+            if (CampoId == 0) { NM.NavigateTo("/admin/campo"); } 
+            else { ElCampo = await CampoIServ.GetCampo(CampoId); } 
+               
+            if (BanderaId == 0) { LaBandera.Color = "Color de la bandera"; } 
+            else { LaBandera = await BanderaIServ.GetBandera(BanderaId); }
+                
+            LaBandera.CampoId = CampoId;
         }
-        public async Task SaveHcp()
+        public async Task SaveBandera()
         {
-            G128Hcp resultado = new G128Hcp();
-            if (HcpId == 0)
+            G172Bandera resultado = new G172Bandera();
+            if (BanderaId == 0)
             {
-                resultado = await HcpIServ.AddHcp(ElHcp);
+                resultado = await BanderaIServ.AddBandera(LaBandera);
                 await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false,
-                    $"El usuario agrego un nuevo registro Hcp {resultado.Id} {resultado.PlayerId}");
+                    $"El usuario agrego un nuevo registro Banderas {resultado.Id} {ElCampo.Corto} {resultado.Color}");
                 ElMesage.Summary = "Registro AGREGADO!";
                 ElMesage.Detail = "Exitosamente";
 
             }
             else
             {
-               resultado = await HcpIServ.UpdateHcp(ElHcp);
+                resultado = await BanderaIServ.UpdateBandera(LaBandera);
                 await EscribirBitacoraUno(UserIdLog, BitaAcciones.Editar, false,
-                    $"El usuario actualizo el Hcp del registro{resultado.Id} {resultado.PlayerId}");
+                    $"El usuario actualizo la bandera {resultado.Id} del campo " +
+                    $"{ElCampo.Corto} {resultado.Color}");
                 ElMesage.Summary = "Registro ACTUALIZADO!";
                 ElMesage.Detail = "Exitosamente";
             }
-            if (resultado != null) NM.NavigateTo($"/admin/hcp/{PlayerId}");
+            if (resultado != null) NM.NavigateTo($"/admin/bandera/{CampoId}");
         }
 
         public NotificationMessage ElMesage { get; set; } = new NotificationMessage()
@@ -88,5 +83,6 @@ namespace GolfV12.Client.Pages.admin
             WriteBitacora.Desc = desc;
             await BitacoraServ.AddBitacora(WriteBitacora);
         }
+
     }
 }

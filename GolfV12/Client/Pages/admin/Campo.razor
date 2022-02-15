@@ -1,0 +1,44 @@
+﻿@page "/admin/campo"
+@inherits CampoBase
+@using GolfV12.Shared;
+
+<h3>Listado de Campos </h3>
+@if (LosCampos == null)
+{
+    <div class="spinner"></div>
+} else
+{
+    
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href=@($"/admin/campoedit/")>
+                <span class="oi oi-plus" aria-hidden="true"></span> Nuevo Campo 
+            </NavLink>
+       </div>
+        
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" 
+        PageSize="50" AllowPaging="true" AllowSorting="true" LogicalFilterOperator="LogicalFilterOperator.Or"
+        Data="@LosCampos" TItem="G170Campo" >
+        <Columns>
+            <RadzenDataGridColumn TItem="G170Campo" Property="Id" Title="Id" Width="60px" Frozen="true">
+                <Template Context="data">
+                    <label>@data.Id</label>
+                    <RadzenLink Icon="edit" Path=@($"/admin/campoedit/{data.Id}") />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G170Campo" Property="Corto" Title="Corto" />
+            <RadzenDataGridColumn TItem="G170Campo" Property="Nombre" Title="Nombre" />
+            <RadzenDataGridColumn TItem="G170Campo" Property="Desc" Title="Descripcion" />
+            <RadzenDataGridColumn TItem="G170Campo" Property="Ciudad" Title="Ciudad" />
+            <RadzenDataGridColumn TItem="G170Campo" Property="Pais" Title="Pais" />
+            <RadzenDataGridColumn TItem="G170Campo"  Title="Estado" >
+                <Template Context="data">
+                    @if(data.Status == false) {<div style:"color-font:Red"><label style:"color:red"> Registro Borrado </label></div>}
+                    <NavLink class="nav-link" href=@($"/admin/bandera/{data.Id}")>
+                        <span class="oi oi-plus" aria-hidden="true"></span> Banderas 
+                    </NavLink>
+                </Template>
+            </RadzenDataGridColumn>
+            
+        </Columns>
+</RadzenDataGrid>
+}

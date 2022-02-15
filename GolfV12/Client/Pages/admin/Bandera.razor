@@ -1,0 +1,48 @@
+﻿@page "/admin/bandera"
+@page "/admin/bandera/{campoid:int}"
+@inherits BanderaBase
+@using GolfV12.Shared;
+
+<h3>Listado de Banderas de un campo </h3>
+
+@if (LasBanderas == null)
+{
+    <div class="spinner"></div>
+} else
+{
+    
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href=@($"/admin/banderaedit/{CampoId}")>
+                <span class="oi oi-plus" aria-hidden="true"></span> Nuevo Bandera @if (CampoId > 0) 
+                        {<label>para el campo @LosCampos[CampoId]</label>}. 
+            </NavLink>
+       </div>
+        
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" 
+        PageSize="50" AllowPaging="true" AllowSorting="true" LogicalFilterOperator="LogicalFilterOperator.Or"
+        Data="@LasBanderas" TItem="G172Bandera" >
+        <Columns>
+            <RadzenDataGridColumn TItem="G172Bandera" Property="Id" Title="Id" Width="60px" Frozen="true">
+                <Template Context="data">
+                    <label>@data.Id</label>
+                    <RadzenLink Icon="edit" Path=@($"/admin/banderaedit/{data.CampoId}/{data.Id}") />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G172Bandera" Property="CampoId" Title="Campo" Width="150px" Frozen="true">
+                <Template Context="data">
+                    @if (@LosCampos.ContainsKey(data.CampoId)) {<label>@LosCampos[data.CampoId]</label> } 
+                        else {<label>@LosCampos[0]</label>} 
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G172Bandera" Property="Color" Title="Bandera" />
+            
+            <RadzenDataGridColumn TItem="G172Bandera"  Title="Estado" >
+                <Template Context="data">
+                    @if(data.Status == false) {<div style:"color-font:Red"><label style:"color:red"> Registro Borrado </label></div>}
+                </Template>
+            </RadzenDataGridColumn>
+            
+        </Columns>
+</RadzenDataGrid>
+}
+

@@ -8,7 +8,7 @@ namespace GolfV12.Client.Pages.admin
     public class HcpBase : ComponentBase 
     {
         [Inject]
-        public IG128HcpServ HcpIServ { get; set; }
+        public IG128HcpServ HcpIServ { get; set; } 
         [Inject]
         public IG120PlayerServ PlayerServ { get; set; }
 
@@ -23,8 +23,6 @@ namespace GolfV12.Client.Pages.admin
             var autState = await AuthStateTask;
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
-
-            await EscribirBitacoraUno(UserIdLog, BitaAcciones.Borrar, false, $"elplayerid es{PlayerId} ");
 
             await LeerLosPlayers();
             var textoTemp1 = string.Empty;
@@ -47,15 +45,15 @@ namespace GolfV12.Client.Pages.admin
 
         public async Task LeerLosPlayers()
         {
-            //LosPlayers.Add("Vacio", "No se encontro nombre de registro");
+            LosPlayers.Add("Vacio", "No se encontro nombre de registro");
             if (string.IsNullOrEmpty(PlayerId)) 
             { 
                 var Allplayers = await PlayerServ.GetPlayers();
                 foreach (var player in Allplayers)
                 {
-                    if (!LosPlayers.ContainsKey(player.UserId)) LosPlayers.Add(player.UserId, player.Nombre + player.Paterno + player.Materno);
-                }
-                LosPlayers.Add("Vacio", "1No se encontro nombre de registro");
+                    if (!LosPlayers.ContainsKey(player.UserId)) LosPlayers.Add(player.UserId, 
+                        player.Nombre + player.Paterno + player.Materno);
+                }  
             } 
             else
             { 
@@ -70,7 +68,6 @@ namespace GolfV12.Client.Pages.admin
                         textTemp = "No se encontro nombre";
                     }
                 LosPlayers.Add(PlayerId, textTemp);
-                LosPlayers.Add("Vacio", "2No se encontro nombre de registro");
             }
         }
 
