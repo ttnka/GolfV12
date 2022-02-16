@@ -1,0 +1,50 @@
+﻿@page "/admin/hoyo/{campoid:int}"
+@inherits HoyoBase
+@using GolfV12.Shared;
+
+<h3>Listado de Hoyos del campo @ElCampo.Corto</h3>
+@if (LosHoyos == null)
+{
+    <div class="spinner"></div>
+} else
+{
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href=@($"/admin/hoyoedit/{ElCampo.Id}")>
+                <span class="oi oi-plus" aria-hidden="true"></span> Nuevo Hoyo para el campo
+                        @ElCampo.Corto @ElCampo.Ciudad
+            </NavLink>
+       </div>
+        
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" 
+        PageSize="50" AllowPaging="true" AllowSorting="true" LogicalFilterOperator="LogicalFilterOperator.Or"
+        Data="@LosHoyos" TItem="G176Hoyo" >
+        <Columns>
+            <RadzenDataGridColumn TItem="G176Hoyo" Property="Id" Title="Id" Width="60px" Frozen="true">
+                <Template Context="data">
+                    <label>@data.Id</label>
+                    <RadzenLink Icon="edit" Path=@($"/admin/hoyoedit/{data.CampoId}/{data.Id}") />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G176Hoyo" Property="CampoId" Title="Campo" Width="150px" Frozen="true">
+                <Template Context="data">
+                    @ElCampo.Corto @ElCampo.Ciudad 
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G176Hoyo" Property="Ruta" Title="Ruta" />
+            <RadzenDataGridColumn TItem="G176Hoyo" Property="Hoyo" Title="Hoyo" />
+            <RadzenDataGridColumn TItem="G176Hoyo" Property="Par" Title="Par" />
+            <RadzenDataGridColumn TItem="G176Hoyo" Property="HcpHombres" Title="Hombres" />
+            <RadzenDataGridColumn TItem="G176Hoyo" Property="HcpMujeres" Title="Mujeres" />
+            <RadzenDataGridColumn TItem="G176Hoyo" Property="HcpMenores" Title="Menores" />
+            <RadzenDataGridColumn TItem="G176Hoyo" Property="HcpOtros" Title="Otros" />
+            
+            <RadzenDataGridColumn TItem="G176Hoyo"  Title="Estado" >
+                <Template Context="data">
+
+                    @if(data.Status == false) {<div style:"color-font:Red"><label style:"color:red"> Registro Borrado </label></div>}
+                </Template>
+            </RadzenDataGridColumn>
+            
+        </Columns>
+</RadzenDataGrid>
+}

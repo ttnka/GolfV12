@@ -6,16 +6,20 @@ using Radzen;
 
 namespace GolfV12.Client.Pages.admin
 {
-    public class CampoEditBase : ComponentBase 
+    public class HoyoEditBase : ComponentBase
     {
         [Parameter]
         public int CampoId { get; set; }
-        public G170Campo ElCampo { get; set; } = new G170Campo();
-
+        [Parameter]
+        public int HoyoId { get; set; }
+        [Inject]
+        public IG176HoyoServ HoyoIServ { get; set; }
         [Inject]
         public IG170CampoServ CampoIServ { get; set; }
         [Inject]
         public NavigationManager NM { get; set; }
+        public G170Campo ElCampo { get; set; } = new G170Campo();
+        public G176Hoyo ElHoyo { get; set; } = new G176Hoyo();
         public string ButtonTexto { get; set; } = "Actualizar";
 
         protected async override Task OnInitializedAsync()
@@ -24,43 +28,37 @@ namespace GolfV12.Client.Pages.admin
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
-            if (CampoId > 0)
+            if (CampoId == 0) NM.NavigateTo("/admin/campo");
+            if (HoyoId == 0)
             {
-                ElCampo = await CampoIServ.GetCampo(CampoId);
-                await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
-                "El usuario intento modificar el Hcp");
+                ElHoyo.CampoId = CampoId;
+                ElHoyo.Ruta = "Unica";
             } else
             {
-                ElCampo.Corto = "Corto";
-                ElCampo.Nombre = "Nombre";
-                ElCampo.Desc = "Des";
-                ElCampo.Ciudad = "Ciudad";
-                ElCampo.Pais = "Pais";
-                ButtonTexto = "Agregar";
+                ElHoyo = await HoyoIServ.GetHoyo(HoyoId);
             }
+            ElCampo = await CampoIServ.GetCampo(CampoId);
         }
-
-        public async Task SaveCampo()
+        public async Task SaveHoyo()
         {
-            G170Campo resultado = null;
-            if (CampoId == 0)
+            G176Hoyo resultado = new G176Hoyo();
+            if (HoyoId == 0)
             {
-                resultado = await CampoIServ.AddCampo(ElCampo);
+                resultado = await HoyoIServ.AddHoyo(ElHoyo);
                 await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false,
-                    $"El usuario agrego un nuevo campo {resultado.Id} {resultado.Corto}");
+                    $"El usuario agrego un nuevo registro {resultado.Id} Hoyos del campo {resultado.CampoId}");
                 ElMesage.Summary = "Registro AGREGADO!";
                 ElMesage.Detail = "Exitosamente";
-
             }
             else
             {
-                resultado = await CampoIServ.UpdateCampo(ElCampo);
+                resultado = await HoyoIServ.UpdateHoyo(ElHoyo);
                 await EscribirBitacoraUno(UserIdLog, BitaAcciones.Editar, false,
-                    $"El usuario actualizo la info del Campo {resultado.Id} {resultado.Corto}");
+                    $"El usuario actualizo registro{resultado.Id} del hoyo {resultado.Hoyo} del campo {resultado.CampoId}");
                 ElMesage.Summary = "Registro ACTUALIZADO!";
                 ElMesage.Detail = "Exitosamente";
             }
-            if (resultado != null) NM.NavigateTo($"/admin/campo/");
+            if (resultado != null) NM.NavigateTo($"/admin/hoyo/{CampoId}");
         }
         public NotificationMessage ElMesage { get; set; } = new NotificationMessage()
         {
@@ -69,7 +67,6 @@ namespace GolfV12.Client.Pages.admin
             Detail = "Detalles ",
             Duration = 3000
         };
-
         [CascadingParameter]
         public Task<AuthenticationState> AuthStateTask { get; set; }
         public string UserIdLog { get; set; }
@@ -84,6 +81,7 @@ namespace GolfV12.Client.Pages.admin
             WriteBitacora.UsuarioId = userId;
             WriteBitacora.Desc = desc;
             await BitacoraServ.AddBitacora(WriteBitacora);
+
         }
     }
 }

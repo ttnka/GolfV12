@@ -25,8 +25,8 @@ namespace GolfV12.Server.Models.Repo
         {
             IQueryable<G178Distancia> querry = _appDbContext.Distancias;
             
-            if (bandera > -1) querry = querry.Where(e => e.BanderaId ==  bandera);
-            if (hoyoN > -1) querry = querry.Where(e => e.Hoyo == hoyoN);
+            if (bandera > 0) querry = querry.Where(e => e.BanderaId ==  bandera);
+            if (hoyoN > 0) querry = querry.Where(e => e.Hoyo == hoyoN);
 
             return await querry.ToListAsync();
         }

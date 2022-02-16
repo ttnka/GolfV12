@@ -24,9 +24,9 @@ namespace GolfV12.Client.Pages.admin
         //protected WBita WB { get; set; } = new WBita();
         protected async override Task OnInitializedAsync()
         {
-            var autState = await authStateTask;
+            var autState = await AuthStateTask;
             var user = autState.User;
-            if (user.Identity.IsAuthenticated) userIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
+            if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
             if (Id == 0)
             {   
@@ -44,7 +44,7 @@ namespace GolfV12.Client.Pages.admin
             } else
             {
                 LaOrganizacion = await iOrgServ.GetOrganizacion(Id);
-                await EscribirBitacoraUno(userIdLog, BitaAcciones.Consultar, false,
+                await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
                     $"Consulto el registro {LaOrganizacion.Id} de la organizacion {LaOrganizacion.Clave}");
             }
             LosEstados = await iEstadoServ.Buscar(titulo:"Vacio", grupo: "Organizacion");
@@ -59,31 +59,31 @@ namespace GolfV12.Client.Pages.admin
             if (LaOrg.Id !=0 )
             {
                 res = await iOrgServ.UpdateOrganizacion(LaOrg);
-                await EscribirBitacoraUno(userIdLog, BitaAcciones.Editar, false,
+                await EscribirBitacoraUno(UserIdLog, BitaAcciones.Editar, false,
                     $"Actualizo el registro {LaOrg.Id} con clave {LaOrg.Clave} titulo {LaOrg.Nombre}");
             } else
             {
                 res = await iOrgServ.AddOrganizacion(LaOrg);
-                await EscribirBitacoraUno(userIdLog, BitaAcciones.Agregar, false,
+                await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false,
                     $"Agrego un registro {LaOrg.Clave} titulo {LaOrg.Nombre}");
             }
             
             if (res != null) NM.NavigateTo("/admin/organizacion");
         }
         [CascadingParameter]
-        public Task<AuthenticationState> authStateTask { get; set; }
-        public string userIdLog { get; set; }
+        public Task<AuthenticationState> AuthStateTask { get; set; }
+        public string UserIdLog { get; set; }
         [Inject]
-        public IG190BitacoraServ bitacoraServ { get; set; }
-        private G190Bitacora writeBitacora { get; set; } = new G190Bitacora();
+        public IG190BitacoraServ BitacoraServ { get; set; }
+        private G190Bitacora WriteBitacora { get; set; } = new G190Bitacora();
         public async Task EscribirBitacoraUno(string userId, BitaAcciones accion, bool Sistema, string desc)
         {
-            writeBitacora.Fecha = DateTime.Now;
-            writeBitacora.Accion = accion;
-            writeBitacora.Sistema = Sistema;
-            writeBitacora.UsuarioId = userId;
-            writeBitacora.Desc = desc;
-            await bitacoraServ.AddBitacora(writeBitacora);
+            WriteBitacora.Fecha = DateTime.Now;
+            WriteBitacora.Accion = accion;
+            WriteBitacora.Sistema = Sistema;
+            WriteBitacora.UsuarioId = userId;
+            WriteBitacora.Desc = desc;
+            await BitacoraServ.AddBitacora(WriteBitacora);
 
         }
 

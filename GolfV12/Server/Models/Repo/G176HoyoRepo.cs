@@ -21,12 +21,12 @@ namespace GolfV12.Server.Models.Repo
             return res.Entity;
         }
 
-        public async Task<IEnumerable<G176Hoyo>> Buscar(int campo, string ruta, int hoyoN)
+        public async Task<IEnumerable<G176Hoyo>> Buscar(int campo, string? ruta, int hoyoN)
         {
             IQueryable<G176Hoyo> querry = _appDbContext.Hoyos;
-            if (campo > -1) querry = querry.Where(e => e.CampoId == campo);
+            if (campo > 0) querry = querry.Where(e => e.CampoId == campo);
             if (!string.IsNullOrEmpty(ruta)) querry = querry.Where(e => e.Ruta.Contains(ruta));
-            if (hoyoN > -1) querry = querry.Where(e => e.Hoyo == hoyoN);
+            if (hoyoN > 0) querry = querry.Where(e => e.Hoyo == hoyoN);
 
             return await querry.ToListAsync();
         }

@@ -1,7 +1,8 @@
 ﻿using GolfV12.Client.Servicios.IFaceServ;
 using GolfV12.Shared;
+using System.Net.Http.Json;
 
-namespace GolfV12.Server.Models.Repo
+namespace GolfV12.Client.Servicios.Serv
 {
     public class G176HoyoServ : IG176HoyoServ
     {
@@ -22,7 +23,7 @@ namespace GolfV12.Server.Models.Repo
         public async Task<IEnumerable<G176Hoyo>> Buscar(int campo, string? ruta, int hoyoN)
         {
             var resultado = "";
-            if (campo > 0) { resultado =  "campo=" + campo + "&"; }
+            if (campo > 0) { resultado = "campo=" + campo + "&"; }
             if (!string.IsNullOrEmpty(ruta)) { resultado = resultado + "ruta=" + ruta + "&"; }
             if (hoyoN > 0) { resultado = resultado + "hoyoN=" + hoyoN + "&"; }
             if (resultado != "") { resultado = "/api/G176Hoyo/filtro?" + resultado; }

@@ -1,5 +1,4 @@
-﻿@page "/admin/bandera"
-@page "/admin/bandera/{campoid:int}"
+﻿@page "/admin/bandera/{campoid:int}"
 @inherits BanderaBase
 @using GolfV12.Shared;
 
@@ -14,7 +13,7 @@
         <div class="nav-item px-3">
             <NavLink class="nav-link" href=@($"/admin/banderaedit/{CampoId}")>
                 <span class="oi oi-plus" aria-hidden="true"></span> Nuevo Bandera @if (CampoId > 0) 
-                        {<label>para el campo @LosCampos[CampoId]</label>}. 
+                        {<label>para el campo @CampoNombre</label>} 
             </NavLink>
        </div>
         
@@ -38,6 +37,9 @@
             
             <RadzenDataGridColumn TItem="G172Bandera"  Title="Estado" >
                 <Template Context="data">
+                     <NavLink class="nav-link" href=@($"/admin/distancia/{data.Id}")>
+                        <span class="oi oi-plus" aria-hidden="true"></span>Distancia    
+                    </NavLink>
                     @if(data.Status == false) {<div style:"color-font:Red"><label style:"color:red"> Registro Borrado </label></div>}
                 </Template>
             </RadzenDataGridColumn>

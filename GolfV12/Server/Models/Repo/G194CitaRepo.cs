@@ -27,7 +27,7 @@ namespace GolfV12.Server.Models.Repo
             IQueryable<G194Cita> querry = _appDbContet.Citas;
             if (!string.IsNullOrEmpty(creador)) querry = querry.Where(e => e.Creador == creador);
             if (!string.IsNullOrEmpty(desc)) querry = querry.Where(e => e.Desc.Contains(desc));
-            if (masterId > -1) querry = querry.Where(e => e.MasterId == masterId);
+            if (masterId > 0) querry = querry.Where(e => e.MasterId == masterId);
             if (fini > DateTime.MinValue) querry = querry.Where(e => e.FIni.Date > fini.Date);
             if(ffin > DateTime.MinValue) querry = querry.Where(e => e.FFin.Date > ffin.Date);
 

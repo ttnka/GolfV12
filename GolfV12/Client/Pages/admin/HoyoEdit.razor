@@ -1,0 +1,103 @@
+﻿@page "/admin/hoyoedit/{campoid:int}"
+@page "/admin/hoyoedit/{campoid:int}/{hoyoid:int}"
+@inherits HoyoEditBase
+@inject NotificationService NS
+@using GolfV12.Shared;
+
+<h3>@ButtonTexto HoyoEdit</h3>
+
+@if (ElHoyo == null)
+{
+    <div class="spinner"></div>
+} else
+{
+  <RadzenCard>   
+  <RadzenTemplateForm TItem="G176Hoyo" Data=@ElHoyo Submit=@AddHoyo >
+      <div class="form-grup row">
+          <label for="campo" class="col-sm-3 col-form-label">Campo</label>
+          <div class="col-sm-9">
+                <RadzenLabel Name="Campo" @bind-Value=@ElCampo.Corto />
+                <RadzenLabel Name="Ciudad" @bind-Value=@ElCampo.Ciudad />
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="ruta" class="col-sm-3 col-form-label">Ruta</label>
+          <div class="col-sm-9">
+                <RadzenTextBox Name="Ruta" @bind-Value=@ElHoyo.Ruta />
+          </div>
+      </div>
+      
+      <div class="form-grup row">
+          <label for="hoyo" class="col-sm-3 col-form-label">Hoyo Numero</label>
+          <div class="col-sm-9">
+                <RadzenNumeric Name="Hoyo" @bind-Value=@ElHoyo.Hoyo Min="1" Max="18" />
+                <RadzenRequiredValidator Component="Hoyo" Text="El numero del Hoyo va 1 a 18 y es requerido!" />
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="par" class="col-sm-3 col-form-label">Par de Hoyo</label>
+          <div class="col-sm-9">
+                <RadzenNumeric Name="Par" @bind-Value=@ElHoyo.Par Min="1" Max="6" />
+                <RadzenRequiredValidator Component="Par" Text="El Par del Hoyo va 1 a 5 y es requerido!" />
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="hcphombres" class="col-sm-3 col-form-label">Hcp Hombres</label>
+          <div class="col-sm-9">
+                <RadzenNumeric Name="HcpHombres" @bind-Value=@ElHoyo.HcpHombres Min="1" Max="18" />
+                <RadzenRequiredValidator Component="HcpHombres" Text="El Par del Hoyo va 1 a 5 y es requerido!" />
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="hcpmujeres" class="col-sm-3 col-form-label">Hcp Mujeres</label>
+          <div class="col-sm-9">
+                <RadzenNumeric Name="HcpMujeres" @bind-Value=@ElHoyo.HcpMujeres Min="1" Max="18" />
+                
+          </div>
+      </div>
+  
+      <div class="form-grup row">
+          <label for="hcpmenores" class="col-sm-3 col-form-label">Hcp Menores</label>
+          <div class="col-sm-9">
+                <RadzenNumeric Name="HcpMenores" @bind-Value=@ElHoyo.HcpMenores Min="1" Max="18" />
+                
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="hcpotros" class="col-sm-3 col-form-label">Hcp Otros</label>
+          <div class="col-sm-9">
+                <RadzenNumeric Name="HcpOtros" @bind-Value=@ElHoyo.HcpOtros Min="1" Max="18" />
+                <RadzenRequiredValidator Component="HcpOtros" Text="El Par del Hoyo va 1 a 5 y es requerido!" />
+          </div>
+      </div>
+    @if (@HoyoId > 0)
+        {
+            <div class="form-grup row">
+                <label for="status" class="col-sm-3 col-form-label">Borrar este registro?</label>
+                <div class="col-sm-9">
+                    <RadzenSwitch Name="Status" @bind-Value=@ElHoyo.Status />         
+                </div>
+            </div>   
+        }
+
+        <div class="form-grup row">
+            <div class="col-sm-12">
+                <NavLink class="nav-link" href="@($"/admin/hoyo/{CampoId}")">Cancelar</NavLink>
+                <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" /> 
+            </div>
+      </div>
+        
+    </RadzenTemplateForm>
+    </RadzenCard>
+}
+@code {
+    async void AddHoyo()
+    {
+        await SaveHoyo();
+        ShowNotification(ElMesage);
+    }
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+}

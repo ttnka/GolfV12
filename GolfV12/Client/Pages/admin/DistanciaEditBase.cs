@@ -6,62 +6,73 @@ using Radzen;
 
 namespace GolfV12.Client.Pages.admin
 {
-    public class CampoEditBase : ComponentBase 
+    public class DistanciaEditBase : ComponentBase 
     {
         [Parameter]
-        public int CampoId { get; set; }
-        public G170Campo ElCampo { get; set; } = new G170Campo();
-
+        public int BanderaId { get; set; }
+        [Parameter]
+        public int DistanciaId { get; set; }
         [Inject]
         public IG170CampoServ CampoIServ { get; set; }
         [Inject]
+        public IG172BanderaServ BanderaIServ { get; set; }
+        [Inject]
+        public IG178DistanciaServ DistIServ { get; set; }
+        public G170Campo ElCampo { get; set; } = new G170Campo();
+        public G172Bandera SoloBandera { get; set; } = new G172Bandera();
+        public G178Distancia LaDistancia { get; set; } = new G178Distancia();
+        [Inject]
         public NavigationManager NM { get; set; }
         public string ButtonTexto { get; set; } = "Actualizar";
-
         protected async override Task OnInitializedAsync()
         {
             var autState = await AuthStateTask;
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
-            if (CampoId > 0)
-            {
-                ElCampo = await CampoIServ.GetCampo(CampoId);
-                await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
-                "El usuario intento modificar el Hcp");
-            } else
-            {
-                ElCampo.Corto = "Corto";
-                ElCampo.Nombre = "Nombre";
-                ElCampo.Desc = "Des";
-                ElCampo.Ciudad = "Ciudad";
-                ElCampo.Pais = "Pais";
+            
+            if (BanderaId == 0) 
+                { NM.NavigateTo("/admin/campo/"); } 
+            else 
+                { 
+                    SoloBandera = await BanderaIServ.GetBandera(BanderaId);
+                    ElCampo = await CampoIServ.GetCampo(SoloBandera.CampoId);
+                }
+            if (DistanciaId == 0) 
+                { 
+                    LaDistancia.BanderaId = BanderaId;
+                    LaDistancia.Fecha = DateTime.Now.Date;
+                } 
+            else 
+                { 
+                    LaDistancia = await DistIServ.GetDistancia(BanderaId);
                 ButtonTexto = "Agregar";
-            }
+                await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
+                    $"El Usuario consulto la distancia del hoyo {LaDistancia.Hoyo} de la mandera {SoloBandera.Color}");
+                }
         }
-
-        public async Task SaveCampo()
+        public async Task SaveDistancia()
         {
-            G170Campo resultado = null;
-            if (CampoId == 0)
+            G178Distancia resultado = new G178Distancia();
+            if (DistanciaId == 0)
             {
-                resultado = await CampoIServ.AddCampo(ElCampo);
+                resultado = await DistIServ.AddDistancia(LaDistancia);
                 await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false,
-                    $"El usuario agrego un nuevo campo {resultado.Id} {resultado.Corto}");
+                    $"El usuario agrego un nuevo distancia Banderas");
                 ElMesage.Summary = "Registro AGREGADO!";
                 ElMesage.Detail = "Exitosamente";
-
             }
             else
             {
-                resultado = await CampoIServ.UpdateCampo(ElCampo);
+                resultado = await DistIServ.UpdateDistancia(LaDistancia);
                 await EscribirBitacoraUno(UserIdLog, BitaAcciones.Editar, false,
-                    $"El usuario actualizo la info del Campo {resultado.Id} {resultado.Corto}");
+                    $"El usuario actualizo la distancia del hoyo  {resultado.Hoyo} del campo ");
                 ElMesage.Summary = "Registro ACTUALIZADO!";
                 ElMesage.Detail = "Exitosamente";
             }
-            if (resultado != null) NM.NavigateTo($"/admin/campo/");
+            if (resultado != null) NM.NavigateTo($"/admin/distancia/{BanderaId}");
         }
+
         public NotificationMessage ElMesage { get; set; } = new NotificationMessage()
         {
             Severity = NotificationSeverity.Success,

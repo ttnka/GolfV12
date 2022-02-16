@@ -1,30 +1,34 @@
 ﻿using GolfV12.Client.Servicios.IFaceServ;
 using GolfV12.Shared;
-using GolfV12.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace GolfV12.Client.Pages.admin
 {
-    public class OrganizacionBase : ComponentBase
+    public class HoyoBase : ComponentBase
     {
-        //[Inject]
-        //public NavigationManager MN { get; set; }
-        
+        [Parameter]
+        public int CampoId { get; set; }
         [Inject]
-        public IG110OrganizacionServ organizacionIServ { get; set; }
-        public IEnumerable<G110Organizacion> LasOrganizaciones { get; set; }
-        //protected WBita WB { get; set; } = new WBita();
-        protected override async Task OnInitializedAsync()
+        public IG170CampoServ CampoIServ { get; set; }
+        [Inject]
+        public IG176HoyoServ HoyoIServ { get; set; } 
+        public G170Campo ElCampo { get; set; } = new G170Campo();   
+        public IEnumerable<G176Hoyo> LosHoyos { get; set; } = Enumerable.Empty<G176Hoyo>();
+        public NavigationManager NM { get; set; }
+        protected async override Task OnInitializedAsync()
         {
             var autState = await AuthStateTask;
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
-
-            LasOrganizaciones = await organizacionIServ.GetOrganizaciones();
-            await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
-                "Consulto listado de Organizaciones");
+            
+            if (CampoId == 0) NM.NavigateTo("/admin/campo");
+            LosHoyos = await HoyoIServ.Buscar(CampoId, "", 0);
+            ElCampo = await CampoIServ.GetCampo(CampoId);
+            await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false, 
+                    $"El Usuario consulto listado de hoyos de campo {ElCampo.Corto}");
         }
+
         [CascadingParameter]
         public Task<AuthenticationState> AuthStateTask { get; set; }
         public string UserIdLog { get; set; }
@@ -39,8 +43,6 @@ namespace GolfV12.Client.Pages.admin
             WriteBitacora.UsuarioId = userId;
             WriteBitacora.Desc = desc;
             await BitacoraServ.AddBitacora(WriteBitacora);
-
         }
-
     }
 }

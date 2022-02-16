@@ -18,6 +18,8 @@ namespace GolfV12.Client.Pages.admin
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
             LosCampos = await CampoIServ.GetCampos();
+            await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
+                "El Usuario Consulto el listado de campos");
         }
 
         [CascadingParameter]

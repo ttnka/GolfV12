@@ -1,0 +1,85 @@
+﻿@page "/admin/distanciaedit/{banderaid:int}"
+@page "/admin/distanciaedit/{banderaid:int}/{distanciaid:int}"
+@inherits DistanciaEditBase
+@inject NotificationService NS
+@using GolfV12.Shared;
+
+<h3>@ButtonTexto DistanciaEdit</h3>
+
+@if (LaDistancia == null)
+{
+    <div class="spinner"></div>
+} else
+{
+  <RadzenCard>   
+  <RadzenTemplateForm TItem="G178Distancia" Data=@LaDistancia Submit=@AddDistancia >
+      <div class="form-grup row">
+          <label for="campo" class="col-sm-3 col-form-label">Campo</label>
+          <div class="col-sm-9">
+              <RadzenLabel Name="Campo" Text="@ElCampo.Corto"/>
+              <RadzenLabel Name="Ciudad" Text="@ElCampo.Ciudad"/>
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="bandera" class="col-sm-3 col-form-label">Bandera</label>
+          <div class="col-sm-9">
+              <RadzenLabel Name="Color" Text="@SoloBandera.Color"/>
+              
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="hoyo" class="col-sm-3 col-form-label">Hoyo</label>
+          <div class="col-sm-9">
+                <RadzenNumeric Name="Hoyo" @bind-Value=@LaDistancia.Hoyo Min="0" Max="18"  />
+                <RadzenRequiredValidator Component="Hoyo" Text="El numero Hoyo entre 1 y 18 es requerido!" />
+          </div>
+      </div>
+  
+      <div class="form-grup row">
+          <label for="distancia" class="col-sm-3 col-form-label">Distancia en yardas</label>
+          <div class="col-sm-9">
+                <RadzenNumeric Name="Distancia" @bind-Value=@LaDistancia.Distancia Min="100" Max="699"  />
+                <RadzenRequiredValidator Component="Distancia" Text="El numero Hoyo entre 100 y 600 es requerido!" />
+          </div>
+      </div>
+
+      <div class="form-grup row">
+          <label for="fecha" class="col-sm-3 col-form-label">Fecha</label>
+          <div class="col-sm-9">
+                <RadzenDatePicker Name="Fecha" TValue="DateTime" @bind-Value=@LaDistancia.Fecha DateFormat="d" />
+                
+          </div>
+      </div>
+
+    @if (@DistanciaId > 0)
+        {
+            <div class="form-grup row">
+                <label for="status" class="col-sm-3 col-form-label">Borrar este registro?</label>
+                <div class="col-sm-9">
+                    <RadzenSwitch Name="Status" @bind-Value=@LaDistancia.Status />         
+                </div>
+            </div>   
+        }
+
+        <div class="form-grup row">
+            <div class="col-sm-12">
+                <NavLink class="nav-link" href="@($"/admin/distancia/{BanderaId}")">Cancelar</NavLink>
+                <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" /> 
+            </div>
+      </div>
+        
+    </RadzenTemplateForm>
+    </RadzenCard>
+}
+
+@code {
+    async void AddDistancia()
+    {
+        await SaveDistancia();
+        ShowNotification(ElMesage);
+    }
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+}
