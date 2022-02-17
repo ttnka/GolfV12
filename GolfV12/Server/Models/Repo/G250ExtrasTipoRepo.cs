@@ -20,12 +20,12 @@ namespace GolfV12.Server.Models.Repo
             return res.Entity;
         }
 
-        public async Task<IEnumerable<G250ExtrasTipo>> Buscar(string? titulo, int creador, 
+        public async Task<IEnumerable<G250ExtrasTipo>> Buscar(string? titulo, string? creador, 
             string? grupo, bool publico)
         {
             IQueryable<G250ExtrasTipo> querry = _appDbContext.ExtrasTipos;
             if (!string.IsNullOrEmpty(titulo)) querry = querry.Where(e => e.Titulo.Contains(titulo));
-            if (creador > 0) querry = querry.Where(e => e.Creador == creador);
+            if (!string.IsNullOrEmpty(creador)) querry = querry.Where(e => e.Creador.Contains(creador));
             if (!string.IsNullOrEmpty(grupo)) querry = querry.Where(e => e.Grupo.Contains(grupo));
             if(publico) querry = querry.Where(e=>e.Publico == true);   
             

@@ -12,7 +12,7 @@ namespace GolfV12.Shared
         [Key]
         public int Id { get; set; }
         public int Torneo { get; set; } = 0;
-        public int Player { get; set; } = 0;
+        public string Player { get; set; }
         public JobTorneo JobT { get; set; } = JobTorneo.Capturista;
         public int Contrincante { get; set; } = 0;
         public int Estado { get; set; } = 2;

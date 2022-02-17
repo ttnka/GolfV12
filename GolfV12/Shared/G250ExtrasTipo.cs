@@ -14,7 +14,7 @@ namespace GolfV12.Shared
         public string Titulo { get; set; } = "Titulo";
         public string Desc { get; set; }
         public int Valor { get; set; } = 1;
-        public int Creador { get; set; } = 0;
+        public string Creador { get; set; }
         public string Grupo { get; set; } = "General";
         public bool Publico { get; set; } = true;
         public int Estado { get; set; } = 1;

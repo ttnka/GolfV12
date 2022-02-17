@@ -12,7 +12,7 @@ namespace GolfV12.Shared
         [Key]
         public int Id { get; set; }
         public int Rol { get; set; } = 0;
-        public int Player { get; set; } = 0;
+        public string Player { get; set; }
         public int Hoyo { get; set; } = 0;
         public int Score { get; set; } = 0;
         public int Estado { get; set; } = 2;

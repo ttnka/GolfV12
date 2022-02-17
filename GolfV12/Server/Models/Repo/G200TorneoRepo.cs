@@ -22,12 +22,12 @@ namespace GolfV12.Server.Models.Repo
         }
 
         public async Task<IEnumerable<G200Torneo>> Buscar(int ejercicio, string? titulo, 
-            int creador)
+           string? creador)
         {
             IQueryable<G200Torneo> querry = _appDbContext.Torneos;
             if (ejercicio > 0) querry = querry.Where(e => e.Ejercicio == ejercicio);
             if (!string.IsNullOrEmpty(titulo)) querry = querry.Where(e => e.Titulo.Contains(titulo));
-            if (creador > 0) querry = querry.Where(e => e.Creador == creador);
+            if (!string.IsNullOrEmpty(creador)) querry = querry.Where(e => e.Creador.Contains(creador));
 
             return await querry.ToListAsync();
         }

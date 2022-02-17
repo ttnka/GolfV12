@@ -4,7 +4,7 @@ namespace GolfV12.Server.Models.IFace
 {
     public interface IG249TiroEst
     {
-        Task<IEnumerable<G249TiroEstadistica>> Buscar(int rol, int player, int hoyo, 
+        Task<IEnumerable<G249TiroEstadistica>> Buscar(int rol, string? player, int hoyo, 
             TiroTipo? tiroTipo);
         Task<IEnumerable<G249TiroEstadistica>> GetTiroEsts();
         Task<G249TiroEstadistica> GetTiroEst(int tiroEstId);

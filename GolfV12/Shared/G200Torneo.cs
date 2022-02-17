@@ -14,7 +14,7 @@ namespace GolfV12.Shared
         public int Ejercicio { get; set; }
         public string Titulo { get; set; } = "Nuevo";
         public string Desc { get; set; }
-        public int Creador { get; set; } = 0;
+        public string Creador { get; set; } 
         public int Formato { get; set; } = 0; 
         public int Rondas { get; set; } = 1;
         public int Campo { get; set; } = 0;

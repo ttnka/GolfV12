@@ -6,36 +6,36 @@ namespace GolfV12.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class G202JobTController : ControllerBase
+    public class G224RolTController : ControllerBase 
     {
-        private readonly IG202JobT _jobTIFace;
+        private readonly IG224RolT _rolIFace;
 
-        public G202JobTController(IG202JobT jobTIFace)
+        public G224RolTController(IG224RolT rolIFace)
         {
-            this._jobTIFace = jobTIFace;
+            this._rolIFace = rolIFace;
         }
         [HttpGet("{filtro}")]
-        public async Task<ActionResult<IEnumerable<G202JobT>>> Buscar(int torneo, string? player, int contrincante)
+        public async Task<ActionResult<IEnumerable<G224RolT>>> Buscar(int torneo)
         {
             try
             {
-                var resultado = await _jobTIFace.Buscar(torneo, player, contrincante);
+                var resultado = await _rolIFace.Buscar(torneo);
                 return Ok(resultado);
                 //return resultado.Any() ? Ok(resultado) : NotFound();
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error al leer la base de datos, " +
-                    "buscando el tipo de rol del jugador -capturista-");
+                    "buscando rol de torneo");
             }
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetJob()
+        public async Task<ActionResult> GetRoles()
         {
             try
             {
-                return Ok(await _jobTIFace.GetJobs());
+                return Ok(await _rolIFace.GetRoles());
             }
             catch (Exception)
             {
@@ -44,47 +44,47 @@ namespace GolfV12.Server.Controllers
             }
         }
 
-        [HttpGet("{jobid:int}")]
-        public async Task<ActionResult<G202JobT>> GetJob(int jobId)
+        [HttpGet("{rolid:int}")]
+        public async Task<ActionResult<G224RolT>> GetRol(int rolId)
         {
             try
             {
-                var resultado = await _jobTIFace.GetJob(jobId);
+                var resultado = await _rolIFace.GetRol(rolId);
                 return resultado != null ? resultado : NotFound();
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error al leer la base de datos, buscando un rol -captura-");
+                    "Error al leer la base de datos, buscando un rol de juego del torneo");
             }
         }
         [HttpPost]
-        public async Task<ActionResult<G202JobT>> Addjob(G202JobT job)
+        public async Task<ActionResult<G224RolT>> AddRol(G224RolT rol)
         {
             try
             {
-                if (job == null) return BadRequest();
-                var newJob = await _jobTIFace.AddJob(job);
-                return CreatedAtAction(nameof(GetJob), new { jobId = job.Id }, newJob);
+                if (rol == null) return BadRequest();
+                var newRol = await _rolIFace.AddRol(rol);
+                return CreatedAtAction(nameof(GetRol), new { rolId = rol.Id }, newRol);
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error al intentar crear una nuevo rol -captura- la base de datos.");
+                    "Error al intentar crear un nuevo Rol de juego de torneo en la base de datos.");
             }
         }
         [HttpPut]
-        public async Task<ActionResult<G202JobT>> UpdateJob(G202JobT job)
+        public async Task<ActionResult<G224RolT>> UpdateRol(G224RolT rol)
         {
             try
             {
-                return job != null ? await _jobTIFace.UpdateJob(job) :
-                    NotFound($"el Rol -captura- del jugador {job.Player} no fue encontrado");
+                return rol != null ? await _rolIFace.UpdateRol(rol) :
+                    NotFound($"El Rol numero {rol.Id} no fue encontrado");
             }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Error al intentar actualizar la base de datos, de los roles de -captura-");
+                    "Error al intentar actualizar la base de datos, de los roles de juego del torneo");
             }
         }
     }

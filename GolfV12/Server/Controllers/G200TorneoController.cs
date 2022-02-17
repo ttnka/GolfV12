@@ -16,7 +16,7 @@ namespace GolfV12.Server.Controllers
         }
         [HttpGet("{filtro}")]
         public async Task<ActionResult<IEnumerable<G200Torneo>>> Buscar(int ejercicio, 
-            string? titulo, int creador)
+            string? titulo, string? creador)
         {
             try
             {

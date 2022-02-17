@@ -20,18 +20,18 @@ namespace GolfV12.Server.Models.Repo
             return res.Entity;
         }
 
-        public async Task<IEnumerable<G222PlayerT>> Buscar(int team, int player)
+        public async Task<IEnumerable<G222PlayerT>> Buscar(int team, string? player)
         {
             IQueryable<G222PlayerT> querry = _appDbContext.PlayersT;
             if (team > 0 ) querry = querry.Where(e => e.Team == team);
-            if (player > 0 ) querry = querry.Where(e => e.Player == player);
+            if (!string.IsNullOrEmpty(player) ) querry = querry.Where(e => e.Player.Contains(player));
 
             return await querry.ToListAsync();
         }
 
-        public async Task<G222PlayerT> GetPlayer(int playerId)
+        public async Task<G222PlayerT> GetPlayer(string playerId)
         {
-            var res = await _appDbContext.PlayersT.FirstOrDefaultAsync(e => e.Id == playerId);
+            var res = await _appDbContext.PlayersT.FirstOrDefaultAsync(e => e.Player.Contains(playerId));
             return res != null ? res : new G222PlayerT();
         }
 

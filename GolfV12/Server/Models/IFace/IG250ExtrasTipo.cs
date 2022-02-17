@@ -4,7 +4,7 @@ namespace GolfV12.Server.Models.IFace
 {
     public interface IG250ExtrasTipo
     {
-        Task<IEnumerable<G250ExtrasTipo>> Buscar(string? titulo, int creador, string? grupo,
+        Task<IEnumerable<G250ExtrasTipo>> Buscar(string? titulo, string? creador, string? grupo,
                bool publico);
         Task<IEnumerable<G250ExtrasTipo>> GetExtrasTipos();
         Task<G250ExtrasTipo> GetExtrasTipo(int extrasTipoId);
