@@ -8,7 +8,7 @@ namespace GolfV12.Client.Pages.admin
     public class BanderaBase : ComponentBase 
     {
         [Inject]
-        public IG170CampoServ CampoIServ { get; set; } 
+        public IG170CampoServ CampoIServ { get; set; }
         [Inject]
         public IG172BanderaServ BanderaIServ { get; set; }
         [Inject]
