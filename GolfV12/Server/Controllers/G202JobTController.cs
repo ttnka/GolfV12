@@ -15,7 +15,7 @@ namespace GolfV12.Server.Controllers
             this._jobTIFace = jobTIFace;
         }
         [HttpGet("{filtro}")]
-        public async Task<ActionResult<IEnumerable<G202JobT>>> Buscar(int torneo, string? player, int contrincante)
+        public async Task<ActionResult<IEnumerable<G202JobT>>> Buscar(int torneo, string? player, string? contrincante)
         {
             try
             {

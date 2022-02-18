@@ -1,4 +1,4 @@
-﻿@page "/admin/campo"
+﻿@page "/admin/campo/"
 @inherits CampoBase
 @using GolfV12.Shared;
 
@@ -32,16 +32,24 @@
             <RadzenDataGridColumn TItem="G170Campo" Property="Pais" Title="Pais" />
             <RadzenDataGridColumn TItem="G170Campo"  Title="Estado" >
                 <Template Context="data">
-                    @if(data.Status == false) {<div style:"color-font:Red"><label style:"color:red"> Registro Borrado </label></div>}
-                    <NavLink class="nav-link" href=@($"/admin/bandera/{data.Id}")>
-                        <span class="oi oi-plus" aria-hidden="true"></span> Banderas 
-                    </NavLink>
-                    <NavLink class="nav-link" href=@($"/admin/hoyo/{data.Id}")>
-                        <span class="oi oi-plus" aria-hidden="true"></span> Hoyo y Hcp 
-                    </NavLink>
+                    @if(data.Status == false) 
+                    {
+                        <RadzenBadge BadgeStyle="BadgeStyle.Danger" IsPill="true" Text="Registro Borrado"/>
+                    }
+                    else
+                    {
+                        <NavLink class="nav-link" href=@($"/admin/bandera/{data.Id}")>
+                            <span class="oi oi-plus" aria-hidden="true"></span> Banderas 
+                        </NavLink>
+                        <NavLink class="nav-link" href=@($"/admin/hoyo/{data.Id}")>
+                            <span class="oi oi-plus" aria-hidden="true"></span> Hoyo y Hcp 
+                        </NavLink>
+                    }
+                    
                 </Template>
             </RadzenDataGridColumn>
             
         </Columns>
 </RadzenDataGrid>
 }
+--Tatanka--

@@ -37,10 +37,17 @@
             
             <RadzenDataGridColumn TItem="G172Bandera"  Title="Estado" >
                 <Template Context="data">
-                     <NavLink class="nav-link" href=@($"/admin/distancia/{data.Id}")>
-                        <span class="oi oi-plus" aria-hidden="true"></span>Distancia    
-                    </NavLink>
-                    @if(data.Status == false) {<div style:"color-font:Red"><label style:"color:red"> Registro Borrado </label></div>}
+                     
+                    @if(data.Status == false) 
+                    {
+                        <RadzenBadge BadgeStyle="BadgeStyle.Danger" IsPill="true" Text="Registro Borrado"/>
+                    } 
+                    else
+                    {
+                        <NavLink class="nav-link" href=@($"/admin/distancia/{data.Id}")>
+                            <span class="oi oi-plus" aria-hidden="true"></span>Distancia    
+                        </NavLink>
+                    }
                 </Template>
             </RadzenDataGridColumn>
             

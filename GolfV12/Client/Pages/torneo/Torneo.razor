@@ -1,0 +1,57 @@
+﻿@page "/torneo/torneo/"
+@inherits TorneoBase
+@using GolfV12.Shared;
+
+<h3>Listado de Torneos</h3>
+
+@if (LosTorneos == null)
+{
+    <div class="spinner"></div>
+} else
+{
+    
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href=@($"/torneo/torneoedit/")>
+                <span class="oi oi-plus" aria-hidden="true"></span> Nuevo Torneo 
+            </NavLink>
+       </div>
+        
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" 
+        PageSize="50" AllowPaging="true" AllowSorting="true" LogicalFilterOperator="LogicalFilterOperator.Or"
+        Data="@LosTorneos" TItem="G200Torneo" >
+        <Columns>
+            <RadzenDataGridColumn TItem="G200Torneo" Property="Id" Title="Id" Width="60px" Frozen="true">
+                <Template Context="data">
+                    <label>@data.Id</label>
+                    <RadzenLink Icon="edit" Path=@($"/torneo/torneoedit/{data.Id}") />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G200Torneo" Property="Ejercicio" Title="Ejercicio" />
+            <RadzenDataGridColumn TItem="G200Torneo" Property="Titulo" Title="Titulo">
+                <Template Context="data">
+                    @data.Titulo @data.Desc
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G200Torneo" Property="Creador" Title="Creador">
+                <Template Context="data">
+                    @AllPlayers[data.Creador]
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G200Torneo" Property="Formato" Title="Formato" />
+            <RadzenDataGridColumn TItem="G200Torneo" Property="Ronda" Title="Ronda" />
+            <RadzenDataGridColumn TItem="G200Torneo" Property="Campo" Title="Campo" />
+            <RadzenDataGridColumn TItem="G200Torneo" Property="TorneoV" Title="Lo Ve" />
+            <RadzenDataGridColumn TItem="G200Torneo" Property="TorneoE" Title="Escribe" />
+            <RadzenDataGridColumn TItem="G200Torneo"  Title="Estado" >
+                <Template Context="data">
+                    @if(data.Status == false) 
+                    {
+                        <RadzenBadge BadgeStyle="BadgeStyle.Danger" IsPill="true" Text="Registro Borrado"/> 
+                    }
+                </Template>
+            </RadzenDataGridColumn>
+            
+        </Columns>
+</RadzenDataGrid>
+}
+--Tatanka--

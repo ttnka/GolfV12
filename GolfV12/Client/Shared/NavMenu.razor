@@ -23,22 +23,6 @@
                     </NavLink>
                 </div>
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="/admin/campo">
-                        <span class="oi oi-plus" aria-hidden="true"></span> campos
-                    </NavLink>
-                </div>
-                
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="/admin/player/">
-                        <span class="oi oi-plus" aria-hidden="true"></span> Jugadores
-                    </NavLink>
-                </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="/api/G170Campo">
-                        <span class="oi oi-plus" aria-hidden="true"></span> Api Player
-                    </NavLink>
-                </div>
-                <div class="nav-item px-3">
                     <RadzenMenu>
                         <RadzenMenuItem Text="Administracion" Icon="home" >
                             <RadzenMenuItem Text="Organizaciones" Icon="oi-plus" Path="/admin/organizacion"/>
@@ -47,9 +31,28 @@
                         </RadzenMenuItem> 
                     </RadzenMenu>
                 </div>
+                
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="/torneo/torneo/">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Torneo
+                    </NavLink>
+                </div>
+                
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="/sistema/formato/">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Formato Torneo
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="/api/G170Campo">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Api Player
+                    </NavLink>
+                </div>
+                
                 <div class="nav-item px-3">
                     <RadzenMenu>
                         <RadzenMenuItem Text="Sistema" Icon="home" >
+                            <RadzenMenuItem Text="Formato" Icon="oi-plus" Path="/sistema/formato"/>
                             <RadzenMenuItem Text="Bitacoara" Icon="oi-plus" Path="/bitacora"/>
                             <RadzenMenuItem Text="Estados" Icon="oi-plus" Path="/sistema/estado"/>
                         </RadzenMenuItem> 

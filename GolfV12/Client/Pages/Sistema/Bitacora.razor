@@ -16,7 +16,7 @@
         AllowSorting="true" Data="@BitacoraAll" TItem="G190Bitacora" LogicalFilterOperator="LogicalFilterOperator.Or">
         <Columns>
             <RadzenDataGridColumn TItem="G190Bitacora" Property="Id" Title="Id" Width="60px" Frozen="true" />
-            <RadzenDataGridColumn TItem="G190Bitacora" Property="Fecha" Title="Fecha" FormatString="{0:o}" Width="160px" Frozen="true" />
+            <RadzenDataGridColumn TItem="G190Bitacora" Property="Fecha" Title="Fecha" FormatString="{0:o}" Width="200px" Frozen="true" />
             <RadzenDataGridColumn TItem="G190Bitacora" Property="Accion" Title="Accion" Width="110px" />
             <RadzenDataGridColumn TItem="G190Bitacora" Property="Usuario" Title="Usuario" Width="200px" >
                 <Template Context="data">
@@ -24,7 +24,11 @@
 
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="G190Bitacora" Property="Desc" Title="Descripcion" />
+            <RadzenDataGridColumn TItem="G190Bitacora" Property="Desc" Title="Descripcion">
+                <Template Context="data">
+                    <p style="white-space:pre-wrap">@data.Desc</p>
+                </Template>
+            </RadzenDataGridColumn>
 
         </Columns>
 </RadzenDataGrid>

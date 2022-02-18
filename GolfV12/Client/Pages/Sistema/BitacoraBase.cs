@@ -44,7 +44,7 @@ namespace GolfV12.Client.Pages.Sistema
             BitacoraAll = (await BitacoraServ.GetBitacoraAll()).ToList(); 
         }
 
-        public async Task NombresEscritore()
+        protected async Task NombresEscritore()
         {
             TodosPlayer.Add("Vacio", "No hay nombre");
             var AllNames =  await PlayerIServ.GetPlayers();

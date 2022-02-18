@@ -40,6 +40,33 @@ builder.Services.AddHttpClient<IG180EstadoServ, G180EstadoServ>(client =>
 builder.Services.AddHttpClient<IG190BitacoraServ, G190BitacoraServ>(client =>
 { client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
 
+builder.Services.AddHttpClient<IG200TorneoServ, G200TorneoServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+builder.Services.AddHttpClient<IG202JobTServ, G202JobTServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+builder.Services.AddHttpClient<IG204FechaTServ, G204FechaTServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+builder.Services.AddHttpClient<IG208CategoriaTServ, G208CategoriaTServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+builder.Services.AddHttpClient<IG220TeamTServ, G220TeamTServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+builder.Services.AddHttpClient<IG222PlayerTServ, G222PlayerTServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+builder.Services.AddHttpClient<IG224RolTServ, G224RolTServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+builder.Services.AddHttpClient<IG240ScoreServ, G240ScoreServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+builder.Services.AddHttpClient<IG242ExtrasServ, G242ExtrasServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+builder.Services.AddHttpClient<IG249TiroEstServ, G249TiroEstServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+builder.Services.AddHttpClient<IG250ExtrasTipoServ, G250ExtrasTipoServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+builder.Services.AddHttpClient<IG280FormatoTServ, G280FormatoTServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+
+
+
 
 builder.Services.AddApiAuthorization();
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

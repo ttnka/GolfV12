@@ -1,8 +1,8 @@
 ﻿using GolfV12.Shared;
 
-namespace GolfV12.Server.Models.IFace
+namespace GolfV12.Client.Servicios.IFaceServ
 {
-    public interface IG202JobT
+    public interface IG202JobTServ
     {
         Task<IEnumerable<G202JobT>> Buscar(int torneo, string? player, string? contrincante);
         Task<IEnumerable<G202JobT>> GetJobs();

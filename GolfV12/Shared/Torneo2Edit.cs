@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GolfV12.Shared
 {
-    public enum TorneoEdit
+    public enum Torneo2Edit
     {
         Creador,
         Capturista,

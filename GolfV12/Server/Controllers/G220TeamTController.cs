@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GolfV12.Server.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class G220TeamTController : ControllerBase 
     {
         private readonly IG220TeamT _teamIFace;

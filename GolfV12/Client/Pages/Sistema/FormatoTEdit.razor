@@ -1,0 +1,96 @@
+﻿@page "/sistema/formatotedit/"
+@page "/sistema/formatotedit/{formatoid:int}"
+@inherits FormatoTEditBase
+@inject NotificationService NS
+@using GolfV12.Shared;
+
+<h3>@ButtonTexto Formato</h3>
+
+@if (ElFormato == null)
+{
+    <div class="spinner"></div>
+} else
+{
+  <RadzenCard>   
+  <RadzenTemplateForm TItem="G280FormatoT" Data=@ElFormato Submit=@AddFormato >
+      
+      <div class="form-grup row">
+          <label for="clave" class="col-sm-3 col-form-label">Clave</label>
+          <div class="col-sm-9">
+                <RadzenTextBox Name="Clave" @bind-Value=@ElFormato.Clave />
+                <RadzenRequiredValidator Component="Clave" Text="La Clave del Formato es requerido y UNICA!" />
+          </div>
+      </div>
+      
+      <div class="form-grup row">
+          <label for="titulo" class="col-sm-3 col-form-label">Titulo del Formato</label>
+          <div class="col-sm-9">
+                <RadzenTextBox Name="Titulo" @bind-Value=@ElFormato.Titulo />
+                <RadzenRequiredValidator Component="Titulo" Text="El Nombre del Formato es requerido!" />
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="desc" class="col-sm-3 col-form-label">Descripcion detalla del formato</label>
+          <div class="col-sm-9">
+                <RadzenTextArea Name="Desc" @bind-Value=@ElFormato.Desc Class="w-100" />
+                
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="ronda" class="col-sm-3 col-form-label">Rondas</label>
+          <div class="col-sm-9">
+                <RadzenNumeric Name="Ronda" @bind-Value=@ElFormato.Ronda Min="1" Max="100" />
+          </div>
+      </div>
+
+      <div class="form-grup row">
+            <label for="individual" class="col-sm-3 col-form-label">Equipo / Individual?</label>
+            <div class="col-sm-9">
+                Equipo<RadzenSwitch Name="Individual" @bind-Value=@ElFormato.Individual /> Individual!        
+            </div>
+        </div>
+    @if (!@ElFormato.Individual) 
+    {
+       <div class="form-grup row">
+          <label for="integrantes" class="col-sm-3 col-form-label">Integrantes</label>
+          <div class="col-sm-9">
+                <RadzenNumeric Name="Integrantes" @bind-Value=@ElFormato.Integrantes Min="1" Max="999" />
+          </div>
+      </div>
+    }
+    @if (@FormatoId > 0)
+        {
+            <div class="form-grup row">
+                <label for="status" class="col-sm-3 col-form-label">Borrar este registro?</label>
+                <div class="col-sm-9">
+                    Si!<RadzenSwitch Name="Status" @bind-Value=@ElFormato.Status /> NO!        
+                </div>
+            </div>   
+        }
+
+        <div class="form-grup row">
+            <div class="col-sm-6">-</div>
+            <div class="col-sm-3">
+                <NavLink class="nav-link" href="/sistema/formato/">Cancelar</NavLink>
+            </div>
+            <div class="col-sm-3">
+                <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" /> 
+            </div>
+      </div>
+        
+    </RadzenTemplateForm>
+    </RadzenCard>
+}
+--Tatanka--
+@code {
+    async void AddFormato()
+    {
+        await SaveFormato();
+        ShowNotification(ElMesage);
+    }
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+    
+}

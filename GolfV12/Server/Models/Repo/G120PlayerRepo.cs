@@ -40,10 +40,14 @@ namespace GolfV12.Server.Models.Repo
         */
         public async Task<G120Player> GetPlayer(string userId)
         {
-            var resultado = await _appDbContext.Players
-                .FirstOrDefaultAsync(x => x.UserId == userId);
+            var resultado = await _appDbContext.Players.FirstOrDefaultAsync(x => x.UserId.Contains(userId));
             //return resultado != null ? resultado : await _appDbContext.Players.FirstOrDefaultAsync(x => x.Id == 1);
-            return  resultado != null ? resultado : new G120Player();
+            //return  resultado != null ? resultado : new G120Player();
+            if (resultado != null) 
+            { return resultado; } 
+            else 
+            {
+                return new G120Player(); }
         }
         
         public async Task<IEnumerable<G120Player>> GetPlayers()

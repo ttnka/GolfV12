@@ -39,12 +39,12 @@ namespace GolfV12.Client.Servicios.Serv
 
         public async Task<IEnumerable<G110Organizacion>> GetOrganizaciones()
         {
-            return await _httpClient.GetFromJsonAsync<IEnumerable<G110Organizacion>>("/api/G110organizacion");
+            return await _httpClient.GetFromJsonAsync<IEnumerable<G110Organizacion>>("/api/G110organizacion/");
         }
 
         public async Task<G110Organizacion> UpdateOrganizacion(G110Organizacion organizacion)
         {
-            var newOrg = await _httpClient.PutAsJsonAsync<G110Organizacion>("/api/G110Organizacion", organizacion);
+            var newOrg = await _httpClient.PutAsJsonAsync<G110Organizacion>("/api/G110Organizacion/", organizacion);
             return newOrg.IsSuccessStatusCode ?
                 await newOrg.Content.ReadFromJsonAsync<G110Organizacion>() : null;
         }

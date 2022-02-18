@@ -41,7 +41,10 @@
             <RadzenDataGridColumn TItem="G176Hoyo"  Title="Estado" >
                 <Template Context="data">
 
-                    @if(data.Status == false) {<div style:"color-font:Red"><label style:"color:red"> Registro Borrado </label></div>}
+                    @if(data.Status == false) 
+                    {
+                        <RadzenBadge BadgeStyle="BadgeStyle.Danger" IsPill="true" Text="Registro Borrado"/> 
+                    }
                 </Template>
             </RadzenDataGridColumn>
             

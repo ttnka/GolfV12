@@ -21,12 +21,12 @@ namespace GolfV12.Server.Models.Repo
             return res.Entity;
         }
 
-        public async Task<IEnumerable<G202JobT>> Buscar(int torneo, string? player, int contrincante)
+        public async Task<IEnumerable<G202JobT>> Buscar(int torneo, string? player, string? contrincante)
         {
             IQueryable<G202JobT> querry = _appDbContext.Jobs;
             if (torneo > 0) querry = querry.Where(e => e.Torneo == torneo);
             if (!string.IsNullOrEmpty(player)) querry = querry.Where(e => e.Player.Contains(player));
-            if (contrincante > 0) querry = querry.Where(e => e.Contrincante == contrincante);
+            if (!string.IsNullOrEmpty(contrincante)) querry = querry.Where(e => e.Contrincante.Contains(contrincante));
 
             return await querry.ToListAsync();
         }

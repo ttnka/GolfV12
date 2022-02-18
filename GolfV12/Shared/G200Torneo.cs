@@ -19,7 +19,7 @@ namespace GolfV12.Shared
         public int Rondas { get; set; } = 1;
         public int Campo { get; set; } = 0;
         public TorneoView TorneoV { get; set; } = TorneoView.Todos;
-        public TorneoEdit TorneoE { get; set; } = TorneoEdit.Jugadores;
+        public Torneo2Edit TorneoE { get; set; } = Torneo2Edit.Jugadores;
         public int Estado { get; set; } = 2;
         public bool Status { get; set; } = true;
 

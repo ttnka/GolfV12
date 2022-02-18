@@ -1,0 +1,54 @@
+﻿@page "/sistema/formato/"
+@inherits FormatoTBase
+@using GolfV12.Shared;
+
+<h3>Listado de Formatos de Torneos</h3>
+
+@if (LosFormatos == null)
+{
+    <div class="spinner"></div>
+} else
+{
+    
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href=@($"/sistema/formatotedit/")>
+                <span class="oi oi-plus" aria-hidden="true"></span> Nuevo Formato Torneo 
+            </NavLink>
+       </div>
+        
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" 
+        PageSize="50" AllowPaging="true" AllowSorting="true" LogicalFilterOperator="LogicalFilterOperator.Or"
+        Data="@LosFormatos" TItem="G280FormatoT" >
+        <Columns>
+            <RadzenDataGridColumn TItem="G280FormatoT" Property="Id" Title="Id" Width="60px" Frozen="true">
+                <Template Context="data">
+                    <label>@data.Id</label>
+                    <RadzenLink Icon="edit" Path=@($"/sistema/formatotedit/{data.Id}") />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G280FormatoT" Property="Clave" Title="Clave" />
+            <RadzenDataGridColumn TItem="G280FormatoT" Property="Titulo" Title="Titulo">
+                <Template Context="data">
+                    @data.Titulo @data.Desc
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G280FormatoT" Property="Ronda" Title="Rondas" />
+            <RadzenDataGridColumn TItem="G280FormatoT" Property="" Title="Equipo">
+                <Template Context="data">
+                    @if(data.Individual) { <label>Individual</label> } else { <label>@($"Equipo de {data.Integrantes}")</label>}
+                </Template>
+            </RadzenDataGridColumn>
+            
+            <RadzenDataGridColumn TItem="G280FormatoT"  Title="Estado" >
+                <Template Context="data">
+                    @if(data.Status == false) 
+                    {
+                        <RadzenBadge BadgeStyle="BadgeStyle.Danger" IsPill="true" Text="Registro Borrado"/> 
+                    }
+                </Template>
+            </RadzenDataGridColumn>
+            
+        </Columns>
+</RadzenDataGrid>
+}
+--Tatanka--

@@ -1,0 +1,94 @@
+﻿@page "/torneo/menu"
+<h3>Elmenu</h3>
+
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="accordion">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                          <h5 class="mb-0">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                              Torneos
+                            </button>
+                          </h5>
+                        </div>
+
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                          <div class="card-body">
+                              <div class="nav-item px-3">
+                                <NavLink class="nav-link" href="/players/misdatos">
+                                    <span class="oi oi-plus" aria-hidden="true"></span> Mis Datos
+                                </NavLink>
+                              </div>
+
+                              <div class="nav-item px-3">
+                                <NavLink class="nav-link" href="/players/misdatos">
+                                    <span class="oi oi-plus" aria-hidden="true"></span> Mis Datos
+                                </NavLink>
+                              </div>
+
+                          </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Administracion
+                        </button>
+                        </h5>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="/admin/organizacion/">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Organizacion
+                    </NavLink>
+                    <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="/admin/player/">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Jugadores
+                    </NavLink>
+                        </div>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="card">
+                    <div class="card-header" id="headingThree">
+                        <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Collapsible Group Item #3
+                        </button>
+                        </h5>
+                    </div>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                        <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        </div>
+                    </div>
+                    </div>
+                </div>

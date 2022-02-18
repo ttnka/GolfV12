@@ -1,0 +1,122 @@
+﻿@page "/torneo/torneoedit/"
+@page "/torneo/torneoedit/{torneoid:int}"
+@inherits TorneoEditBase
+@inject NotificationService NS
+@using GolfV12.Shared;
+
+<h3>@ButtonTexto Torneo</h3>
+@if (ElTorneo == null)
+{
+    <div class="spinner"></div>
+} else
+{
+  <RadzenCard>   
+  <RadzenTemplateForm TItem="G200Torneo" Data=@ElTorneo Submit=@AddTorneo >
+      
+      <div class="form-grup row">
+          <label for="ejercicio" class="col-sm-3 col-form-label">Año</label>
+          <div class="col-sm-9">
+                <RadzenNumeric Name="Ejercicio" @bind-Value=@ElTorneo.Ejercicio Min="2022" Max="2022" />
+          </div>
+      </div>
+      
+      <div class="form-grup row">
+          <label for="titulo" class="col-sm-3 col-form-label">Titulo del Torneo</label>
+          <div class="col-sm-9">
+                <RadzenTextBox Name="Titulo" @bind-Value=@ElTorneo.Titulo />
+                <RadzenRequiredValidator Component="Titulo" Text="El Nombre del Torneo es requerido!" />
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="desc" class="col-sm-3 col-form-label">Descripcion del Campo, domicilio etc.</label>
+          <div class="col-sm-9">
+                <RadzenTextArea Name="Desc" @bind-Value=@ElTorneo.Desc Class="w-100" />
+                
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="creador" class="col-sm-3 col-form-label">Creador del Torneo</label>
+          <div class="col-sm-9">
+                <RadzenLabel Name="Creador" Text="@($"{ElUser.Nombre} {ElUser.Apodo} {ElUser.Paterno}" )" />
+          </div>
+      </div>
+
+      <div class="form-grup row">
+          <label for="formato" class="col-sm-3 col-form-label">Formato del torneo</label>
+          <div class="col-sm-9">
+                <RadzenDropDown Name="Formato" AllowClear="false" Class="w-50" 
+                            Data="@LosFormatos" @bind-Value="@ElTorneo.Formato"
+                            ValueProperty="Id" TextProperty="Titulo"/>
+                
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="rondas" class="col-sm-3 col-form-label">Rondas</label>
+          <div class="col-sm-9">
+                <RadzenNumeric Name="Rondas" @bind-Value=@ElTorneo.Rondas />
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="campo" class="col-sm-3 col-form-label">Campo</label>
+          <div class="col-sm-9">
+                <RadzenDropDown Name="Campo" ValueProperty="Id" TextProperty="Corto" 
+                        AllowClear="false" Class="w-50" Data=@LosCampos @bind-Value=@ElTorneo.Campo />
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="torneoview" class="col-sm-3 col-form-label">Quien puede ver?</label>
+          <div class="col-sm-9">
+                <RadzenDropDown Name="TorneoView" AllowClear="false" Class="w-50" 
+                            Data=@TorneoViews @bind-Value=@ElTorneo.TorneoV
+                            TextProperty=Name ValueProperty=Value />
+                
+          </div>
+      </div>
+
+      <div class="form-grup row">
+          <label for="torneoedit" class="col-sm-3 col-form-label">Quien pude escribir?</label>
+          <div class="col-sm-9">
+                <RadzenDropDown Name="TorneoEdit" AllowClear="false" Class="w-50" 
+                            Data=@TorneoEdits @bind-Value=@ElTorneo.TorneoE
+                            TextProperty=Name ValueProperty=Value />
+                
+          </div>
+      </div>
+      
+    @if (@TorneoId > 0)
+        {
+            <div class="form-grup row">
+                <label for="status" class="col-sm-3 col-form-label">Borrar este registro?</label>
+                <div class="col-sm-9">
+                    Si!<RadzenSwitch Name="Status" @bind-Value=@ElTorneo.Status /> NO!        
+                </div>
+            </div>   
+        }
+
+        <div class="form-grup row">
+            <div class="col-sm-6">--Tatanka--</div>
+            <div class="col-sm-3">
+                <NavLink class="nav-link" href="/torneo/torneo/">Cancelar</NavLink>
+            </div>
+            <div class="col-sm-3">
+                <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" /> 
+            </div>
+      </div>
+        
+    </RadzenTemplateForm>
+    </RadzenCard>
+}
+
+--Tatanka--
+@code {
+    async void AddTorneo()
+    {
+        await SaveTorneo();
+        ShowNotification(ElMesage);
+    }
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+    
+}

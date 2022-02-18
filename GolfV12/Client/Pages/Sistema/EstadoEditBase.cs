@@ -65,7 +65,7 @@ namespace GolfV12.Client.Pages.Sistema
                     $"Actualizo registro {elEdo.Id} de {elEdo.Titulo} del grupo {elEdo.Grupo}");
             }
 
-            if (res != null) NM.NavigateTo("/sistema/estado");
+            if (res != null) NM.NavigateTo("/sistema/estado/");
         }
         [CascadingParameter]
         public Task<AuthenticationState> AuthStateTask { get; set; }
