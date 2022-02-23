@@ -44,7 +44,7 @@ namespace GolfV12.Server.Controllers
             }
         }
 
-        [HttpGet("{fechaid:int}")]
+        [HttpGet("{fechatid:int}")]
         public async Task<ActionResult<G204FechaT>> GetFechaT(int fechaTId)
         {
             try
@@ -65,7 +65,8 @@ namespace GolfV12.Server.Controllers
             {
                 if (fechaT == null) return BadRequest();
                 var newfechaT = await _fechaIFace.AddFechaT(fechaT);
-                return CreatedAtAction(nameof(GetFechaT), new { fechaTId = fechaT.Id }, newfechaT);
+                var new2fec = CreatedAtAction(nameof(GetFechaT), new { fechaTId = fechaT.Id }, newfechaT);
+                return new2fec;
             }
             catch (Exception)
             {

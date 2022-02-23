@@ -23,30 +23,71 @@
             <RadzenDataGridColumn TItem="G200Torneo" Property="Id" Title="Id" Width="60px" Frozen="true">
                 <Template Context="data">
                     <label>@data.Id</label>
+                   
                     <RadzenLink Icon="edit" Path=@($"/torneo/torneoedit/{data.Id}") />
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="G200Torneo" Property="Ejercicio" Title="Ejercicio" />
+            
             <RadzenDataGridColumn TItem="G200Torneo" Property="Titulo" Title="Titulo">
                 <Template Context="data">
-                    @data.Titulo @data.Desc
+                   <p style="white-space:pre-wrap"> @data.Titulo @data.Desc </p>
                 </Template>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="G200Torneo" Property="Creador" Title="Creador">
                 <Template Context="data">
-                    @AllPlayers[data.Creador]
+                <p style="white-space:pre-wrap">
+                    @if (AllPlayers.ContainsKey(@data.Creador)) 
+                    {@AllPlayers[data.Creador]} 
+                    else 
+                    {<label>No se encontro informacion del Creador!</label>}
+                </p>    
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="G200Torneo" Property="Formato" Title="Formato" />
-            <RadzenDataGridColumn TItem="G200Torneo" Property="Ronda" Title="Ronda" />
-            <RadzenDataGridColumn TItem="G200Torneo" Property="Campo" Title="Campo" />
-            <RadzenDataGridColumn TItem="G200Torneo" Property="TorneoV" Title="Lo Ve" />
-            <RadzenDataGridColumn TItem="G200Torneo" Property="TorneoE" Title="Escribe" />
+            <RadzenDataGridColumn TItem="G200Torneo" Property="Formato" Title="Formato">
+                <Template Context="data">
+                <p style="white-space:pre-wrap">
+                    @if (LosFormatos.ContainsKey(@data.Formato)) 
+                    {@LosFormatos[data.Formato]} 
+                    else 
+                    {<label>No se encontro Formato!</label>}
+                </p>    
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G200Torneo" Property="Rondas" Title="Rdas" >
+                <Template Context="data">
+                    <RadzenLink Icon="edit" Path=@($"/torneo/fechat/{data.Id}") /> @data.Rondas
+                </Template>
+            
+               </RadzenDataGridColumn>   
+            <RadzenDataGridColumn TItem="G200Torneo" Property="Campo" Title="Campo" >
+                <Template Context="data">
+                <p style="white-space:pre-wrap">
+                    @if (LosCampos.ContainsKey(data.Campo)) 
+                    {@LosCampos[data.Campo]} 
+                    else 
+                    {<label>No se encontro info del Campo</label>}
+                </p>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G200Torneo" Property="Ejercicio" Title="Ver, Editar" >
+            <Template Context="data">
+                <p style="white-space:pre-wrap">
+                 Lo Ve -    @data.TorneoV <br>
+                 Lo Edita - @data.TorneoE 
+                 
+                </p>
+                </Template>
+            </RadzenDataGridColumn>
+
             <RadzenDataGridColumn TItem="G200Torneo"  Title="Estado" >
                 <Template Context="data">
                     @if(data.Status == false) 
                     {
-                        <RadzenBadge BadgeStyle="BadgeStyle.Danger" IsPill="true" Text="Registro Borrado"/> 
+                        <RadzenBadge BadgeStyle="BadgeStyle.Danger" IsPill="true" Text="Registro Borrado"/>
+                    }
+                    else
+                    {
+                        <NavLink class="nav-link" href=@($"/torneo/jobt/{data.Id}")> Captura </NavLink>
                     }
                 </Template>
             </RadzenDataGridColumn>

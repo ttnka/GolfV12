@@ -21,35 +21,42 @@ else
             Favoritos
         </RadzenTabsItem>
         <RadzenTabsItem Text="Mis Datos">
-
+            
             <EditForm Model="@Midata" OnSubmit="actualizarMisDatos">
+                <div class="form-grup row">
+                    <label for="disdatos" class="col-sm-2 col-form-label">Deseas Editar tus datos?</label>
+                    <div class="col-sm-10">
+                        Si!<RadzenSwitch Name="Disdatos" @bind-value="EditarMisDatos"  />No!
+                        
+                    </div>
+                </div>
                 <div class="form-grup row">
                     <label for="apodo" class="col-sm-2 col-form-label">Apodo</label>
                     <div class="col-sm-10">
-                        <InputText @bind-Value="Midata.Apodo" class="form-control"></InputText>
+                        <RadzenTextBox @bind-Value="Midata.Apodo" class="form-control" Disabled=@EditarMisDatos />
                     </div>
                 </div>
                 <div class="form-grup row">
                     <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
                     <div class="col-sm-10">
-                        <InputText @bind-Value="Midata.Nombre" class="form-control"></InputText>
+                        <RadzenTextBox @bind-Value="Midata.Nombre" class="form-control" Disabled=@EditarMisDatos/>
                     </div>
                 </div>
                 <div class="form-grup row">
                     <label for="paterno" class="col-sm-2 col-form-label">Paterno</label>
                     <div class="col-sm-10">
-                        <InputText @bind-Value="Midata.Paterno" class="form-control"></InputText>
+                        <RadzenTextBox @bind-Value="Midata.Paterno" class="form-control" Disabled=@EditarMisDatos />
                     </div>
                 </div>
                 <div class="form-grup row">
                     <label for="materno" class="col-sm-2 col-form-label">Materno</label>
                     <div class="col-sm-10">
-                        <InputText @bind-Value="Midata.Materno" class="form-control"></InputText>
+                        <RadzenTextBox @bind-Value="Midata.Materno" class="form-control" Disabled=@EditarMisDatos />
                     </div>
                 </div>
                 
+                <RadzenButton style="width: 160px" ButtonType="ButtonType.Submit" Text="Actualizar" Disabled=@EditarMisDatos />
                 
-                <button class="btn btn-primary" type="submit">Actualizar</button>
             </EditForm>
         </RadzenTabsItem>
         <RadzenTabsItem Text="Mi Historia">
@@ -69,10 +76,12 @@ else
     {
         await MisDatosUpdate();
         ShowNotification(elMesage);
+        
     }
     public void ShowNotification(NotificationMessage message)
     {
         NS.Notify(message);
     }
+    
 
 }

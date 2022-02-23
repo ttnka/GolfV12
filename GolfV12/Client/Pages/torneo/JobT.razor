@@ -1,0 +1,79 @@
+﻿@page "/torneo/jobt/{torneoid:int}"
+@inherits JobTBase
+
+@using GolfV12.Shared;
+
+<h3>Listado de jugadores capturistas</h3>
+@if (LosJobs == null)
+{
+    <div class="spinner"></div>
+} else
+{
+    <div class="form-grup row"> 
+        <div class="col-sm-9">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href=@($"/torneo/jobtedit/{@TorneoId}")>
+                <span class="oi oi-plus" aria-hidden="true"></span> Nuevo Capturista torneo 
+                </NavLink>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href=@($"/torneo/torneo/")>
+                <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a torneos 
+                </NavLink>
+            </div>
+        </div>
+    </div>
+        
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" 
+        PageSize="50" AllowPaging="true" AllowSorting="true" LogicalFilterOperator="LogicalFilterOperator.Or"
+        Data="@LosJobs" TItem="G202JobT" >
+        <Columns>
+            <RadzenDataGridColumn TItem="G202JobT" Property="Id" Title="Id" Width="60px" Frozen="true">
+                <Template Context="data">
+                    <label>@data.Id</label>
+                    <RadzenLink Icon="edit" Path=@($"/torneo/jobtedit/{TorneoId}/{data.Id}") />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G202JobT" Property="Torneo" Title="Torneo">
+                <Template Context="data">
+                    @if (data.Torneo > 0)
+                    {
+                        <p style="white-space:pre-wrap">@ElTorneo</p>
+                    }
+                    else
+                    {<label>No se encuentra info del Torneo</label>}
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G202JobT" Property="Player" Title="Jugador">
+                <Template Context="data">
+                    @if(LosNombres.ContainsKey(data.Player)) 
+                    {<p style="white-space:pre-wrap">@LosNombres[data.Player]</p>}
+                    else
+                    {<p style="white-space:pre-wrap">@LosNombres["Vacio"]</p>}
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G202JobT" Property="JobT" Title="Actividad" />
+            <RadzenDataGridColumn TItem="G202JobT" Property="Contrincante" Title="Contrincante">
+                <Template Context="data">
+                    @if(LosNombres.ContainsKey(data.Contrincante)) 
+                    {<p style="white-space:pre-wrap">@LosNombres[data.Contrincante]</p>}
+                    else
+                    {<p style="white-space:pre-wrap">" "</p>}
+                </Template>
+            </RadzenDataGridColumn>
+            
+            <RadzenDataGridColumn TItem="G202JobT"  Title="Estado" >
+                <Template Context="data">
+                    @if(data.Status == false) 
+                    {
+                        <RadzenBadge BadgeStyle="BadgeStyle.Danger" IsPill="true" Text="Registro Borrado"/> 
+                    }
+                </Template>
+            </RadzenDataGridColumn>
+            
+        </Columns>
+</RadzenDataGrid>
+}
+--Tatanka--

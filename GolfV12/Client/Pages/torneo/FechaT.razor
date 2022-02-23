@@ -1,0 +1,73 @@
+﻿@page "/torneo/fechat/{torneoid:int}"
+@inherits FechaTBase
+
+@using GolfV12.Shared;
+
+<h3>Listado de fechas del Torneo  </h3>
+@if (LasFechas == null)
+{
+    <div class="spinner"></div>
+} else
+{
+    
+    <div class="form-grup row"> 
+        @if(FechaDic["RondasTorneo"] > FechaDic["RondaMaxFecha"]) {
+        <div class="col-sm-9">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href=@($"/torneo/fechatedit/{@TorneoId}")>
+                <span class="oi oi-plus" aria-hidden="true"></span> Nueva Fecha torneo 
+                </NavLink>
+            </div>
+        </div>
+        }
+        <div class="col-sm-3">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href=@($"/torneo/torneo/")>
+                <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a torneos 
+                </NavLink>
+            </div>
+        </div>
+    </div>
+        
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" 
+        PageSize="50" AllowPaging="true" AllowSorting="true" LogicalFilterOperator="LogicalFilterOperator.Or"
+        Data="@LasFechas" TItem="G204FechaT" >
+        <Columns>
+            <RadzenDataGridColumn TItem="G204FechaT" Property="Id" Title="Id" Width="60px" Frozen="true" >
+                <Template Context="data">
+                    <label>@data.Id</label>
+                    <RadzenLink Icon="edit" Path=@($"/torneo/fechatedit/{TorneoId}/{data.Id}") />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G204FechaT" Property="Torneo" Title="Torneo" Frozen="true" >
+                <Template Context="data">
+                    @if (data.Torneo > 0)
+                    {
+                        <p style="white-space:pre-wrap">@ElTorneo</p>
+                    }
+                    else
+                    {<label>No se encuentra info del Torneo</label>}
+                </Template>
+            </RadzenDataGridColumn>
+            
+            <RadzenDataGridColumn TItem="G204FechaT" Property="Ronda" Title="Ronda" />
+            <RadzenDataGridColumn TItem="G204FechaT" Property="Fecha" Title="Fecha">
+                <Template Context="data">
+                    @data.Fecha.Day / @data.Fecha.Month / @data.Fecha.Year
+                    @data.Fecha
+                </Template>
+            </RadzenDataGridColumn>
+            
+            <RadzenDataGridColumn TItem="G204FechaT"  Title="Estado" >
+                <Template Context="data">
+                    @if(data.Status == false) 
+                    {
+                        <RadzenBadge BadgeStyle="BadgeStyle.Danger" IsPill="true" Text="Registro Borrado"/> 
+                    }
+                </Template>
+            </RadzenDataGridColumn>
+            
+        </Columns>
+</RadzenDataGrid>
+}
+--Tatanka--

@@ -1,0 +1,86 @@
+﻿@page "/torneo/jobtedit/{torneoid:int}/"
+@page "/torneo/jobtedit/{torneoid:int}/{jobtid:int}"
+@inherits JobTEditBase
+@inject NotificationService NS
+@using GolfV12.Shared
+
+<h3>@ButtonTexto un jugador para captura</h3>
+@if (ElJobT == null)
+{
+    <div class="spinner"></div>
+} else
+{
+  <RadzenCard>   
+  <RadzenTemplateForm TItem="G202JobT" Data=@ElJobT Submit=@AddJob >
+      <div class="form-grup row">
+          <label for="torneo" class="col-sm-3 col-form-label">Torneo</label>
+          <div class="col-sm-9">
+              <RadzenLabel Name="Torneo" Text="@($"{ElTorneo.Titulo} {ElTorneo.Campo} ")"/>
+              
+          </div>
+      </div>
+      
+      <div class="form-grup row">
+          <label for="player" class="col-sm-3 col-form-label">Jugador que capturará!</label>
+          <div class="col-sm-9">
+                <RadzenDropDown Name="player" AllowClear="true" Class="w-100" 
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.StartsWith" 
+                AllowFiltering="true" Data="@LosPlayersDD" @bind-Value="@ElJobT.Player"
+                            ValueProperty="Key" TextProperty="Value"/>
+                
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="jobT" class="col-sm-3 col-form-label">Actividad!</label>
+          <div class="col-sm-9">
+                <RadzenDropDown Name="JobT" AllowClear="false" Class="w-50" 
+                            Data="@LosJobsT" @bind-Value="@ElJobT.JobT"
+                            ValueProperty="Name" TextProperty="Value"/>
+                
+          </div>
+      </div>
+
+        @if (@ElJobT.JobT == JobTorneo.Contrincante)
+        {
+            <div class="form-grup row">
+              <label for="contrincante" class="col-sm-3 col-form-label">Contrincante?</label>
+              <div class="col-sm-9">
+                    <RadzenDropDown Name="Contrincante" AllowClear="false" Class="w-100" 
+                                Data="@LosPlayersDD" @bind-Value="@ElJobT.Contrincante"
+                                ValueProperty="Key" TextProperty="Value"/>
+                
+              </div>
+          </div>
+        }
+        @if (@JobTId > 0)
+        {
+            <div class="form-grup row">
+                <label for="status" class="col-sm-3 col-form-label">Borrar este registro?</label>
+                <div class="col-sm-9">
+                    SI!<RadzenSwitch Name="Status" @bind-Value=@ElJobT.Status />NO        
+                </div>
+            </div>   
+        }
+
+        <div class="form-grup row">
+            <div class="col-sm-12">
+                <NavLink class="nav-link" href="@($"/torneo/jobt/{TorneoId}")">Cancelar</NavLink>
+                <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" /> 
+            </div>
+      </div>
+        
+    </RadzenTemplateForm>
+    </RadzenCard>
+}
+
+@code {
+    async void AddJob()
+    {
+        await SaveJob();
+        ShowNotification(ElMesage);
+    }
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+}

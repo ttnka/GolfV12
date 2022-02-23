@@ -44,8 +44,10 @@ builder.Services.AddHttpClient<IG200TorneoServ, G200TorneoServ>(client =>
 { client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
 builder.Services.AddHttpClient<IG202JobTServ, G202JobTServ>(client =>
 { client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+
 builder.Services.AddHttpClient<IG204FechaTServ, G204FechaTServ>(client =>
 { client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+
 builder.Services.AddHttpClient<IG208CategoriaTServ, G208CategoriaTServ>(client =>
 { client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
 builder.Services.AddHttpClient<IG220TeamTServ, G220TeamTServ>(client =>

@@ -15,8 +15,9 @@ namespace GolfV12.Client.Pages.players
         [Inject]
         protected IG120PlayerServ PlayerIServ { get; set; }
         public NavigationManager NM { get; set; }
-        protected G120Player Midata { get; set; }
+        protected G120Player Midata { get; set; } = new G120Player();
         //protected WBita WB { get; set; } = new WBita();
+        public bool EditarMisDatos { get; set; } = true;
         protected override async Task OnInitializedAsync()
         {
             var autState = await AuthStateTask;
@@ -38,8 +39,11 @@ namespace GolfV12.Client.Pages.players
                     $"Apodo {Midata.Apodo} {Midata.Estado}");
                 elMesage.Summary = "Registro Actualizado ";
                 elMesage.Detail = "Exitosamente!!!";
+                EditarMisDatos = true;
             }
         }
+
+        
 
         // Mensaje de Actualizacion
         public NotificationMessage elMesage { get; set; } = new NotificationMessage() { 
@@ -47,7 +51,7 @@ namespace GolfV12.Client.Pages.players
     
         [CascadingParameter]
         public Task<AuthenticationState> AuthStateTask { get; set; }
-        public string UserIdLog { get; set; }
+        public string UserIdLog { get; set; } = String.Empty;
         // Bitacora
 
         [Inject]

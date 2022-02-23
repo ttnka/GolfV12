@@ -24,8 +24,8 @@ namespace GolfV12.Client.Servicios.Serv
         public async Task<IEnumerable<G178Distancia>> Buscar(int bandera, int hoyoN)
         {
             var resultado = "";
-            if (bandera > 0) { resultado = "bandera=" + bandera + "&"; }
-            if (hoyoN > 0) { resultado = resultado + "hoyoN=" + hoyoN + "&"; }
+            if (bandera > 0) { resultado = "banderaid=" + bandera + "&"; }
+            if (hoyoN > 0) { resultado = resultado + "hoyo=" + hoyoN + "&"; }
             if (resultado != "") { resultado = "/api/G178Distancia/filtro?" + resultado; }
             return await _httpClient.GetFromJsonAsync<IEnumerable<G178Distancia>>(resultado);
         }

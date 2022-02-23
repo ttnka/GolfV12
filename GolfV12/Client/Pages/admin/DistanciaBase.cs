@@ -9,7 +9,9 @@ namespace GolfV12.Client.Pages.admin
     {
         [Parameter]
         public int BanderaId { get; set; }
-        
+        [Parameter]
+        public int CampoId { get; set; }
+
         [Inject]
         public IG178DistanciaServ DistIServ { get; set; }
         [Inject]
@@ -27,6 +29,7 @@ namespace GolfV12.Client.Pages.admin
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
+            if (CampoId == 0) NM.NavigateTo("/admin/campo/");
             if (BanderaId == 0) NM.NavigateTo("/admin/bandera/");
            
             LasDistancias = await DistIServ.Buscar(BanderaId, 0);

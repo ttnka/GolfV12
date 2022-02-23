@@ -23,6 +23,10 @@ namespace GolfV12.Client.Pages.torneo
         public IEnumerable<TorneoView> TorneoViews { get; set; } = Enum.GetValues(typeof(TorneoView)).Cast<TorneoView>().ToList();
         public IEnumerable<Torneo2Edit> TorneoEdits { get; set; } = Enum.GetValues(typeof(Torneo2Edit)).Cast<Torneo2Edit>().ToList();  
         [Inject]
+        public IG204FechaTServ FechaTServ { get; set; }
+        public G204FechaT LaFecha { get; set; } = new G204FechaT();
+
+        [Inject]
         public NavigationManager NM { get; set; }
         public string ButtonTexto { get; set; } = "Actualizar";
         protected async override Task OnInitializedAsync()
@@ -56,11 +60,21 @@ namespace GolfV12.Client.Pages.torneo
             if (string.IsNullOrEmpty(ElTorneo.Desc)) ElTorneo.Desc = " ";
             if (TorneoId == 0)
             {
+                if (LaFecha.Fecha.Date < DateTime.Now.Date) LaFecha.Fecha = DateTime.Now.Date;
+                if (LaFecha.Fecha.Date > DateTime.Now.AddDays(370)) LaFecha.Fecha = DateTime.Now.Date;
+                
+                ElTorneo.Ejercicio = LaFecha.Fecha.Year; 
                 resultado = await TorneoIServ.AddTorneo(ElTorneo);
                 await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false,
                     $"El usuario agrego un nuevo Torneo {resultado.Titulo} {resultado.Ejercicio}");
                 ElMesage.Summary = "Registro AGREGADO!";
                 ElMesage.Detail = "Exitosamente";
+
+                LaFecha.Torneo = resultado.Id;
+                LaFecha.Ronda = 1;
+                
+                LaFecha.Estado = 1;
+                await FechaTServ.AddFechaT(LaFecha); 
             }
             else
             {

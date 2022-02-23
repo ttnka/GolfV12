@@ -13,12 +13,15 @@
   <RadzenCard>   
   <RadzenTemplateForm TItem="G200Torneo" Data=@ElTorneo Submit=@AddTorneo >
       
+      @if(TorneoId == 0) {
       <div class="form-grup row">
-          <label for="ejercicio" class="col-sm-3 col-form-label">Año</label>
+          <label for="fecha" class="col-sm-3 col-form-label">Fecha</label>
           <div class="col-sm-9">
-                <RadzenNumeric Name="Ejercicio" @bind-Value=@ElTorneo.Ejercicio Min="2022" Max="2022" />
+                <RadzenDatePicker Name="Fecha" @bind-Value=@LaFecha.Fecha DateFormat="d" />
           </div>
       </div>
+      }
+
       
       <div class="form-grup row">
           <label for="titulo" class="col-sm-3 col-form-label">Titulo del Torneo</label>
@@ -53,9 +56,10 @@
       <div class="form-grup row">
           <label for="rondas" class="col-sm-3 col-form-label">Rondas</label>
           <div class="col-sm-9">
-                <RadzenNumeric Name="Rondas" @bind-Value=@ElTorneo.Rondas />
+                <RadzenNumeric Name="Rondas" @bind-Value=@ElTorneo.Rondas Min=1 Max=52/>
           </div>
       </div>
+      
       <div class="form-grup row">
           <label for="campo" class="col-sm-3 col-form-label">Campo</label>
           <div class="col-sm-9">
@@ -94,7 +98,7 @@
         }
 
         <div class="form-grup row">
-            <div class="col-sm-6">--Tatanka--</div>
+            <div class="col-sm-6">-</div>
             <div class="col-sm-3">
                 <NavLink class="nav-link" href="/torneo/torneo/">Cancelar</NavLink>
             </div>

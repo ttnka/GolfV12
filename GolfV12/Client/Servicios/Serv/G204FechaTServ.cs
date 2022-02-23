@@ -14,8 +14,8 @@ namespace GolfV12.Client.Servicios.Serv
         }
         public async Task<G204FechaT> AddFechaT(G204FechaT fechaT)
         {
-            var newOrg = await _httpClient.PostAsJsonAsync<G204FechaT>("/api/G204FechaT", fechaT);
-            return newOrg.IsSuccessStatusCode ?
+            var newOrg = await _httpClient.PostAsJsonAsync<G204FechaT>("/api/G204FechaT/", fechaT);
+              return newOrg.IsSuccessStatusCode ?
                 await newOrg.Content.ReadFromJsonAsync<G204FechaT>() :
                 null;
         }

@@ -22,7 +22,7 @@ namespace GolfV12.Client.Pages.admin
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
             
-            if (CampoId == 0) NM.NavigateTo("/admin/campo");
+            if (CampoId == 0) NM.NavigateTo("/admin/campo/");
             LosHoyos = await HoyoIServ.Buscar(CampoId, "", 0);
             ElCampo = await CampoIServ.GetCampo(CampoId);
             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false, 
