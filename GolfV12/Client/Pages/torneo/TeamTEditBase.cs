@@ -4,66 +4,83 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Radzen;
 
-namespace GolfV12.Client.Pages.admin
+namespace GolfV12.Client.Pages.torneo
 {
-    public class BanderaEditBase : ComponentBase
+    public class TeamTEditBase : ComponentBase 
     {
-        [Inject]
-        public IG170CampoServ CampoIServ { get; set; }
-        [Inject]
-        public IG172BanderaServ BanderaIServ { get; set;}
         [Parameter]
-        public int CampoId { get; set; } 
+        public int TorneoId { get; set; }
         [Parameter]
-        public int BanderaId { get; set; } 
-        public G170Campo ElCampo { get; set; } = new G170Campo();
-        public G172Bandera LaBandera { get; set; } = new G172Bandera();
+        public int TeamId { get; set; }
+        [Inject]
+        public IG200TorneoServ TorneoIServ { get; set; }
+        public G200Torneo ElTorneo { get; set; } = new G200Torneo();
+        [Inject]
+        public IG220TeamTServ TeamTServ { get; set; }
+        public G220TeamT ElTeam { get; set; } = new G220TeamT();
+        public int TeamIdNext { get; set; } = 1;
+           
         [Inject]
         public NavigationManager NM { get; set; }
         public string ButtonTexto { get; set; } = "Actualizar";
         protected async override Task OnInitializedAsync()
         {
+            if (TorneoId == 0) NM.NavigateTo("/torneo/torneo/");
             var autState = await AuthStateTask;
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
-
-
-            if (CampoId == 0) 
-            { NM.NavigateTo("/admin/campo"); } 
-            else 
-            { ElCampo = await CampoIServ.GetCampo(CampoId);} 
-               
-            if (BanderaId == 0) 
-            { LaBandera.Color = "Color de la bandera"; } 
-            else 
-            { LaBandera = await BanderaIServ.GetBandera(BanderaId); }
-                
-            LaBandera.CampoId = CampoId;
+            await LeerTeam(); 
         }
-        public async Task SaveBandera()
+
+        public async Task LeerTeam()
         {
-            G172Bandera resultado = new G172Bandera();
-            if (BanderaId == 0)
+            ElTorneo = await TorneoIServ.GetTorneo(TorneoId);
+            var teams = await TeamTServ.Buscar(TorneoId, 0, "");
+            if (teams != null) 
+            {  
+                foreach (var team in teams)
+                {
+                    if (TeamIdNext <= team.TeamNum) TeamIdNext = team.TeamNum + 1;
+                    ButtonTexto = "Agregar";
+                }
+            }
+
+            if (TeamId == 0)
             {
-                resultado = await BanderaIServ.AddBandera(LaBandera);
+                ElTeam.Torneo = TorneoId;
+                ElTeam.TeamNum = TeamIdNext;
+                ElTeam.Nombre = "Nuevo";
+                ElTeam.NumJugadores = 1;
+
+                ButtonTexto = "Agregar";
+            }
+            else
+            {
+                ElTeam = await TeamTServ.GetTeam(TeamId);
+            }
+        }
+        public async Task SaveTeam()
+        {
+            G220TeamT resultado = new G220TeamT();
+            if (TeamId == 0)
+            {
+                resultado = await TeamTServ.AddTeam(ElTeam) ;
                 await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false,
-                    $"El usuario agrego un nuevo registro Banderas {resultado.Id} {ElCampo.Corto} {resultado.Color}");
+                    $"El usuario agrego un nuevo equipo al torneo {ElTorneo.Titulo} {ElTorneo.Campo}");
                 ElMesage.Summary = "Registro AGREGADO!";
                 ElMesage.Detail = "Exitosamente";
 
             }
             else
             {
-                resultado = await BanderaIServ.UpdateBandera(LaBandera);
+                resultado = await TeamTServ.UpdateTeam(ElTeam) ;
                 await EscribirBitacoraUno(UserIdLog, BitaAcciones.Editar, false,
-                    $"El usuario actualizo la bandera {resultado.Id} del campo " +
-                    $"{ElCampo.Corto} {resultado.Color}");
+                    $"El usuario actualizo el equipo de del registro {resultado.Nombre} del torneo {ElTorneo.Titulo} {ElTorneo.Campo} ");
                 ElMesage.Summary = "Registro ACTUALIZADO!";
                 ElMesage.Detail = "Exitosamente";
             }
-            if (resultado != null) NM.NavigateTo($"/admin/bandera/{CampoId}");
+            if (resultado != null) NM.NavigateTo($"/torneo/teamt/{TorneoId}");
         }
-
         public NotificationMessage ElMesage { get; set; } = new NotificationMessage()
         {
             Severity = NotificationSeverity.Success,
@@ -87,6 +104,5 @@ namespace GolfV12.Client.Pages.admin
             WriteBitacora.Desc = desc;
             await BitacoraServ.AddBitacora(WriteBitacora);
         }
-
     }
 }

@@ -15,11 +15,11 @@ namespace GolfV12.Server.Controllers
             this._teamIFace = teamIFace;
         }
         [HttpGet("{filtro}")]
-        public async Task<ActionResult<IEnumerable<G220TeamT>>> Buscar(int teamNum, string? nombre)
+        public async Task<ActionResult<IEnumerable<G220TeamT>>> Buscar(int torneo, int teamNum, string? nombre)
         {
             try
             {
-                var resultado = await _teamIFace.Buscar(teamNum, nombre);
+                var resultado = await _teamIFace.Buscar(torneo, teamNum, nombre);
                 return Ok(resultado);
                 //return resultado.Any() ? Ok(resultado) : NotFound();
             }

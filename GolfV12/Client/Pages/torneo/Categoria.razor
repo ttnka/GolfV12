@@ -1,0 +1,76 @@
+﻿@page "/torneo/categoria/{torneoid:int}"
+@inherits CategoriaBase
+
+@using GolfV12.Shared;
+
+<h3>Listado de categorias del Torneo  </h3>
+@if (LasCategorias == null)
+{
+    <div class="spinner"></div>
+} else
+{
+    <div class="form-grup row">        
+        <div class="col-sm-9">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href=@($"/torneo/categoriaedit/{@TorneoId}")>
+                <span class="oi oi-plus" aria-hidden="true"></span> Nueva categoria  
+                </NavLink>
+            </div>
+        </div>
+        
+        <div class="col-sm-3">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href=@($"/torneo/torneo/")>
+                <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a torneos 
+                </NavLink>
+            </div>
+        </div>
+    </div>
+        
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" 
+        PageSize="50" AllowPaging="true" AllowSorting="true" LogicalFilterOperator="LogicalFilterOperator.Or"
+        Data="@LasCategorias" TItem="G208CategoriaT" >
+        <Columns>
+            <RadzenDataGridColumn TItem="G208CategoriaT" Property="Id" Title="Id" Width="60px" Frozen="true" >
+                <Template Context="data">
+                    <label>@data.Id</label>
+                    <RadzenLink Icon="edit" Path=@($"/torneo/categoriaedit/{TorneoId}/{data.Id}") />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G208CategoriaT" Property="Torneo" Title="Torneo" Frozen="true" >
+                <Template Context="data">
+                    @if (data.Torneo > 0)
+                    {
+                        <p style="white-space:pre-wrap">@ElTorneo</p>
+                    }
+                    else
+                    {<label>No se encuentra info del Torneo</label>}
+                </Template>
+            </RadzenDataGridColumn>
+            
+            <RadzenDataGridColumn TItem="G208CategoriaT" Property="Titulo" Title="Titulo" />
+            <RadzenDataGridColumn TItem="G208CategoriaT" Property="Desc" Title="Descripcion" />
+            <RadzenDataGridColumn TItem="G208CategoriaT" Property="Banderas" Title="Banderas" >
+                <Template Context="data">
+                    @if (data.Bandera > 0)
+                    {
+                        <p style="white-space:pre-wrap">@LasBanderasDic[data.Bandera]</p>
+                    }
+                    else
+                    {<label>No se encuentra info de la bandera</label>}
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G208CategoriaT" Property="NumJugadores" Title="Jugadores" />
+            <RadzenDataGridColumn TItem="G208CategoriaT"  Title="Estado" >
+                <Template Context="data">
+                    @if(data.Status == false) 
+                    {
+                        <RadzenBadge BadgeStyle="BadgeStyle.Danger" IsPill="true" Text="Registro Borrado"/> 
+                    }
+                </Template>
+            </RadzenDataGridColumn>
+            
+        </Columns>
+</RadzenDataGrid>
+}
+--Tatanka--

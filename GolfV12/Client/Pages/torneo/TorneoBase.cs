@@ -9,7 +9,7 @@ namespace GolfV12.Client.Pages.torneo
     {
         [Inject]
         public IG200TorneoServ TorneoIServ { get; set; }
-        public IEnumerable<G200Torneo> LosTorneos { get; set; } 
+        public IEnumerable<G200Torneo> LosTorneos { get; set; }  = Enumerable.Empty<G200Torneo>();
         [Inject]
         public IG120PlayerServ PlayerIServ { get; set; }       
         public Dictionary<string, string> AllPlayers { get; set; } = new Dictionary<string, string>();
@@ -19,6 +19,8 @@ namespace GolfV12.Client.Pages.torneo
         [Inject]
         public IG170CampoServ CampoIServ { get; set; }
         public Dictionary<int, string> LosCampos { get; set; } = new Dictionary<int, string>();
+        [Inject]
+        public IG204FechaTServ FechaIServ { get; set; }
         protected async override Task OnInitializedAsync()
         {
             var autState = await AuthStateTask;

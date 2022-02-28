@@ -11,7 +11,7 @@ namespace GolfV12.Client.Pages.torneo
         public int TorneoId { get; set; }
         [Inject]
         public IG204FechaTServ FechaTIServ { get; set; }  
-        public IEnumerable<G204FechaT> LasFechas { get; set; } 
+        public IEnumerable<G204FechaT> LasFechas { get; set; }  = Enumerable.Empty<G204FechaT>();
         public Dictionary<string, int> FechaDic { get; set; } = new Dictionary<string, int>();
         public string ElTorneo { get; set; } = string.Empty;
         [Inject]
@@ -27,6 +27,8 @@ namespace GolfV12.Client.Pages.torneo
 
             LasFechas = await FechaTIServ.Buscar(TorneoId, DateTime.MinValue);
             await LeerDatos();
+            await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
+                $"El Usuario cosulto las fechas de un torneo {ElTorneo}");
         }
 
         protected async Task LeerDatos() 

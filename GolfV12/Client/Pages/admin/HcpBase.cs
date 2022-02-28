@@ -12,7 +12,7 @@ namespace GolfV12.Client.Pages.admin
         [Inject]
         public IG120PlayerServ PlayerServ { get; set; }
 
-        public IEnumerable<G128Hcp> LosHcps { get; set; }
+        public IEnumerable<G128Hcp> LosHcps { get; set; } = Enumerable.Empty<G128Hcp>();
         public Dictionary<string, string> LosPlayers { get; set; } = new Dictionary<string, string>();
 
         [Parameter]

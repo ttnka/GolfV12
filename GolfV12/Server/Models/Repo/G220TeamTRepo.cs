@@ -21,9 +21,10 @@ namespace GolfV12.Server.Models.Repo
             return res.Entity;
         }
 
-        public async Task<IEnumerable<G220TeamT>> Buscar(int teamNum, string? nombre)
+        public async Task<IEnumerable<G220TeamT>> Buscar(int torneo, int teamNum, string? nombre)
         {
             IQueryable<G220TeamT> querry = _appDbContext.TeamsT;
+            if (torneo > 0) querry = querry.Where(e => e.Torneo == torneo);
             if (teamNum > 0) querry = querry.Where(e => e.TeamNum == teamNum);
             if (!string.IsNullOrEmpty(nombre)) querry = querry.Where(e => e.Nombre.Contains(nombre));
             

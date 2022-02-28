@@ -11,6 +11,7 @@ namespace GolfV12.Shared
     {
         [Key]
         public int Id { get; set; }
+        public int Torneo { get; set; } = 0;
         public int TeamNum { get; set; } = 1;
         public string Nombre { get; set; } = "Nombre";
         public int NumJugadores { get; set; } = 1;

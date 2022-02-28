@@ -12,7 +12,7 @@ namespace GolfV12.Client.Pages.admin
         public IG120PlayerServ iG120PlayerServ { get; set; }
         [Inject]
         public IG110OrganizacionServ  iG110OrgServ { get; set; }
-        public IEnumerable<G120Player> LosJugadores { get; set; }
+        public IEnumerable<G120Player> LosJugadores { get; set; } = Enumerable.Empty<G120Player>();
         public Dictionary<int, string> LasOrg { get; set; } = new Dictionary<int, string>();      
         public NavigationManager MN { get; set; }
         //protected WBita WB { get; set; } = new WBita(); 

@@ -13,15 +13,15 @@ namespace GolfV12.Client.Pages.admin
         public int CampoId { get; set; }
 
         [Inject]
-        public IG178DistanciaServ DistIServ { get; set; }
+        public IG178DistanciaServ? DistIServ { get; set; }
         [Inject]
-        public IG172BanderaServ BanderaIServ { get; set; }
+        public IG172BanderaServ? BanderaIServ { get; set; }
         [Inject]
-        public IG170CampoServ CampoIServ { get; set; }
+        public IG170CampoServ? CampoIServ { get; set; }
         public IEnumerable<G178Distancia> LasDistancias { get; set; } = Enumerable.Empty<G178Distancia>();
         public IEnumerable<G172Bandera> LasBanderas { get; set; } = Enumerable.Empty<G172Bandera>();
         public G170Campo ElCampo { get; set; } = new G170Campo();
-        public G172Bandera LaBandera { get; set; }
+        public G172Bandera LaBandera { get; set; } = new();
         public NavigationManager NM { get; set; }
         protected async override Task OnInitializedAsync()
         {
@@ -42,8 +42,8 @@ namespace GolfV12.Client.Pages.admin
         }
 
         [CascadingParameter]
-        public Task<AuthenticationState> AuthStateTask { get; set; }
-        public string UserIdLog { get; set; }
+        public Task<AuthenticationState>? AuthStateTask { get; set; }
+        public string UserIdLog { get; set; } = string.Empty;
         [Inject]
         public IG190BitacoraServ BitacoraServ { get; set; }
         private G190Bitacora WriteBitacora { get; set; } = new G190Bitacora();

@@ -13,7 +13,7 @@ namespace GolfV12.Client.Pages.admin
         
         [Inject]
         public IG110OrganizacionServ organizacionIServ { get; set; }
-        public IEnumerable<G110Organizacion> LasOrganizaciones { get; set; }
+        public IEnumerable<G110Organizacion> LasOrganizaciones { get; set; } = Enumerable.Empty<G110Organizacion>();
         //protected WBita WB { get; set; } = new WBita();
         protected override async Task OnInitializedAsync()
         {

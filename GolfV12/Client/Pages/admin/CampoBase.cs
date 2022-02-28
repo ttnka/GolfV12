@@ -9,7 +9,7 @@ namespace GolfV12.Client.Pages.admin
     {
         [Inject]
         public IG170CampoServ CampoIServ { get; set; }
-        public IEnumerable<G170Campo> LosCampos { get; set; }
+        public IEnumerable<G170Campo> LosCampos { get; set; } = Enumerable.Empty<G170Campo>();
 
         public int CampoId { get; set; }
         protected async override Task OnInitializedAsync()

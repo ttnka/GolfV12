@@ -23,15 +23,15 @@
       <div class="form-grup row">
           <label for="ruta" class="col-sm-3 col-form-label">Ruta</label>
           <div class="col-sm-9">
-                <RadzenTextBox Name="Ruta" @bind-Value=@ElHoyo.Ruta />
+                <RadzenTextBox Name="Ruta" @bind-Value=@ElHoyo.Ruta 
+                Change="@(arg => BuscarNextHoyo(ElHoyo.Ruta))" />
           </div>
       </div>
       
       <div class="form-grup row">
           <label for="hoyo" class="col-sm-3 col-form-label">Hoyo Numero</label>
           <div class="col-sm-9">
-                <RadzenNumeric Name="Hoyo" @bind-Value=@ElHoyo.Hoyo Min="1" Max="18" />
-                <RadzenRequiredValidator Component="Hoyo" Text="El numero del Hoyo va 1 a 18 y es requerido!" />
+                <RadzenNumeric Name="Hoyo" @bind-Value=@ElHoyo.Hoyo Disabled="true" />
           </div>
       </div>
       <div class="form-grup row">

@@ -52,6 +52,7 @@ namespace GolfV12.Client.Pages.torneo
             }
             else
             { ElJobT = await JobTIServ.GetJob(JobTId); }
+
         }
         protected List<KeyValuePair<string, string>> NamesTemp {get; set;} = 
                 new List<KeyValuePair<string, string>>();  

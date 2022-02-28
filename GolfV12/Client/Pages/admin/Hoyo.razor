@@ -8,12 +8,24 @@
     <div class="spinner"></div>
 } else
 {
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href=@($"/admin/hoyoedit/{ElCampo.Id}")>
-                <span class="oi oi-plus" aria-hidden="true"></span> Nuevo Hoyo para el campo
-                        @ElCampo.Corto @ElCampo.Ciudad
-            </NavLink>
-       </div>
+    <div class="form-grup row">        
+        <div class="col-sm-9">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href=@($"/admin/hoyoedit/{CampoId}")>
+                    <span class="oi oi-plus" aria-hidden="true"></span> Nuevo hoyo campo  
+                </NavLink>
+            </div>
+        </div>
+        
+        <div class="col-sm-3">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href=@($"/admin/campo/")>
+                    <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar al listado de campos           
+                </NavLink>
+            </div>
+        </div>
+    </div>
+       
         
 <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" 
         PageSize="50" AllowPaging="true" AllowSorting="true" LogicalFilterOperator="LogicalFilterOperator.Or"
@@ -21,7 +33,7 @@
         <Columns>
             <RadzenDataGridColumn TItem="G176Hoyo" Property="Id" Title="Id" Width="60px" Frozen="true">
                 <Template Context="data">
-                    <label>@data.Id</label>
+                    <label>@data.Hoyo</label>
                     <RadzenLink Icon="edit" Path=@($"/admin/hoyoedit/{data.CampoId}/{data.Id}") />
                 </Template>
             </RadzenDataGridColumn>
@@ -31,7 +43,7 @@
                 </Template>
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="G176Hoyo" Property="Ruta" Title="Ruta" />
-            <RadzenDataGridColumn TItem="G176Hoyo" Property="Hoyo" Title="Hoyo" />
+            
             <RadzenDataGridColumn TItem="G176Hoyo" Property="Par" Title="Par" />
             <RadzenDataGridColumn TItem="G176Hoyo" Property="HcpHombres" Title="Hombres" />
             <RadzenDataGridColumn TItem="G176Hoyo" Property="HcpMujeres" Title="Mujeres" />

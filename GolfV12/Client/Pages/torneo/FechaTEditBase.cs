@@ -36,6 +36,7 @@ namespace GolfV12.Client.Pages.torneo
             if (FechaId == 0)
             {
                 await LeerDatos();
+                ButtonTexto = "Agregar"; 
             }
             else 
             { 

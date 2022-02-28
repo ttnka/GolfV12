@@ -45,11 +45,11 @@ namespace GolfV12.Server.Controllers
         }
 
         [HttpGet("{categoriaid:int}")]
-        public async Task<ActionResult<G208CategoriaT>> GetCategoria(int categoria)
+        public async Task<ActionResult<G208CategoriaT>> GetCategoria(int categoriaId)
         {
             try
             {
-                var resultado = await _catIFace.GetCategoria(categoria);
+                var resultado = await _catIFace.GetCategoria(categoriaId);
                 return resultado != null ? resultado : NotFound();
             }
             catch (Exception)
@@ -65,7 +65,7 @@ namespace GolfV12.Server.Controllers
             {
                 if (categoria == null) return BadRequest();
                 var newCategoria = await _catIFace.AddCategoria(categoria);
-                return CreatedAtAction(nameof(GetCategoria), new { categoria = categoria.Id }, newCategoria);
+                return CreatedAtAction(nameof(GetCategoria), new { categoriaId = categoria.Id }, newCategoria);
             }
             catch (Exception)
             {

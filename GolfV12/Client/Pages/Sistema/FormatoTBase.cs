@@ -19,6 +19,8 @@ namespace GolfV12.Client.Pages.Sistema
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
             LosFormatos = await FormatoIServ.GetFormatos();
+            await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
+                $"El Usuario consulto el listado de formatos de torneo");
 
         }
         [CascadingParameter]

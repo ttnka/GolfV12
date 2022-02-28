@@ -14,6 +14,7 @@ namespace GolfV12.Client.Pages.admin
         public int HoyoId { get; set; }
         [Inject]
         public IG176HoyoServ HoyoIServ { get; set; }
+        public int HoyoNext { get; set; } = 1;
         [Inject]
         public IG170CampoServ CampoIServ { get; set; }
         [Inject]
@@ -29,16 +30,33 @@ namespace GolfV12.Client.Pages.admin
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
             if (CampoId == 0) NM.NavigateTo("/admin/campo");
+            await LeerDatos();
+        }
+
+        public async Task LeerDatos()
+        {
             if (HoyoId == 0)
             {
                 ElHoyo.CampoId = CampoId;
                 ElHoyo.Ruta = "Unica";
-            } else
+                await BuscarNextHoyo(ElHoyo.Ruta);
+            }
+            else
             {
                 ElHoyo = await HoyoIServ.GetHoyo(HoyoId);
             }
             ElCampo = await CampoIServ.GetCampo(CampoId);
         }
+        public async Task BuscarNextHoyo(string ruta)
+        {
+            var LosHoyos = await HoyoIServ.Buscar(CampoId, ruta, 0);
+            foreach (var l in LosHoyos)
+            {
+                if (HoyoNext <= l.Hoyo) HoyoNext = l.Hoyo + 1;
+            }
+            ElHoyo.Hoyo = HoyoNext;
+        }
+
         public async Task SaveHoyo()
         {
             G176Hoyo resultado = new G176Hoyo();

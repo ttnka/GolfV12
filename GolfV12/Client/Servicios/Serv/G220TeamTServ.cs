@@ -20,10 +20,11 @@ namespace GolfV12.Client.Servicios.Serv
                 null;
         }
 
-        public async Task<IEnumerable<G220TeamT>> Buscar(int teamNum, string? nombre)
+        public async Task<IEnumerable<G220TeamT>> Buscar(int torneo, int teamNum, string? nombre)
         {
             var resultado = "";
-            if (teamNum > 0) { resultado =  "teamNum=" + teamNum + "&"; }
+            if (torneo > 0) { resultado = "torneo=" + torneo + "&"; }
+            if (teamNum > 0) { resultado = resultado + "teamNum=" + teamNum + "&"; }
             if (!string.IsNullOrEmpty(nombre)) { resultado = resultado + "nombre=" + nombre + "&"; }
  //           if (!string.IsNullOrEmpty(desc)) { resultado = resultado + "desc=" + desc + "&"; }
             if (resultado != "") { resultado = "/api/G220TeamT/filtro?" + resultado; }

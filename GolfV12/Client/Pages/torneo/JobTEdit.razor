@@ -23,10 +23,9 @@
       <div class="form-grup row">
           <label for="player" class="col-sm-3 col-form-label">Jugador que capturará!</label>
           <div class="col-sm-9">
-                <RadzenDropDown Name="player" AllowClear="true" Class="w-100" 
-                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterOperator="StringFilterOperator.StartsWith" 
-                AllowFiltering="true" Data="@LosPlayersDD" @bind-Value="@ElJobT.Player"
-                            ValueProperty="Key" TextProperty="Value"/>
+                <RadzenDropDown Name="player" AllowClear="true" Class="w-100"  AllowFiltering="true"
+                FilterCaseSensitivity="FilterCaseSensitivity.Default" FilterOperator="StringFilterOperator.Contains" 
+                Data="@LosPlayersDD" @bind-Value="@ElJobT.Player" ValueProperty="Key" TextProperty="Value"/>
                 
           </div>
       </div>
@@ -45,9 +44,9 @@
             <div class="form-grup row">
               <label for="contrincante" class="col-sm-3 col-form-label">Contrincante?</label>
               <div class="col-sm-9">
-                    <RadzenDropDown Name="Contrincante" AllowClear="false" Class="w-100" 
-                                Data="@LosPlayersDD" @bind-Value="@ElJobT.Contrincante"
-                                ValueProperty="Key" TextProperty="Value"/>
+                    <RadzenDropDown Name="Contrincante" AllowClear="false" Class="w-100" AllowFiltering="true"
+                    FilterCaseSensitivity="FilterCaseSensitivity.Default" FilterOperator="StringFilterOperator.Contains"
+                    Data="@LosPlayersDD" @bind-Value="@ElJobT.Contrincante" ValueProperty="Key" TextProperty="Value"/>
                 
               </div>
           </div>

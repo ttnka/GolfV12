@@ -53,7 +53,7 @@
                 </p>    
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="G200Torneo" Property="Rondas" Title="Rdas" >
+            <RadzenDataGridColumn TItem="G200Torneo" Property="Rondas" Title="Fechas" >
                 <Template Context="data">
                     <RadzenLink Icon="edit" Path=@($"/torneo/fechat/{data.Id}") /> @data.Rondas
                 </Template>
@@ -87,7 +87,10 @@
                     }
                     else
                     {
-                        <NavLink class="nav-link" href=@($"/torneo/jobt/{data.Id}")> Captura </NavLink>
+                        <NavLink class="nav-link" href=@($"/torneo/teamt/{data.Id}")> Equipos </NavLink>
+
+                        <NavLink class="nav-link" href=@($"/torneo/categoria/{data.Id}")> Categorias </NavLink>
+                        <NavLink class="nav-link" href=@($"/torneo/jobt/{data.Id}")> Capturista </NavLink>
                     }
                 </Template>
             </RadzenDataGridColumn>

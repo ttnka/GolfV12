@@ -4,23 +4,22 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace GolfV12.Client.Pages.torneo
-{   
-    public class JobTBase : ComponentBase
+{
+    public class CategoriaBase : ComponentBase
     {
         [Parameter]
         public int TorneoId { get; set; }
+
         [Inject]
-        public IG202JobTServ JobIServ { get; set; }
-        public IEnumerable<G202JobT> LosJobs { get; set; } = Enumerable.Empty<G202JobT>();
+        public IG208CategoriaTServ CatIServ { get; set; }
+        public IEnumerable<G208CategoriaT> LasCategorias { get; set; } = Enumerable.Empty<G208CategoriaT>();
         [Inject]
         public IG200TorneoServ TorneoIServ { get; set; }
-        //public IEnumerable<G200Torneo> LosTorneos { get; set; } = new List<G200Torneo>();
-        [Inject]
-        public IG120PlayerServ playerIServ { get; set; }
-
         public string ElTorneo { get; set; } = string.Empty;
-        
-        public Dictionary<string, string> LosNombres { get; set; } = new Dictionary<string, string>();
+        [Inject]
+        public IG172BanderaServ BanderaIServ { get; set; }
+        public IEnumerable<G172Bandera> LasBanderas { get; set; } = Enumerable.Empty<G172Bandera>();
+        public Dictionary<int, string> LasBanderasDic { get; set; } = new Dictionary<int, string>();
         [Inject]
         public NavigationManager NM { get; set; }
         protected async override Task OnInitializedAsync()
@@ -30,23 +29,25 @@ namespace GolfV12.Client.Pages.torneo
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
-            LosJobs = await JobIServ.Buscar(TorneoId, "", "");
-            await LeerTorneos();
+            await LeerDatos();
             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
-                $"El Usuario consulto el listado de capturistas de un torneo {ElTorneo}");
+                $"El Usuario consulto las categorias de un torneo {ElTorneo}");
         }
-        protected async Task LeerTorneos()
+        protected async Task LeerDatos()
         {
-            var LosPlayers = await playerIServ.GetPlayers();
-            foreach (var player in LosPlayers)
-            {
-                if (!LosNombres.ContainsKey(player.UserId)) LosNombres.Add(player.UserId,
-                        $"{player.Nombre} {player.Apodo} {player.Paterno}");
-            }
-                LosNombres.Add("Vacio", "Nombre no encontrado");
-
             var t = await TorneoIServ.GetTorneo(TorneoId);
-            ElTorneo = $"{t.Id} {t.Titulo} {LosNombres[t.Creador]}";
+            ElTorneo = $"{t.Titulo} ({t.Id})";
+           
+            LasCategorias = await CatIServ.Buscar(TorneoId, "");
+            LasBanderas = await BanderaIServ.Buscar(t.Campo, "");
+            if (LasBanderas.Any())
+            {
+                foreach (var l in LasBanderas)
+                {
+                    if (!LasBanderasDic.ContainsKey(l.Id)) LasBanderasDic.Add(l.Id, $"{l.Color}" );
+                }
+                LasBanderasDic.Add(0, "No hay informacion del color de la bandera!");
+            }
         }
 
         [CascadingParameter]
@@ -64,6 +65,5 @@ namespace GolfV12.Client.Pages.torneo
             WriteBitacora.Desc = desc;
             await BitacoraServ.AddBitacora(WriteBitacora);
         }
-
     }
 }

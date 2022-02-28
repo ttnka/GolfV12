@@ -1,0 +1,75 @@
+﻿@page "/torneo/teamtedit/{torneoid:int}/"
+@page "/torneo/teamtedit/{torneoid:int}/{teamid:int}"
+@inherits TeamTEditBase
+@inject NotificationService NS
+@using GolfV12.Shared
+
+<h3>@ButtonTexto un jugador para captura</h3>
+@if (ElTeam == null)
+{
+    <div class="spinner"></div>
+} else
+{
+  <RadzenCard>   
+  <RadzenTemplateForm TItem="G220TeamT" Data=@ElTeam Submit=@AddTeam >
+      <div class="form-grup row">
+          <label for="torneo" class="col-sm-3 col-form-label">Torneo</label>
+          <div class="col-sm-9">
+              <RadzenLabel Name="Torneo" Text="@($"{ElTorneo.Titulo} {ElTorneo.Campo} ")"/>
+          </div>
+      </div>
+      
+      <div class="form-grup row">
+          <label for="ronda" class="col-sm-3 col-form-label"># Equipo</label>
+          <div class="col-sm-9">
+              <RadzenNumeric Name="Ronda" @bind-Value=@ElTeam.TeamNum Disabled="true" ShowUpDown="false"  />
+              
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="ronda" class="col-sm-3 col-form-label">Nombre</label>
+          <div class="col-sm-9">
+              <RadzenTextBox @bind-Value=@ElTeam.Nombre class="form-control" />
+          </div>
+      </div>
+
+      <div class="form-grup row">
+          <label for="ronda" class="col-sm-3 col-form-label">Integrantes</label>
+          <div class="col-sm-9">
+              <RadzenNumeric Name="Ronda" @bind-Value=@ElTeam.NumJugadores Min="1" Max="99" />
+              
+          </div>
+      </div>
+
+        @if (@TeamId > 0)
+        {
+            <div class="form-grup row">
+                <label for="status" class="col-sm-3 col-form-label">Borrar este registro?</label>
+                <div class="col-sm-9">
+                    SI!<RadzenSwitch Name="Status" @bind-Value=@ElTeam.Status />NO        
+                </div>
+            </div>   
+        }
+
+        <div class="form-grup row">
+            <div class="col-sm-12">
+                <NavLink class="nav-link" href="@($"/torneo/teamt/{TorneoId}")">Cancelar</NavLink>
+                <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" /> 
+            </div>
+      </div>
+        
+    </RadzenTemplateForm>
+    </RadzenCard>
+}
+
+@code {
+    async void AddTeam()
+    {
+        await SaveTeam();
+        ShowNotification(ElMesage);
+    }
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+}
