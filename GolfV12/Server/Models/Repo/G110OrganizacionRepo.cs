@@ -8,7 +8,8 @@ namespace GolfV12.Server.Models.Repo
     public class G110OrganizacionRepo : IG110Organizacion
     {
         private readonly ApplicationDbContext _appDbContext;
-
+        public string DatoTemp1 { get; set; } = string.Empty;
+        public string DatoTemp2 { get; set; } = string.Empty;
         public G110OrganizacionRepo(ApplicationDbContext applicationDbContext)
         {
             this._appDbContext = applicationDbContext;
@@ -19,7 +20,7 @@ namespace GolfV12.Server.Models.Repo
             await _appDbContext.SaveChangesAsync();
             return res.Entity;
         }
-
+        /*
         public async Task<IEnumerable<G110Organizacion>> Buscar(string? clave, string? nombre, 
             string? desc)
         {
@@ -36,12 +37,50 @@ namespace GolfV12.Server.Models.Repo
             var res = await _appDbContext.Organizaciones.FirstOrDefaultAsync(e=>e.Id == organizacionId);
             return res != null ? res : new G110Organizacion();
         }
-
+        
         public async Task<IEnumerable<G110Organizacion>> GetOrganizaciones()
         {
             return await _appDbContext.Organizaciones.ToListAsync();
         }
+        */
+         public async Task<IEnumerable<G110Organizacion>> Filtro(string? clave)
+         {
+                    // clave = org1
+                    // ejeplo = organizaciones?clave=org1_-_nombre=ivan_-_desc=conocido
 
+            IQueryable<G110Organizacion> querry = _appDbContext.Organizaciones;
+            if (string.IsNullOrWhiteSpace(clave)) return await querry.ToListAsync();
+            
+            string[] parametros = clave.Split("_-_");
+            
+            if (parametros[0] == "org1")
+            {
+                for(int i = 1; i < parametros.Length; i++)
+                {
+                    DatoTemp1 = parametros[i];
+                    DatoTemp2 = parametros[i+1];
+                    switch (DatoTemp1)
+                    {
+                        case "id":
+                            int elid = int.Parse(parametros[i+1]); 
+                            querry = querry.Where(e => e.Id == elid);
+                            break;
+                        case "clave":
+                            querry = querry.Where(e => e.Clave.Contains(DatoTemp2));
+                            break;
+                        case "nombre":
+                            querry = querry.Where(e => e.Nombre.Contains("zuver"));
+                            break ;
+                        case "desc":
+                            querry = querry.Where(e => e.Desc.Contains(parametros[i + 1]));
+                            break ;
+                            
+                    }  
+                    return await querry.ToListAsync();
+                }
+            }
+            return await querry.ToListAsync();
+         }
         public async Task<G110Organizacion> UpdateOrganizacion(G110Organizacion organizacion)
         {
             var res = await _appDbContext.Organizaciones.FirstOrDefaultAsync(e => e.Id == organizacion.Id);

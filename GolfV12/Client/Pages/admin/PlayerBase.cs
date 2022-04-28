@@ -32,7 +32,7 @@ namespace GolfV12.Client.Pages.admin
         public async Task OrganizacionesLeer()
         {
             LasOrg.Add(0, "No hay datos");
-            var OrgAll = await iG110OrgServ.GetOrganizaciones();
+            var OrgAll = await iG110OrgServ.Filtro("org1_-_id_-_0");
             foreach(var org in OrgAll)
             {
                 if (!LasOrg.ContainsKey(org.Id)) LasOrg.Add(org.Id, $"{org.Clave} {org.Nombre}");

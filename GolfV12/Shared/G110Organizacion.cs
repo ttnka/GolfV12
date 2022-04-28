@@ -12,10 +12,10 @@ namespace GolfV12.Shared
         [Key]
         public int Id { get; set; }
         [Required]
-        public string Clave { get; set; }
-        public string Nombre { get; set; }
-        public string Desc { get; set; }
-        public string Domicilio { get; set; }
+        public string Clave { get; set; } = string.Empty;
+        public string Nombre { get; set; } = string.Empty;
+        public string Desc { get; set; } = string.Empty;
+        public string? Domicilio { get; set; } = string.Empty ;
         public int Estado { get; set; } = 2;
         public bool Status { get; set; } = true;
 

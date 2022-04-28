@@ -45,7 +45,7 @@ namespace GolfV12.Server.Controllers
         }
 
         [HttpGet("{playerTid:int}")]
-        public async Task<ActionResult<G222PlayerT>> GetPlayer(string playerTId)
+        public async Task<ActionResult<G222PlayerT>> GetPlayer(int playerTId)
         {
             try
             {

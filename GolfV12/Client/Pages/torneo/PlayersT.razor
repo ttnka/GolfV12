@@ -1,0 +1,81 @@
+﻿@page "/torneo/playert/{torneoid:int}/{teamtid:int}"
+@inherits PlayersTBase
+
+@using GolfV12.Shared;
+
+<h3>Listado de equipos del torneos</h3>
+@if (LosJugadores == null | !LosNombres.ContainsKey("Vacio") )
+{
+    <div class="spinner"></div>
+} else
+{
+    
+    <div class="form-grup row"> 
+        @if(Datos["NumMaxPlayers"] > Datos["Players"])
+        {
+            <div class="col-sm-6">
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href=@($"/torneo/playertedit/{@TorneoId}/{@TeamTId}")>
+                    <span class="oi oi-plus" aria-hidden="true"></span> Nuevo Jugador en el equipo
+                    </NavLink>
+                </div>
+            </div>
+        }   
+        <div class="col-sm-6">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href=@($"/torneo/teamt/{@TeamTId}")>
+                    <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a lista de equipos 
+                </NavLink>
+            </div>
+        </div>
+   </div>
+    
+        
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" 
+        PageSize="50" AllowPaging="true" AllowSorting="true" LogicalFilterOperator="LogicalFilterOperator.Or"
+        Data="@LosPlayers" TItem="G222PlayerT" >
+        <Columns>
+
+            <RadzenDataGridColumn TItem="G222PlayerT" Property="Id" Title="Id" Width="60px" Frozen="true">
+                <Template Context="data">
+                    <RadzenLink Icon="edit" Path=@($"/torneo/playertedit/{@TorneoId}/{data.Team}/{data.Id}") />
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G222PlayerT" Property="Team" Title="Equipo">
+                <Template Context="data">
+                    @if (@LosNombres.ContainsKey("ElTeam"))
+                    {
+                        <p style="white-space:pre-wrap">@LosNombres["ElTeam"]</p>
+                    }
+                    else
+                    {<label>No se encuentra info del Equipo</label>}
+                </Template>
+            </RadzenDataGridColumn>
+            
+            <RadzenDataGridColumn TItem="G222PlayerT" Property="Player" Title="Jugadores">
+             <Template Context="data">
+                    @if (@LosNombres.ContainsKey(@data.Player))
+                    {
+                        <p style="white-space:pre-wrap">@LosNombres[@data.Player]</p>
+                    }
+                    else
+                    {<label>No se encuentra info del Jugador</label>}
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G222PlayerT" Property="Hcp" Title="Hcp"/>
+                
+            
+            <RadzenDataGridColumn TItem="G222PlayerT"  Title="Estado" >
+                <Template Context="data">
+                    @if(data.Status == false) 
+                    {
+                        <RadzenBadge BadgeStyle="BadgeStyle.Danger" IsPill="true" Text="Registro Borrado"/> 
+                    }
+                </Template>
+            </RadzenDataGridColumn>
+            
+        </Columns>
+</RadzenDataGrid>
+}
+--Tatanka--

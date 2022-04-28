@@ -45,7 +45,7 @@ namespace GolfV12.Client.Servicios.Serv
 
         public async Task<G170Campo> UpdateCampo(G170Campo campo)
         {
-            var newCampo = await _httpClient.PutAsJsonAsync < G170Campo>("/api/G170Campo", campo);
+            var newCampo = await _httpClient.PutAsJsonAsync <G170Campo>("/api/G170Campo", campo);
             return newCampo.IsSuccessStatusCode ?
                 await newCampo.Content.ReadFromJsonAsync<G170Campo>() : null;
         }

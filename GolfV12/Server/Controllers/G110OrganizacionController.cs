@@ -14,6 +14,7 @@ namespace GolfV12.Server.Controllers
         {
             this._orgIFace = orgIFace;
         }
+        /*
         [HttpGet("{filtro}")]
         public async Task<ActionResult<IEnumerable<G110Organizacion>>> Buscar(
             string? clave, string? nombre, string? desc)
@@ -59,6 +60,25 @@ namespace GolfV12.Server.Controllers
                     "Error al leer la base de datos, buscando una organizacion");
             }
         }
+         */
+        
+        [HttpGet("{filtro}")]
+        public async Task<ActionResult<IEnumerable<G110Organizacion>>> Filtro(string? clave)
+        {
+            try
+            {
+               var resultado = await _orgIFace.Filtro(clave);
+                return Ok(resultado);
+                //return resultado.Any() ? Ok(resultado) : NotFound();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error al leer la base de datos, " +
+                    "buscando organizaciones");
+            }
+        }
+        
+        
         [HttpPost]
         public async Task<ActionResult<G110Organizacion>> AddOrganizacion(G110Organizacion organizacion)
         {
@@ -66,7 +86,8 @@ namespace GolfV12.Server.Controllers
             {
                 if (organizacion == null) return BadRequest();
                 var newOrganizacion = await _orgIFace.AddOrganizacion(organizacion);
-                return CreatedAtAction(nameof(GetOrganizacion), new { organizacionId = organizacion.Id }, newOrganizacion);
+                //return CreatedAtAction(nameof(GetOrganizacion), new { organizacionId = organizacion.Id }, newOrganizacion);
+                return CreatedAtAction(nameof(Filtro), new { clave = $"org1_-_id_-_{organizacion.Id}" }, newOrganizacion);
             }
             catch (Exception)
             {

@@ -66,7 +66,7 @@ namespace GolfV12.Server.Models.Repo
                 }
                 else
                 {
-                    res.Bday = player.Bday;
+                    
                     res.Apodo = player.Apodo;
                     res.Nombre = player.Nombre;
                     res.Paterno = player.Paterno;

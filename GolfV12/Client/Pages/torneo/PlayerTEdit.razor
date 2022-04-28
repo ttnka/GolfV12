@@ -1,0 +1,78 @@
+﻿@page "/torneo/playertedit/{torneoid:int}/{teamtid:int}"
+@page "/torneo/playertedit/{torneoid:int}/{teamtid:int}/{playertid:int}"
+@inherits PlayerTEditBase
+@inject NotificationService NS
+@using GolfV12.Shared
+
+<h3>@ButtonTexto un jugador para captura</h3>
+@if (ElPlayer == null)
+{
+    <div class="spinner"></div>
+} else
+{
+  <RadzenCard>   
+  <RadzenTemplateForm TItem="G222PlayerT" Data=@ElPlayer Submit=@AddPlayer >
+      <div class="form-grup row">
+          <label for="torneo" class="col-sm-3 col-form-label">Torneo</label>
+          <div class="col-sm-9">
+              <RadzenLabel Name="Torneo" Text="@($"{ElTorneo.Titulo} {ElTorneo.Campo} ")"/>
+              
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="team" class="col-sm-3 col-form-label">Equipo</label>
+          <div class="col-sm-9">
+              <RadzenLabel Name="Team" Text=@ElTeam.Nombre/>
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="player" class="col-sm-3 col-form-label">Jugador</label>
+          <div class="col-sm-9">
+                <RadzenDropDown Name="player" AllowClear="true" Class="w-100"  AllowFiltering="true"
+                FilterCaseSensitivity="FilterCaseSensitivity.Default" FilterOperator="StringFilterOperator.Contains"  
+                Data=@LosJugadores @bind-Value=@ElPlayer.Player 
+                ValueProperty="Key" TextProperty="Value"/>
+                
+          </div>
+      </div>
+      <div class="form-grup row">
+          <label for="hcp" class="col-sm-3 col-form-label">HcP</label>
+          <div class="col-sm-9">
+                <RadzenNumeric Name="Hcp" @bind-Value=@ElPlayer.Hcp />
+                <RadzenRequiredValidator Component="Hcp" Text="El Hcp va 0 a 40 y es requerido!" />
+          </div>
+      </div>
+
+        @if (@PlayerTId > 0)
+        {
+            <div class="form-grup row">
+                <label for="status" class="col-sm-3 col-form-label">Borrar este registro?</label>
+                <div class="col-sm-9">
+                    SI!<RadzenSwitch Name="Status" @bind-Value=@ElPlayer.Status />NO        
+                </div>
+            </div>   
+        }
+
+        <div class="form-grup row">
+            <div class="col-sm-12">
+                <NavLink class="nav-link" href="@($"/torneo/playert/{TorneoId}/{TeamTId}")">Cancelar</NavLink>
+                <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" /> 
+            </div>
+      </div>
+        
+    </RadzenTemplateForm>
+    </RadzenCard>
+}
+
+@code {
+
+    async void AddPlayer()
+    {
+        await SavePlayer();
+        ShowNotification(ElMesage);
+    }
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+}

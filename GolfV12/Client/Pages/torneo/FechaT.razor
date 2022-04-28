@@ -4,26 +4,28 @@
 @using GolfV12.Shared;
 
 <h3>Listado de fechas del Torneo  </h3>
-@if (LasFechas == null)
+@if (LasFechas == null | !FechaDic.ContainsKey("RondasTorneo")
+        | !FechaDic.ContainsKey("RondaMaxFecha"))
 {
     <div class="spinner"></div>
 } else
 {
     
     <div class="form-grup row"> 
-        @if(FechaDic["RondasTorneo"] > FechaDic["RondaMaxFecha"]) {
-        <div class="col-sm-9">
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href=@($"/torneo/fechatedit/{@TorneoId}")>
-                <span class="oi oi-plus" aria-hidden="true"></span> Nueva Fecha torneo 
-                </NavLink>
-            </div>
-        </div>
-        }
+        @if (FechaDic["RondasTorneo"] > FechaDic["RondaMaxFecha"])
+            {
+                <div class="col-sm-9">
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href=@($"/torneo/fechatedit/{@TorneoId}")>
+                            <span class="oi oi-plus" aria-hidden="true"></span> Nueva Fecha para ronda 
+                        </NavLink>
+                    </div>
+                </div>
+            }
         <div class="col-sm-3">
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href=@($"/torneo/torneo/")>
-                <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a torneos 
+                    <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a torneos 
                 </NavLink>
             </div>
         </div>

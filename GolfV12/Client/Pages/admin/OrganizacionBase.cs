@@ -21,7 +21,7 @@ namespace GolfV12.Client.Pages.admin
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
-            LasOrganizaciones = await organizacionIServ.GetOrganizaciones();
+            LasOrganizaciones = await organizacionIServ.Filtro("");
             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
                 "Consulto listado de Organizaciones");
         }

@@ -29,9 +29,9 @@ namespace GolfV12.Server.Models.Repo
             return await querry.ToListAsync();
         }
 
-        public async Task<G222PlayerT> GetPlayer(string playerId)
+        public async Task<G222PlayerT> GetPlayer(int playerId)
         {
-            var res = await _appDbContext.PlayersT.FirstOrDefaultAsync(e => e.Player.Contains(playerId));
+            var res = await _appDbContext.PlayersT.FirstOrDefaultAsync(e => e.Id == playerId);
             return res != null ? res : new G222PlayerT();
         }
 

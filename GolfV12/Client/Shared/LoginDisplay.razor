@@ -7,11 +7,11 @@
 <AuthorizeView>
     <Authorized>
         <a href="authentication/profile">Hola crayola, @context.User.Identity?.Name!</a>
-        <button class="nav-link btn btn-link" @onclick="BeginSignOut">Log out</button>
+        <button class="nav-link btn btn-link" @onclick="BeginSignOut">Salir</button>
     </Authorized>
     <NotAuthorized>
-        <a href="authentication/register">Register</a>
-        <a href="authentication/login">Log in</a>
+        <a href="authentication/register">Registrar se</a>
+        <a href="authentication/login">Entrar</a>
     </NotAuthorized>
 </AuthorizeView>
 

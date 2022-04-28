@@ -40,7 +40,7 @@ namespace GolfV12.Client.Pages.admin
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
-            LasOrg = await OrgIServ.GetOrganizaciones();
+            LasOrg = await OrgIServ.Filtro("org1_-_id_-_0");
             if (UserId.Contains("Temp"))
             {
                 ElPlayer = new G120Player

@@ -43,7 +43,7 @@ namespace GolfV12.Client.Pages.admin
                 
             } else
             {
-                LaOrganizacion = await iOrgServ.GetOrganizacion(Id);
+                LaOrganizacion = (await iOrgServ.Filtro($"org1_-_id_-_{Id}")).FirstOrDefault();
                 await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
                     $"Consulto el registro {LaOrganizacion.Id} de la organizacion {LaOrganizacion.Clave}");
             }

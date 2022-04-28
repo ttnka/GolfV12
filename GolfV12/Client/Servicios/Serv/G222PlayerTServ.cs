@@ -30,7 +30,7 @@ namespace GolfV12.Client.Servicios.Serv
             return await _httpClient.GetFromJsonAsync<IEnumerable<G222PlayerT>>(resultado);
         }
 
-        public async Task<G222PlayerT> GetPlayer(string playerId)
+        public async Task<G222PlayerT> GetPlayer(int playerId)
         {
             return await _httpClient.GetFromJsonAsync<G222PlayerT>($"/api/G222PlayerT/{playerId}");
         }
