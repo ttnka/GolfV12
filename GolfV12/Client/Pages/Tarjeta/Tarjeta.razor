@@ -1,0 +1,90 @@
+﻿@page "/tarjeta/tarjeta"
+@page "/tarjeta/tarjeta/{playerid}"
+
+
+@inherits TarjetaBase
+
+@using GolfV12.Shared;
+
+<h3>Listado tarjetas de juego</h3>
+@if (LasTarjetas == null)
+{
+    <div class="spinner"></div>
+} else
+{
+    <div class="form-grup row"> 
+        <div class="col-sm-6">
+            <div class="nav-item px-3">
+                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Nueva Tarjeta" 
+                Click="@InsertTarjeta"/>
+            </div>
+        </div>
+    </div>
+        
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" 
+        PageSize="50" AllowPaging="true" AllowSorting="true" LogicalFilterOperator="LogicalFilterOperator.Or"
+        Data="@LasTarjetas" TItem="G500Tarjeta" >
+        <Columns>
+
+            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Fecha" Title="Fecha" Width="120px" Frozen="true">
+                <Template Context="data">
+                    <label>@data.Fecha.Day/@data.Fecha.Month/@data.Fecha.Year</label>
+                    @if(@data.Fecha >= @DateTime.Now.Date)
+                    {
+                        <RadzenLink Icon="edit" Path=@($"/tarjeta/tarjetaedit/{data.Id}") />
+                    }
+                    
+                </Template>
+            </RadzenDataGridColumn>
+            
+            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Titulo" Title="Titulo"/>
+
+            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Id" Title="Jugadores">
+                <Template Context="data">
+                        @if (LosNombres.ContainsKey($"Jugadores_{ data.Id}")) 
+                        {
+                            @LosNombres[$"Jugadores_{data.Id}"]
+                        } 
+                    else 
+                    {<label> 0 </label>}
+                
+                <RadzenLink Icon="add_circle_outline" Path=@($"/tarjeta/jugador/{data.Id}") />
+                </Template>
+            </RadzenDataGridColumn>
+            
+            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Campo" Title="Campo">
+                <Template Context="data">
+                <p style="white-space:pre-wrap">
+                    @if (LosCampos.ContainsKey(data.Campo)) 
+                    {@LosCampos[data.Campo]} 
+                    else 
+                    {<label>No se encontro info del Campo</label>}
+                </p>
+                </Template>
+            </RadzenDataGridColumn>
+            
+            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Consulta" Title="Consulta">
+                <Template Context="data">
+                    @data.Consulta
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Captura" Title="Captura">
+                <Template Context="data">
+                    @data.Captura
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G500Tarjeta"  Title="Estado" >
+                <Template Context="data">
+                    @if(data.Status == false) 
+                    {
+                        <RadzenBadge BadgeStyle="BadgeStyle.Danger" IsPill="true" Text="Registro Borrado"/> 
+                    }
+                </Template>
+            </RadzenDataGridColumn>
+
+        </Columns>
+</RadzenDataGrid>
+}
+--Tatanka--

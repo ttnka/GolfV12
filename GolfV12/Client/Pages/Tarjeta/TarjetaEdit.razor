@@ -1,0 +1,98 @@
+﻿@page "/tarjeta/tarjetaedit/"
+@page "/tarjeta/tarjetaedit/{tarjetaid}"
+@inherits TarjetaEditBase
+@inject NotificationService NS
+@using GolfV12.Shared;
+
+<h3>@ButtonTexto Torneo</h3>
+@if (LaTarjeta == null)
+{
+    <div class="spinner"></div>
+} else
+{
+  <RadzenCard>   
+  <RadzenTemplateForm TItem="G500Tarjeta" Data=@LaTarjeta Submit=@AddTarjeta >
+      
+      <div class="form-grup row">
+          <label for="fecha" class="col-sm-3 col-form-label">Fecha</label>
+          <div class="col-sm-9">
+                <RadzenDatePicker Name="Fecha" @bind-Value=@LaTarjeta.Fecha DateFormat="d" />
+          </div>
+      </div>
+
+
+      <div class="form-grup row">
+          <label for="campo" class="col-sm-3 col-form-label">Campo</label>
+          <div class="col-sm-9">
+                <RadzenDropDown Name="Campo" AllowClear="false" Class="w-50" 
+                            Data="@LosCampos" @bind-Value="@LaTarjeta.Campo"
+                            ValueProperty="Id" TextProperty="Corto"/>
+          </div>
+      </div>
+      
+      
+      <div class="form-grup row">
+          <label for="titulo" class="col-sm-3 col-form-label">Titulo </label>
+          <div class="col-sm-9">
+                <RadzenTextBox Name="Titulo" @bind-Value=@LaTarjeta.Titulo />
+          </div>
+      </div>
+
+      <div class="form-grup row">
+          <label for="captura" class="col-sm-3 col-form-label">Quien puede capturar?</label>
+          <div class="col-sm-9">
+                <RadzenDropDown Name="Captura" AllowClear="false" Class="w-50" 
+                            Data=@TarjetaEdits @bind-Value=@LaTarjeta.Captura
+                            TextProperty=Name ValueProperty=Value />
+                
+          </div>
+      </div>
+
+      <div class="form-grup row">
+          <label for="consulta" class="col-sm-3 col-form-label">Quien puede ver?</label>
+          <div class="col-sm-9">
+                <RadzenDropDown Name="Consulta" AllowClear="false" Class="w-50" 
+                            Data=@TarjetaViews @bind-Value=@LaTarjeta.Consulta
+                            TextProperty=Name ValueProperty=Value />
+                
+          </div>
+      </div>
+      
+      
+    @if (!string.IsNullOrEmpty(TarjetaId))
+        {
+            <div class="form-grup row">
+                <label for="status" class="col-sm-3 col-form-label">Borrar este registro?</label>
+                <div class="col-sm-9">
+                    Si!<RadzenSwitch Name="Status" @bind-Value=@LaTarjeta.Status /> NO!        
+                </div>
+            </div>   
+        }
+
+        <div class="form-grup row">
+            <div class="col-sm-6">-</div>
+            <div class="col-sm-3">
+                <NavLink class="nav-link" href="/tarjeta/tarjeta/">Cancelar</NavLink>
+            </div>
+            <div class="col-sm-3">
+                <RadzenButton ButtonType="ButtonType.Submit" Text="@ButtonTexto" /> 
+            </div>
+      </div>
+        
+    </RadzenTemplateForm>
+    </RadzenCard>
+}
+
+--Tatanka--
+@code {
+    async void AddTarjeta()
+    {
+        await SaveTarjeta();
+        ShowNotification(ElMesage);
+    }
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+    
+}

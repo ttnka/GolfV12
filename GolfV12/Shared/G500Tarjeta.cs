@@ -11,6 +11,7 @@ namespace GolfV12.Shared
     {
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string Creador { get; set; } = Guid.NewGuid().ToString();
         public DateTime Fecha { get; set; } = DateTime.Now;
         public int Campo { get; set; } = 0;
         public string Titulo { get; set; } = string.Empty;

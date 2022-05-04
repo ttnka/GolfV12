@@ -53,11 +53,12 @@ namespace GolfV12.Client.Servicios.Serv
 
             if (parametros[0] == "org1")
             {
+                resultado = resultado + "org1";
                 for(int i = 1; i < parametros.Length; i++)
                 {
                     foreach (var t in titulos)
                     {
-                        if (parametros[i] == t) resultado = resultado + t + parametros[i+1] + "&";
+                        if (parametros[i] == t) resultado = resultado + t + "_-_" + parametros[i+1] + "_-_";
                     }
                 }
                 //resultado = "/api/G110Organizacion/filtro?" + resultado;

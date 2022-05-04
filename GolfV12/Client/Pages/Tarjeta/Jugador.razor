@@ -1,0 +1,158 @@
+﻿@page "/tarjeta/jugador/{tarjetaid}"
+@inherits JugadorBase
+@inject NotificationService NS
+@using GolfV12.Shared;
+
+<h3>Listado de Jugadores en la tarjeta</h3>
+@if (LosJugadores == null | !LosDatos.ContainsKey("Vacio") )
+{
+    <div class="spinner"></div>
+} else
+{
+    
+    <div class="form-grup row"> 
+        <div class="col-sm-12">
+            <div class="col-sm-5">
+                <NavLink class="nav-link" href=@($"/tarjeta/tarjeta")>
+                    <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a lista tarjetas 
+                </NavLink>
+            </div>
+            <div class="col-sm-5">
+                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Agregar Jugador" 
+                Click="@InsertRow" Disabled=@(jugadorToInsert != null) />
+            </div>
+        </div>
+   </div>
+ <!-- id, tarjeta, player, hcp, estado, status --> 
+
+   <RadzenDataGrid @ref=@JugadoresGrid AllowFiltering="true" AllowPaging="true" PageSize="50" AllowSorting="true" EditMode="DataGridEditMode.Single"
+                Data=@LosJugadores TItem="G510Jugador" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
+        <Columns>
+            <RadzenDataGridColumn TItem="G510Jugador" Property="player" Title="Id" Width="40px" >
+                <Template Context="datos">
+                    @if (LosDatos.ContainsKey($"Renglon_{datos.Player}"))
+                    {
+                        @LosDatos[$"Renglon_{datos.Player}"]
+                    }
+                    else
+                    {
+                        <label>0</label>
+                    }
+
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G510Jugador" Property="player" Title="Jugador" Width="420px">
+                <Template Context="datos">
+<!--
+                    <RadzenImage Path="@datos.foto" style="width: 32px; height: 32px; border-radius: 16px; margin-right: 6px;" />
+-->
+                    @if (LosDatos.ContainsKey($"Nombre_{datos.Player}"))
+                    {
+                        @LosDatos[$"Nombre_{datos.Player}"] 
+                    } else 
+                    {
+                        <label>No hay nombre del Jugador</label> 
+                    }
+                </Template>
+                <EditTemplate Context="datosE">
+                    <RadzenDropDown Name="player" AllowClear="false" Class="w-150"  AllowFiltering="true"
+                        FilterCaseSensitivity="FilterCaseSensitivity.Default" FilterOperator="StringFilterOperator.Contains"  
+                        Data="@LosNombres"  @bind-Value=ElJugadorRenglon ValueProperty="Key" TextProperty="Value" 
+                        Style="width:100%; display: block;">
+<!--                    <Template>
+                            <RadzenImage Path="@context.Photo" style="width: 20px; height: 20px; border-radius: 16px; margin-right: 6px;" />
+                            @context.FirstName @context.LastName
+                        </Template>
+-->
+                    </RadzenDropDown>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G510Jugador" Property="Hcp" Title="HCP">
+                <Template Context="datos">
+                    @datos.Hcp
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric @bind-Value="datos.Hcp" Style="width:40%" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G510Jugador" Property="Status" Title="Juega">
+                <Template Context="datos">
+                    @if (datos.Status)
+                    {
+                        <label>Si</label>
+                    }
+                    else
+                    {
+                        <label>No</label>
+                    }
+                </Template>
+                <EditTemplate Context="datos">
+                    No-<RadzenSwitch @bind-Value=@datos.Status />-Si
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G510Jugador" Context="sampleBlazorModelsSampleOrder" Filterable="false" 
+                    Sortable="false" TextAlign="TextAlign.Center" Width="120px">
+                <Template Context="datos">
+                    <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" 
+                        Click="@(args => EditRow(datos))" @onclick:stopPropagation="true">
+                    </RadzenButton>
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Primary" Class="m-1" Click="@((args) => SaveRow(datos))">
+                    </RadzenButton>
+                    <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@((args) => CancelEdit(datos))">
+                    </RadzenButton>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            
+
+        </Columns>
+   </RadzenDataGrid>         
+}
+
+--Tatanka--
+
+@code {
+    G510Jugador jugadorToInsert;
+
+    async Task EditRow(G510Jugador jugador)
+    {
+        await JugadoresGrid.EditRow(jugador);
+    }
+    async void OnUpdateRow(G510Jugador jugador)
+    {
+        if (jugador == jugadorToInsert) jugadorToInsert = null;
+        if (jugador.Status == false) jugador.Tarjeta = "Borrar";
+        await JugadoresIServ.UpdateJugador(jugador);
+    }
+    async Task SaveRow(G510Jugador jugador)
+    {
+        if (jugador == jugadorToInsert) jugadorToInsert = null;
+        await JugadoresGrid.UpdateRow(jugador);
+    }
+    void CancelEdit(G510Jugador jugador)
+    {
+        if (jugador == jugadorToInsert) jugadorToInsert = null;
+        JugadoresGrid.CancelEditRow(jugador);
+    }
+    async Task InsertRow()
+    {
+        jugadorToInsert = new G510Jugador();
+        await JugadoresGrid.InsertRow(jugadorToInsert);
+    }
+    async void OnCreateRow(G510Jugador jugador)
+    {
+        if (!LosDatos.ContainsKey(ElJugadorRenglon))
+        {
+            jugador.Tarjeta = TarjetaId;
+            jugador.Player = ElJugadorRenglon;
+            jugador.Estado = 1;
+            await JugadoresIServ.AddJugador(jugador);
+        }
+        
+    }
+
+}

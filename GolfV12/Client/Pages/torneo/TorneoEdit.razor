@@ -112,12 +112,14 @@
 }
 
 --Tatanka--
-@code {
+@code 
+{
     async void AddTorneo()
     {
         await SaveTorneo();
         ShowNotification(ElMesage);
     }
+
     public void ShowNotification(NotificationMessage message)
     {
         NS.Notify(message);

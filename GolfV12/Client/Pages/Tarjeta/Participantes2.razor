@@ -1,0 +1,94 @@
+﻿@page "/tarjeta/participantes/{tarjetaid}"
+@inherits Participantes2Base
+@inject NotificationService NS
+@using GolfV12.Shared;
+
+<h3>Listado de equipos del torneos</h3>
+@if (LosParticipantes == null | !LosNombres.ContainsKey("Vacio") )
+{
+    <div class="spinner"></div>
+} else
+{
+    
+    <div class="form-grup row"> 
+        <div class="col-sm-12">
+            <div class="nav-item px-6">
+                <NavLink class="nav-link" href=@($"/tarjeta/tarjeta")>
+                    <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a lista tarjetas 
+                </NavLink>
+            </div>
+            <div class="nav-item px-6">
+                <NavLink class="nav-link" href="/tarjeta/tarjeta/">Cancelar</NavLink>
+            </div>
+        </div>
+   </div>
+    
+<RadzenCard>   
+  <RadzenTemplateForm TItem="G510Jugador" Data=@ElJugador Submit=@AddJugador>
+
+        <div class="form-grup row">
+          <label for="player" class="col-sm-6 col-form-label">Jugador</label>
+          <label for="player" class="col-sm-3 col-form-label">HCP</label>
+          <label for="player" class="col-sm-3 col-form-label">Accion</label>
+        </div>   
+        <div class="form-grup row">
+          <div class="col-sm-6">
+                <RadzenDropDown Name="player" AllowClear="false" AllowFiltering="true"  
+                            Data=@LosJugadores @bind-Value=@ElJugadorRenglon 
+                            ValueProperty="Key" TextProperty="Value"/>
+          </div>
+          <div class="col-sm-3">
+                <RadzenNumeric Name="hcp" @bind-Value=@ElJugador.Hcp Min=-5 Max=36/>
+          </div>
+          <div class="col-sm-3">
+                <RadzenButton ButtonType="ButtonType.Submit" Text="Agregar" /> 
+          </div>
+      </div>
+        
+    </RadzenTemplateForm>
+    
+    
+    <table class="table is-fullwidth">
+        <thead>
+            <tr>
+                <th>Reg</th>
+                <th>Jugador</th>
+                <th>Hcp</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+                @foreach(var dato in LosParticipantes)
+                {
+                    <tr>
+                        <td>@LosNombres[$"Renglon_{dato.Player}"]</td>
+                        <td>@LosNombres[dato.Player]</td>
+                        <td>@dato.Hcp</td>
+                        <td>@dato.Status -- 
+                            Si<RadzenSwitch @bind-Value=@dato.Status Change=@(
+                            arg => @CambiarStatus(dato.Id)) />No</td>
+                    </tr>
+                }
+            </tbody>
+    </table>
+</RadzenCard>    
+
+
+
+}
+--Tatanka--
+@code 
+{
+    async void AddJugador()
+    {
+        await SaveJugador();
+        ShowNotification(ElMesage);
+    }
+    
+
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+    
+}

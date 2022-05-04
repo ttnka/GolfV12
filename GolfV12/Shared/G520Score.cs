@@ -11,12 +11,16 @@ namespace GolfV12.Shared
     {
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string Tarjeta { get; set; } = string.Empty;
         public int Campo { get; set; } = 0;
         public string Player { get; set; } = string.Empty;
         public decimal Hcp { get; set; } = 0;
         public bool Publico { get; set; } = true;
         public int Hoyo { get; set; } = 0;
         public int Score { get; set; } = 1;
+        public int Estado { get; set; } = 1;
+        public bool Status { get; set; } = true;
+
 
     }
 }

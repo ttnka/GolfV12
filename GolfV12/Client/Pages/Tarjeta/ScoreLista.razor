@@ -1,0 +1,69 @@
+﻿@page "/tarjeta/scorelista/{tarjetaid}"
+@inherits ScoreListaBase
+@inject NotificationService NS
+@using GolfV12.Shared;
+
+<h3>Listado de Jugadores en la tarjeta</h3>
+@if (LosScores == null | !LosDatos.ContainsKey("Vacio") )
+{
+    <div class="spinner"></div>
+} else
+{
+    
+    <div class="form-grup row"> 
+        <div class="col-sm-12">
+            <div class="col-sm-5">
+                <NavLink class="nav-link" href=@($"/tarjeta/tarjeta")>
+                    <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a lista tarjetas 
+                </NavLink>
+            </div>
+            <div class="col-sm-5">
+                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Agregar Jugador" 
+                Click="@InsertRow" Disabled=@(scoreToInsert != null) />
+            </div>
+        </div>
+   </div>
+ <!-- id, tarjeta, campo, player, hcp, score, publico, estado, status --> 
+
+
+}
+@code {
+    G520Score scoreToInsert;
+
+    async Task EditRow(G520Score score)
+    {
+        await ScoreGrid.EditRow(score);
+    }
+    async void OnUpdateRow(G520Score score)
+    {
+        if (score == scoreToInsert) scoreToInsert = null;
+      //  if (score.Status == false) score.Tarjeta = "Borrar";
+        await ScoresIServ.UpdateScore(score);
+    }
+    async Task SaveRow(G520Score score)
+    {
+        if (score == scoreToInsert) scoreToInsert = null;
+        await ScoreGrid.UpdateRow(score);
+    }
+    void CancelEdit(G520Score score)
+    {
+        if (score == scoreToInsert) scoreToInsert = null;
+        ScoreGrid.CancelEditRow(score);
+    }
+    async Task InsertRow()
+    {
+        scoreToInsert = new G520Score();
+        await ScoreGrid.InsertRow(scoreToInsert);
+    }
+    async void OnCreateRow(G520Score score)
+    {
+        if (!LosDatos.ContainsKey(ElScoreRenglon))
+        {
+            score.Tarjeta = TarjetaId;
+            score.Player = ElScoreRenglon;
+            score.Estado = 1;
+            await ScoresIServ.AddScore(score);
+        }
+        
+    }
+}
