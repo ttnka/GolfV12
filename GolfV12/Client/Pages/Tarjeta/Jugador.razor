@@ -126,11 +126,13 @@
     {
         if (jugador == jugadorToInsert) jugadorToInsert = null;
         if (jugador.Status == false) jugador.Tarjeta = "Borrar";
+
         await JugadoresIServ.UpdateJugador(jugador);
     }
     async Task SaveRow(G510Jugador jugador)
     {
         if (jugador == jugadorToInsert) jugadorToInsert = null;
+        //await JugadoresIServ.UpdateJugador(jugador); 
         await JugadoresGrid.UpdateRow(jugador);
     }
     void CancelEdit(G510Jugador jugador)
@@ -145,14 +147,26 @@
     }
     async void OnCreateRow(G510Jugador jugador)
     {
-        if (!LosDatos.ContainsKey(ElJugadorRenglon))
+        if (!LosDatos.ContainsKey($"Jugador_{ElJugadorRenglon}"))
         {
             jugador.Tarjeta = TarjetaId;
             jugador.Player = ElJugadorRenglon;
             jugador.Estado = 1;
             await JugadoresIServ.AddJugador(jugador);
+            LosDatos.Add($"Jugador_{ElJugadorRenglon}", ElJugadorRenglon);
         }
-        
+        else
+        {
+            ElMesage.Summary = "Error!";
+            ElMesage.Detail = "El JUGADOR ya existe!";
+            JugadoresGrid.CancelEditRow(jugador);
+            ShowNotification(ElMesage);
+        }
+
+    }
+     public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
     }
 
 }

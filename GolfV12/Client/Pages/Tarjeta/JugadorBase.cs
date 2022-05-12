@@ -15,7 +15,8 @@ namespace GolfV12.Client.Pages.Tarjeta
 
         [Inject]
         public IG120PlayerServ PlayersIServ { get; set; }
-        public IEnumerable<KeyValuePair<string, string>> LosNombres { get; set; } = new List<KeyValuePair<string, string>>();
+        public IEnumerable<KeyValuePair<string, string>> LosNombres { get; set; } = 
+            new List<KeyValuePair<string, string>>();
         [Inject]
         public IG510JugadorServ JugadoresIServ { get; set; }
         public IEnumerable<G510Jugador> LosJugadores { get; set; } = new List<G510Jugador>();
@@ -50,7 +51,6 @@ namespace GolfV12.Client.Pages.Tarjeta
         {
             //List<KeyValuePair<string, string>> NamesTemp;
             var AllNames = await PlayersIServ.GetPlayers();
-            int renglon = 1;
             foreach (var name in AllNames)
             {
                 NamesTemp.Add(new KeyValuePair<string, string>(name.UserId,
@@ -58,8 +58,7 @@ namespace GolfV12.Client.Pages.Tarjeta
                 if (!LosDatos.ContainsKey($"Nombre_{name.UserId}"))
                 {
                     LosDatos.Add($"Nombre_{name.UserId}", $"{name.Nombre} {name.Apodo} {name.Paterno}");
-                    LosDatos.Add($"Renglon_{name.UserId}", renglon.ToString());
-                    renglon++;
+                    
                 }
                 
             }
@@ -68,18 +67,23 @@ namespace GolfV12.Client.Pages.Tarjeta
         }
         protected async Task LeerJugadores()
         {
-            LosJugadores = await JugadoresIServ.Filtro($"jug1_-_tarjeta_-_{TarjetaId}");
+            int renglon = 1;
+            LosJugadores = await JugadoresIServ.Filtro($"jug2tarjeta_-_tarjeta_-_{TarjetaId}");
             foreach (var jugadors in LosJugadores)
             {
                 if (!LosDatos.ContainsKey($"Jugador_{jugadors.Player}"))
+                {
                     LosDatos.Add($"Jugador_{jugadors.Player}", jugadors.Player);
+                    LosDatos.Add($"Renglon_{jugadors.Player}", renglon.ToString());
+                    renglon++;
+                }
             }
         }
 
         public NotificationMessage ElMesage { get; set; } =
             new NotificationMessage()
             {
-                Severity = NotificationSeverity.Success,
+                Severity = NotificationSeverity.Error,
                 Summary = "Cuerpo",
                 Detail = "Detalles ",
                 Duration = 3000

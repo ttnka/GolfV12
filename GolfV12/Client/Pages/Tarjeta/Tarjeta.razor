@@ -48,7 +48,8 @@
                     else 
                     {<label> 0 </label>}
                 
-                <RadzenLink Icon="add_circle_outline" Path=@($"/tarjeta/jugador/{data.Id}") />
+                  <RadzenLink Icon="add_circle_outline" Path=@($"/tarjeta/jugador/{data.Id}") />
+                      
                 </Template>
             </RadzenDataGridColumn>
             
@@ -77,10 +78,13 @@
 
             <RadzenDataGridColumn TItem="G500Tarjeta"  Title="Estado" >
                 <Template Context="data">
+                    
                     @if(data.Status == false) 
                     {
                         <RadzenBadge BadgeStyle="BadgeStyle.Danger" IsPill="true" Text="Registro Borrado"/> 
                     }
+                    <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Scores" 
+                Click="@(arg => InsertScore(data.Id))"/>
                 </Template>
             </RadzenDataGridColumn>
 

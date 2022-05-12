@@ -28,38 +28,41 @@ namespace GolfV12.Server.Models.Repo
             if (string.IsNullOrWhiteSpace(clave)) return await querry.ToListAsync();
 
             string[] parametros = clave.Split("_-_");
-            string Data1 = string.Empty;
-            string Data2 = string.Empty;
-
-            if (parametros[0] == "jug1")
+            Dictionary<string, string> Condiciones = new Dictionary<string, string>();
+            
+            for (int i = 1; i < parametros.Length; i+=2)
             {
-                for (int i = 1; i < parametros.Length; i++)
-                {
-                    Data1 = parametros[i];
-                    Data2 = parametros[i + 1];
-                    switch (Data1)
-                    {
-                        case "id":
-                            querry = querry.Where(e => e.Id.Contains(Data2));
-                            break;
-                        case "tarjeta":
-                            querry = querry.Where(e => e.Tarjeta.Contains(Data2));
-                            break;
-                        case "player":
-                            querry = querry.Where(e => e.Player.Contains(Data2));
-                            break;
-                        case "Estado":
-                            querry = querry.Where(e => e.Estado == int.Parse(Data2));
-                            break;
-                        case "Status":
-                            querry = querry.Where(e => e.Status.Equals(Data2));
-                            break;
-                    }
-                    return await querry.ToListAsync();
-                }
+                if (!Condiciones.ContainsKey(parametros[i])) 
+                    Condiciones.Add(parametros[i], parametros[i+1].ToString());
+            }
+
+            switch (parametros[0])
+            {
+                case "jug1id":
+                    querry = querry.Where(e => e.Id == Condiciones["id"]);
+                    break;
+                case "jug2id":
+                    querry = querry.Where(e => e.Id == Condiciones["id"] &&
+                                e.Status == true);
+                    break;
+                case "jug1tarjeta":
+                    querry = querry.Where(e => e.Tarjeta == Condiciones["tarjeta"]);
+                    break;
+                case "jug2tarjeta":
+                    querry = querry.Where(e => e.Tarjeta == Condiciones["tarjeta"] &&
+                                e.Status == true);
+                    break;
+                case "jug1player":
+                    querry = querry.Where(e => e.Player == Condiciones["player"]);
+                    break;
+                case "jug2player":
+                    querry = querry.Where(e => e.Player == Condiciones["player"] &&
+                                e.Status == true);
+                    break;
             }
             return await querry.ToListAsync();
         }
+        
 
         public async Task<G510Jugador> UpdateJugador(G510Jugador jugador)
         {

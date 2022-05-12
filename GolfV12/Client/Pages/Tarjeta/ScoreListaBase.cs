@@ -28,11 +28,69 @@ namespace GolfV12.Client.Pages.Tarjeta
 
         protected List<KeyValuePair<string, string>> NamesTemp { get; set; } =
                 new List<KeyValuePair<string, string>>();
+        protected List<KeyValuePair<string, string>> PlayerTemp { get; set; } =
+                new List<KeyValuePair<string, string>>();
         public string ElScoreRenglon { get; set; } = string.Empty;
-
         public RadzenDataGrid<G520Score> ScoreGrid { get; set; } = new();
 
+        protected async override Task OnInitializedAsync()
+        {
+            if (string.IsNullOrEmpty(TarjetaId)) NM.NavigateTo("/tarjeta/tarjeta/");
+            var autState = await AuthStateTask;
+            var user = autState.User;
+            if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
+            await LeerNombres();
+            await LeerJugadores();
+            await LeerScores();
+
+            await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
+                $"El Usuario consulto el listado de jugadores de una tarjeta");
+        }
+
+        protected async Task LeerNombres()
+        {
+            //List<KeyValuePair<string, string>> NamesTemp;
+            var AllNames = await PlayersIServ.GetPlayers();
+            
+            foreach (var name in AllNames)
+            {
+               // NamesTemp.Add(new KeyValuePair<string, string>(name.UserId,
+               //    $"{name.Nombre} {name.Apodo} {name.Paterno}"));
+                if (!LosDatos.ContainsKey($"Nombre_{name.UserId}"))
+                {
+                    LosDatos.Add($"Nombre_{name.UserId}", $"{name.Nombre} {name.Apodo} {name.Paterno}");
+                }
+
+            }
+            if (!LosDatos.ContainsKey("Vacio")) LosDatos.Add("Vacio", "No se encontro Jugador!");
+        }
+        protected async Task LeerJugadores()
+        {
+            //List<KeyValuePair<string, string>> NamesTemp;
+            int renglon = 1;
+            LosJugadores = await JugadoresIServ.Filtro($"jug1tarjeta_-_tarjeta_-_{TarjetaId}");
+            foreach (var jugadors in LosJugadores)
+            {
+                if (!LosDatos.ContainsKey($"Jugador_{jugadors.Player}"))
+                {
+                    LosDatos.Add($"Jugador_{jugadors.Player}", jugadors.Player);
+                    LosDatos.Add($"Renglon_{jugadors.Player}", renglon.ToString());
+                    NamesTemp.Add(new KeyValuePair<string, string>(jugadors.Player, LosDatos[$"Nombre_{jugadors.Player}"])); 
+                    renglon++;
+                }
+            }
+            LosNombres = NamesTemp.AsEnumerable();
+        }
+        protected async Task LeerScores()
+        {
+            LosScores = await ScoresIServ.Filtro($"sco3tarjeta_-_tarjeta_-_{TarjetaId}");
+            foreach (var LS in LosScores)
+            {
+                if (!LosDatos.ContainsKey($"Jugador_{LS.Player}_Hoyo_{LS.Hoyo}"))
+                    LosDatos.Add($"Jugador_{LS.Player}_Hoyo_{LS.Hoyo}", LS.Score.ToString());
+            }
+        }
         public NotificationMessage ElMesage { get; set; } =
             new NotificationMessage()
             {

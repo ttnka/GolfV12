@@ -18,32 +18,187 @@
                 </NavLink>
             </div>
             <div class="col-sm-5">
-                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Agregar Jugador" 
+                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Agregar Score" 
                 Click="@InsertRow" Disabled=@(scoreToInsert != null) />
             </div>
         </div>
    </div>
- <!-- id, tarjeta, campo, player, hcp, score, publico, estado, status --> 
+ <!-- id, tarjeta, campo, player, hoyo, score, hcp, publico, estado, status --> 
 
+ <RadzenDataGrid @ref=@ScoreGrid AllowFiltering="true" AllowPaging="true" PageSize="50" AllowSorting="true" EditMode="DataGridEditMode.Single"
+                Data=@LosScores TItem="G520Score" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
+        <Columns>
+            <RadzenDataGridColumn TItem="G520Score" Property="player" Title="Id" Width="30px" >
+                <Template Context="datos">
+                    @if (LosDatos.ContainsKey($"Renglon_{datos.Player}"))
+                    {
+                        @LosDatos[$"Renglon_{datos.Player}"]
+                    }
+                    else
+                    {
+                        <label>0</label>
+                    }
+
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="G520Score" Property="player" Title="Jugador" Width="350px">
+                <Template Context="datos">
+<!--
+                    <RadzenImage Path="@datos.foto" style="width: 32px; height: 32px; border-radius: 16px; margin-right: 6px;" />
+-->
+                    @if (LosDatos.ContainsKey($"Nombre_{datos.Player}"))
+                    {
+                        @LosDatos[$"Nombre_{datos.Player}"] 
+                    } else 
+                    {
+                        <label>No hay nombre del Jugador</label> 
+                    }
+                </Template>
+                <EditTemplate Context="datosE">
+                    <RadzenDropDown Name="player" AllowClear="false" Class="w-150"  AllowFiltering="true"
+                        FilterCaseSensitivity="FilterCaseSensitivity.Default" FilterOperator="StringFilterOperator.Contains"  
+                        Data="@LosNombres"  @bind-Value=ElScoreRenglon ValueProperty="Key" TextProperty="Value" 
+                        Style="width:100%; display: block;">
+<!--                    <Template>
+                            <RadzenImage Path="@context.Photo" style="width: 20px; height: 20px; border-radius: 16px; margin-right: 6px;" />
+                            @context.FirstName @context.LastName
+                        </Template>
+-->
+                    </RadzenDropDown>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G520Score" Property="Hoyo" Title="Hoyo">
+                <Template Context="datos">
+                    @datos.Hoyo
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="Hoyo" @bind-Value="datos.Hoyo" Min="1" Max="18" Style="width:40%"  />
+                    <RadzenRequiredValidator Component="Hoyo" Text="Numero hoyo 1 a 18 es requerido!" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G520Score" Property="Score" Title="Score">
+                <Template Context="datos">
+                    @datos.Score
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="Score" @bind-Value="datos.Score" Style="width:40%" Min="1" Max="15" />
+                    <RadzenRequiredValidator Component="Score" Text="El Score va 1 a 15 y es requerido!" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G520Score" Property="Hcp" Title="HCP">
+                <Template Context="datos">
+                    @datos.Hcp
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="Hcp" @bind-Value="datos.Hcp" Style="width:40%" Min="-5" Max="35" Step="0" />
+                    <RadzenRequiredValidator Component="Hcp" Text="El Hpc es -5 a 36 y es requerido!" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G520Score" Property="Estado" Title="Estado">
+                <Template Context="datos">
+                    @datos.Estado
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric @bind-Value="datos.Estado" Style="width:40%" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+
+            <RadzenDataGridColumn TItem="G520Score" Property="Publico" Title="Publico">
+                <Template Context="datos">
+                    @if (datos.Status)
+                    {
+                        <label>Si</label>
+                    }
+                    else
+                    {
+                        <label>No</label>
+                    }
+                </Template>
+                <EditTemplate Context="datos">
+                    No-<RadzenSwitch @bind-Value=@datos.Publico />-Si
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G520Score" Property="Status" Title="Juega">
+                <Template Context="datos">
+                    @if (datos.Status)
+                    {
+                        <label>Si</label>
+                    }
+                    else
+                    {
+                        <label>No</label>
+                    }
+                </Template>
+                <EditTemplate Context="datos">
+                    No-<RadzenSwitch @bind-Value=@datos.Status />-Si
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G520Score" Context="sampleBlazorModelsSampleOrder" Filterable="false" 
+                    Sortable="false" TextAlign="TextAlign.Center" Width="120px">
+                <Template Context="datos">
+                    <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" 
+                        Click="@(args => EditRow(datos))" @onclick:stopPropagation="true">
+                    </RadzenButton>
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Primary" Class="m-1" Click="@((args) => SaveRow(datos))">
+                    </RadzenButton>
+                    <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@((args) => CancelEdit(datos))">
+                    </RadzenButton>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            
+
+        </Columns>
+   </RadzenDataGrid>    
 
 }
+
+--Tatanka--
 @code {
     G520Score scoreToInsert;
 
     async Task EditRow(G520Score score)
     {
+        List<KeyValuePair<string, string>> NamesTemp2 = new();
+        NamesTemp2.Add(new KeyValuePair<string, string>(score.Player, LosDatos[$"Nombre_{score.Player}"]));
+        LosNombres = NamesTemp2.AsEnumerable();
         await ScoreGrid.EditRow(score);
+
+
     }
     async void OnUpdateRow(G520Score score)
     {
         if (score == scoreToInsert) scoreToInsert = null;
-      //  if (score.Status == false) score.Tarjeta = "Borrar";
+        if (score.Status == false) score.Tarjeta = "Borrar";
         await ScoresIServ.UpdateScore(score);
     }
     async Task SaveRow(G520Score score)
     {
-        if (score == scoreToInsert) scoreToInsert = null;
-        await ScoreGrid.UpdateRow(score);
+        if (ElScoreRenglon.Length > 10)
+        {
+            if (score == scoreToInsert) scoreToInsert = null;
+            score.Tarjeta = TarjetaId;
+            score.Player = ElScoreRenglon;
+            //await ScoresIServ.UpdateScore(score);
+            await ScoreGrid.UpdateRow(score);
+
+        }
+        else
+        {
+            ElMesage.Severity = NotificationSeverity.Warning;
+            ElMesage.Summary = "Error!";
+            ElMesage.Detail = "El JUGADOR ES OBLIGATORIO!";
+            ShowNotification(ElMesage);
+        }
+
     }
     void CancelEdit(G520Score score)
     {
@@ -53,17 +208,42 @@
     async Task InsertRow()
     {
         scoreToInsert = new G520Score();
+        await LeerJugadores();
         await ScoreGrid.InsertRow(scoreToInsert);
     }
     async void OnCreateRow(G520Score score)
     {
-        if (!LosDatos.ContainsKey(ElScoreRenglon))
+        if (!LosDatos.ContainsKey($"Jugador_{ElScoreRenglon}_Hoyo_{score.Hoyo}") &&
+            (score.Hoyo > 0) && (score.Hoyo < 19) && (ElScoreRenglon.Length > 10))
         {
-            score.Tarjeta = TarjetaId;
-            score.Player = ElScoreRenglon;
-            score.Estado = 1;
+            score.Estado = 3;
             await ScoresIServ.AddScore(score);
+            LosDatos.Add($"Jugador_{ElScoreRenglon}_Hoyo_{score.Hoyo}",
+                        score.Score.ToString());
+            ElMesage.Severity = NotificationSeverity.Success;
+                ElMesage.Summary = "Perfecto!";
+                ElMesage.Detail = "Se agrego registro con exito!";
+            ShowNotification(ElMesage);   
         }
-        
+        else
+        {
+            if (ElScoreRenglon.Length < 10)
+            {
+                ElMesage.Summary = "Error!";
+                ElMesage.Detail = "El JUGADOR ES OBLIGATORIO!";
+            } else if(scoreToInsert.Hoyo < 0 || scoreToInsert.Hoyo > 18)
+            {
+                ElMesage.Summary = "Error!";
+                ElMesage.Detail = "El Hoyo debe ser 1 a 18!";
+            }
+
+            if (score == scoreToInsert) scoreToInsert = null;
+            ScoreGrid.CancelEditRow(score);
+            ShowNotification(ElMesage);
+        }
+    }
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
     }
 }

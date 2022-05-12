@@ -28,41 +28,34 @@ namespace GolfV12.Server.Models.Repo
             if (string.IsNullOrWhiteSpace(clave)) return await querry.ToListAsync();
 
             string[] parametros = clave.Split("_-_");
-            string Data1 = string.Empty;
-            string Data2 = string.Empty;
-
-            if (parametros[0] == "tar1")
+            Dictionary<string, string> ParaDic = new Dictionary<string, string>();
+            
+            for (int i = 1; i < parametros.Length; i+=2)
             {
-                for (int i = 1; i < parametros.Length; i++)
-                {
-                    Data1 = parametros[i];
-                    Data2 = parametros[i + 1];
-                    switch (Data1)
-                    {
-                        case "id":
-                            querry = querry.Where(e => e.Id.Contains(Data2));
-                            break;
-                        case "creador":
-                            querry = querry.Where(e => e.Creador.Contains(Data2));
-                            break;
-                        case "fecha":
-                            querry = querry.Where(e => e.Fecha.Equals(Data2));
-                            break;
-                        case "campo":
-                            querry = querry.Where(e => e.Campo == int.Parse(Data2));
-                            break;
-                        case "Titulo":
-                            querry = querry.Where(e => e.Titulo.Contains(Data2));
-                            break;
-                        case "Estado":
-                            querry = querry.Where(e => e.Estado == int.Parse(Data2));
-                            break;
-                        case "Status":
-                            querry = querry.Where(e => e.Status.Equals(Data2));
-                            break;
-                    }
-                    return await querry.ToListAsync();
-                }
+                if (!ParaDic.ContainsKey(parametros[i])) 
+                    ParaDic.Add(parametros[i], parametros[i+1]);
+            }
+
+            switch (parametros[0])
+            {
+                case "tar1id":
+                    querry = querry.Where(e => e.Id == ParaDic["id"]);
+                    break;
+
+                case "tar2id":
+                    querry = querry.Where(e => e.Id == ParaDic["id"] && 
+                            e.Status == true);
+                    break;
+
+                case "tar1creador":
+                    querry = querry.Where(e => e.Creador == ParaDic["creador"]);
+                    break;
+
+                case "tar2creador":
+                    querry = querry.Where(e => e.Creador == ParaDic["creador"] && 
+                            e.Status == true);
+                    break;
+
             }
             return await querry.ToListAsync();
         }

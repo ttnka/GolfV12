@@ -27,21 +27,44 @@ namespace GolfV12.Client.Servicios.Serv
             if (!string.IsNullOrEmpty(clave))
             {
                 var parametros = clave.Split("_-_");
-                string titulo = "id,tarjeta,campo,player,hcp,publico,hoyo,score,estado,status";
-                var titulos = titulo.Split(",");
-                if (parametros[0] == "sco1")
-                {
-                    resultado = resultado + "sco1_-_";
-                    for (int i = 1; i < parametros.Length; i+=2)
-                    {
-                        foreach (var t in titulos)
-                        {
-                            if (parametros[i] == t) resultado = resultado + t + "_-_" + parametros[i + 1] + "_-_";
+                // "id,tarjeta,campo,player,hcp,publico,hoyo,score,estado,status";
+                Dictionary <string, string> ScoreDic = new Dictionary<string, string>();
 
-                        }
-                    }
+                for (int i = 1; i < parametros.Length; i+=2)
+                {
+                    if (!ScoreDic.ContainsKey(parametros[i])) 
+                        ScoreDic.Add(parametros[i], parametros[i+1]);
                 }
-                resultado = resultado.Substring(0, resultado.Length - 3);
+
+                switch (parametros[0])
+                {
+                    case "sco1id":
+                        resultado += "sco1id_-_id_-_" + ScoreDic["id"];
+                        break;
+                    case "sco2id":
+                        resultado += "sco2id_-_id_-_" + ScoreDic["id"] 
+                                    + "_-_status_-_true";
+                        break;
+                    case "sco1tarjeta":
+                        resultado += "sco1tarjeta_-_tarjeta_-_" + ScoreDic["tarjeta"];
+                        break;
+                    case "sco2tarjeta":
+                        resultado += "sco2tarjeta_-_tarjeta_-_" + ScoreDic["tarjeta"] 
+                                    + "_-_status_-_true";
+                        break;
+                    case "sco3tarjeta":
+                        resultado += "sco3tarjeta_-_tarjeta_-_" + ScoreDic["tarjeta"]
+                                    + "_-_status_-_true";
+                        break;
+                    case "sco1player":
+                        resultado += "sco1id_-_player_-_" + ScoreDic["player"];
+                        break;
+                    case "sco2player":
+                        resultado += "sco1id_-_player_-_" + ScoreDic["player"] 
+                                    + "_-_status_-_true";
+                        break;
+
+                }
             }
             return await _httpClient.GetFromJsonAsync<IEnumerable<G520Score>>(resultado);
         }

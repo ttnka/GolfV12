@@ -28,20 +28,37 @@ namespace GolfV12.Client.Servicios.Serv
             if (!string.IsNullOrEmpty(clave))
             {
                 var parametros = clave.Split("_-_");
-                string titulo = "id,tarjeta,player,estado,status";
-                var titulos = titulo.Split(",");
-                if (parametros[0] == "jug1")
+                // "id,tarjeta,player,estado,status";
+                Dictionary<string, string> Paradic = new Dictionary<string, string>();
+                for (int i = 1; i < parametros.Length; i+=2)
                 {
-                    resultado = resultado + "jug1_-_";
-                    for (int i = 1; i < parametros.Length; i+=2)
-                    {
-                        foreach (var t in titulos)
-                        {
-                            if (parametros[i] == t) resultado = resultado + t + "_-_" + parametros[i + 1] + "_-_";
-                        }
-                    }
+                    if (!Paradic.ContainsKey(parametros[i])) 
+                        Paradic.Add(parametros[i], parametros[i+1]);
                 }
-                resultado = resultado.Substring(0, resultado.Length - 3);
+                switch (parametros[0])
+                {
+                    case "jug1id":
+                        resultado += "jug1id_-_id_-_" + Paradic["id"];
+                        break;
+                    case "jug2id":
+                        resultado += "jug2id_-_id_-_" + Paradic["id"] + 
+                            "_-_status_-_true";
+                        break;
+                    case "jug1tarjeta":
+                        resultado += "jug1tarjeta_-_tarjeta_-_" + Paradic["tarjeta"];
+                        break;
+                    case "jug2tarjeta":
+                        resultado += "jug2tarjeta_-_tarjeta_-_" + Paradic["tarjeta"] +
+                            "_-_status_-_true";
+                        break;
+                    case "jug1player":
+                        resultado += "jug1player_-_player_-_" + Paradic["player"];
+                        break;
+                    case "jug2player":
+                        resultado += "jug2player_-_player_-_" + Paradic["player"] +
+                            "_-_status_-_true";
+                        break;
+                }
             }
             return await _httpClient.GetFromJsonAsync<IEnumerable<G510Jugador>>(resultado);
         }

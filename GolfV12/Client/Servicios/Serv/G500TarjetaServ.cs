@@ -25,27 +25,34 @@ namespace GolfV12.Client.Servicios.Serv
             // clave = tar1
             // ejeplo = G500Tarjeta/filtro?clave=tar1_-_titulo=juegodellunes_-_campo=1
             var resultado = "/api/G500Tarjeta/filtro?clave=";
+            Dictionary<string, string> ParaDic = new Dictionary<string, string>();
             if (!string.IsNullOrEmpty(clave) & clave.Count()> 13)
             {
                 var parametros = clave.Split("_-_");
                 string titulo = "id,creador,fecha,campo,titulo,estado,status";
                 var titulos = titulo.Split(",");
-                if (parametros[0] == "tar1")
+                for (int i = 1; i < parametros.Length; i += 2)
                 {
-                    resultado = resultado + "tar1_-_";
-                    for (int i = 1; i < parametros.Length; i+=2)
-                    {
-                        foreach (var t in titulos)
-                        {
-                            if (parametros[i] == t) resultado = resultado + t + "_-_" + parametros[i + 1] + "_-_";
-                        }
-
-                    }
+                    if (!ParaDic.ContainsKey(parametros[i])) 
+                        ParaDic.Add(parametros[i], parametros[i + 1]);
                 }
-                resultado = resultado.Substring(0, resultado.Length - 3);
+                switch (parametros[0])
+                {
+                    case "tar1id":
+                        resultado += "tar1id_-_id_-_" + ParaDic["id"]; 
+                        break;
+                    case "tar2id":
+                        resultado +=  "tar2id_-_id_-_" + ParaDic["id"] + "_-_status_-_true";
+                        break;
+                    case "tar1creador":
+                        resultado += "tar1creador_-_creador_-_" + ParaDic["creador"];
+                        break;
+                    case "tar2creador":
+                        resultado += "tar2creador_-_creador_-_" + ParaDic["creador"] + "_-_status_-_true";
+                        break;
+                }
+               // resultado = resultado.Substring(0, resultado.Length - 3);
             }
-            
-            
             return await _httpClient.GetFromJsonAsync<IEnumerable<G500Tarjeta>>(resultado);
         }
 

@@ -31,6 +31,10 @@ namespace GolfV12.Client.Pages.Tarjeta
         {
             NM.NavigateTo("/tarjeta/tarjetaedit/");
         }
+        public void InsertScore(string url)
+        {
+            NM.NavigateTo($"/tarjeta/scorelista/{url}");
+        }
         protected async override Task OnInitializedAsync()
         {
             //if (TorneoId == 0) NM.NavigateTo("/torneo/torneo/");
@@ -38,7 +42,6 @@ namespace GolfV12.Client.Pages.Tarjeta
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
             
-
             await LeerDatos();
             await LeerCampos();
 
@@ -51,7 +54,7 @@ namespace GolfV12.Client.Pages.Tarjeta
             string claveP = "clave=";
             if (!string.IsNullOrEmpty(PlayerId))
             {
-                claveP = $"tar1_-_creador_-_{PlayerId}";
+                claveP = $"tar1creador_-_creador_-_{PlayerId}";
             }
             AllPlayers = await PlayersServ.GetPlayers();
             if (AllPlayers != null)
@@ -88,7 +91,6 @@ namespace GolfV12.Client.Pages.Tarjeta
                         }
                     }   
                 }
-
             }
             
         }
