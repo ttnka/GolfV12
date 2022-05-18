@@ -1,0 +1,170 @@
+﻿@inherits MiListaHcpBase
+@inject NotificationService NS
+@using GolfV12.Shared;
+
+
+<h3>Mi Lista Hcp</h3>
+
+<!-- id, playerId, Fecha, BanderaId, hcp, estado, status --> 
+<RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Agregar mi Hcp" 
+                Click="@InsertRow" Disabled=@(HcpToInsert != null) />
+
+ <RadzenDataGrid @ref=@HcpGrid AllowFiltering="true" AllowPaging="true" PageSize="50" 
+                AllowSorting="true" EditMode="DataGridEditMode.Single"
+                Data=@LosHcps TItem="G128Hcp" RowUpdate="@OnUpdateRow" 
+                RowCreate="@OnCreateRow">
+        <Columns>
+            <RadzenDataGridColumn TItem="G128Hcp" Property="Id" Title="Id" Width="30px" Filterable="false" >
+                <Template Context="datos">
+                    @if (DatosDic.ContainsKey($"Renglon_{datos.Id}"))
+                    {
+                        @DatosDic[$"Renglon_{datos.Id}"]
+                    }
+                    else
+                    {
+                        <label>0</label>
+                    }
+
+                </Template>
+            </RadzenDataGridColumn>
+            
+            <RadzenDataGridColumn TItem="G128Hcp" Property="Fecha" Title="Fecha" Filterable="false">
+                <Template Context="datos">
+                    @datos.Fecha.Day / @datos.Fecha.Month / @datos.Fecha.Year 
+                </Template>
+                <EditTemplate Context="datos">
+                    @datos.Fecha.Day / @datos.Fecha.Month / @datos.Fecha.Year
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G128Hcp" Title="Campo">
+                <Template Context="datos">
+                @if (DatosDic.ContainsKey($"BanderaIdCampo_{datos.BanderaId}"))
+                {
+                    var campoIdtemp = DatosDic[$"BanderaIdCampo_{datos.BanderaId}"];
+                    @if (DicHijo.ContainsKey($"Campo_{campoIdtemp}"))
+                        @DicHijo[$"Campo_{campoIdtemp}"];
+                }else
+                {
+                    <label>No hay nombre del campo</label>
+                }
+                </Template>
+
+                <EditTemplate Context="datos">
+                    <RadzenDropDown Name="campo" AllowClear="false" Class="w-150" 
+                        AllowFiltering="true" Change="@FiltrarBanderas"
+                        FilterCaseSensitivity="FilterCaseSensitivity.Default" 
+                        FilterOperator="StringFilterOperator.Contains"  
+                        Data="@LosCampos"  @bind-Value=ElCampo ValueProperty="Key" TextProperty="Value" 
+                        Style="width:100%; display: block;">
+                    </RadzenDropDown> 
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G128Hcp" Property="Bandera" Title="Bandera">
+                <Template Context="datos">
+                @if (DatosDic.ContainsKey($"Campo_{ElCampo}_BanderaId_{datos.BanderaId}_Color"))
+                {
+                    @DatosDic[$"Campo_{ElCampo}_BanderaId_{datos.BanderaId}_Color"];
+                }else
+                {
+                    <label>No hay color de bandera</label>
+                }
+                </Template>
+
+                <EditTemplate Context="datos">
+                    <RadzenDropDown Name="bandera" AllowClear="false" Class="w-150"  
+                    AllowFiltering="true"
+                        FilterCaseSensitivity="FilterCaseSensitivity.Default" 
+                        FilterOperator="StringFilterOperator.Contains"  
+                        Data="@LasBanderas"  @bind-Value=datos.BanderaId 
+                        ValueProperty="Key" TextProperty="Value" 
+                        Style="width:100%; display: block;">
+                    </RadzenDropDown> 
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G128Hcp" Property="Hcp" Title="HCP">
+                <Template Context="datos">
+                    @datos.Hcp
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="Hcp" @bind-Value="datos.Hcp" Style="width:40%" Min="-5" Max="35" Step="0" />
+                    <RadzenRequiredValidator Component="Hcp" Text="El Hpc es -5 a 36 y es requerido!" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+<!--
+            <RadzenDataGridColumn TItem="G128Hcp" Context="sampleBlazorModelsSampleOrder" Filterable="false" 
+                    Sortable="false" TextAlign="TextAlign.Center" Width="120px">
+                <Template Context="datos">
+                    <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" 
+                        Click="@(args => EditRow(datos))" @onclick:stopPropagation="true">
+                    </RadzenButton>
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Primary" Class="m-1" Click="@((args) => SaveRow(datos))">
+                    </RadzenButton>
+                    <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@((args) => CancelEdit(datos))">
+                    </RadzenButton>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+-->
+        </Columns>
+   </RadzenDataGrid>    
+
+
+--Tatanka--
+@code {
+    G128Hcp HcpToInsert;
+
+    async Task EditRow(G128Hcp hcp)
+    {
+        await HcpGrid.EditRow(hcp);
+    }
+    async void OnUpdateRow(G128Hcp hcp)
+    {
+        if (hcp == HcpToInsert) HcpToInsert = null;
+        await HcpIServ.UpdateHcp(hcp);
+    }
+    async Task SaveRow(G128Hcp hcp)
+    {
+        ElHcp.Fecha = DateTime.Now.Date;
+        ElHcp.PlayerId = UserIdLog;
+        ElHcp.Estado = 1;
+        ElHcp.Status = true;
+        await HcpGrid.UpdateRow(hcp);
+        /*
+        ElMesage.Severity = NotificationSeverity.Warning;
+        ElMesage.Summary = "Error!";
+        ElMesage.Detail = "El JUGADOR ES OBLIGATORIO!";
+        ShowNotification(ElMesage);
+    */
+    }
+    void CancelEdit(G128Hcp hcp)
+    {
+        if (hcp == HcpToInsert) HcpToInsert = null;
+        HcpGrid.CancelEditRow(hcp);
+    }
+    async Task InsertRow()
+    {
+        HcpToInsert = new G128Hcp();
+        HcpToInsert.Fecha = DateTime.Now.Date;
+        HcpToInsert.PlayerId = UserIdLog;
+        HcpToInsert.Estado = 2;
+        await HcpGrid.InsertRow(HcpToInsert);
+    }
+    async void OnCreateRow(G128Hcp hcp)
+    {
+        ElHcp.Fecha = DateTime.Now.Date;
+        ElHcp.PlayerId = UserIdLog;
+        if (hcp == HcpToInsert) HcpToInsert = null;
+        await HcpIServ.AddHcp(hcp);
+        // HcpGrid.CancelEditRow(hcp);
+        // ShowNotification(ElMesage);
+    }
+
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+}

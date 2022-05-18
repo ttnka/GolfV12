@@ -8,7 +8,7 @@ namespace GolfV12.Shared
 {
     public enum TorneoEdit
     {
-        Creador,
+        Admin,
         Capturista,
         JugadorDiferente,
         Jugadores

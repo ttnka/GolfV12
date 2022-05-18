@@ -37,7 +37,7 @@ namespace GolfV12.Server.Models.Repo
             
             return await querry.ToListAsync();
         } 
-        */
+        
         public async Task<G120Player> GetPlayer(string userId)
         {
             var resultado = await _appDbContext.Players.FirstOrDefaultAsync(x => x.UserId.Contains(userId));
@@ -54,7 +54,65 @@ namespace GolfV12.Server.Models.Repo
         {
             return await _appDbContext.Players.ToListAsync();
         }
+        */
+        public async Task<IEnumerable<G120Player>> Filtro(string? clave)
+        {
+            // clave = play1
+            // ejeplo = player?clave=org1_-_nombre_-_ivan_-_desc_-_conocido
+            IQueryable<G120Player> querry = _appDbContext.Players;
+            if (string.IsNullOrEmpty(clave) || clave=="all") return await querry.ToListAsync();
+            string[] parametros = clave.Split("_-_");
+            Dictionary<string, string> ParaDic = new Dictionary<string, string>();
 
+            for (int i = 1; i < parametros.Length; i += 2)
+            {
+                if (!ParaDic.ContainsKey(parametros[i]))
+                    ParaDic.Add(parametros[i], parametros[i + 1]);
+            }
+
+            switch (parametros[0])
+            {
+                case "play1id":
+                    querry = querry.Where(e => e.UserId == ParaDic["userid"]);
+                    break;
+
+                case "play2id":
+                    querry = querry.Where(e => e.UserId == ParaDic["userid"] && e.Status == true);
+                    break;
+
+                case "play3id":
+                    querry = querry.Where(e => e.UserId == ParaDic["userid"] && e.Nivel == (Niveles)Enum.Parse(typeof(Niveles), ParaDic["nivel"]) &&
+                       e.Status == true);
+                    break;
+
+                case "play1nombre":
+                    querry = querry.Where(e => e.Nombre == ParaDic["nombre"]);
+                    break;
+
+                case "play2nombre":
+                    querry = querry.Where(e => e.Nombre == ParaDic["nombre"] && e.Paterno == ParaDic["paterno"]);
+                    break;
+
+                case "play3nombre":
+                    querry = querry.Where(e => e.Nombre == ParaDic["nombre"] && e.Paterno == ParaDic["paterno"] && e.Materno == ParaDic["materno"]);
+                    break;
+
+                case "play1nivel":
+                    querry = querry.Where(e => e.Nivel == (Niveles)Enum.Parse(typeof(Niveles), ParaDic["nivel"]));
+                    break;
+
+                case "play2nivel":
+                    querry = querry.Where(e => e.Nivel == (Niveles)Enum.Parse(typeof(Niveles), ParaDic["nivel"]) &&
+                       e.Status == Convert.ToBoolean(ParaDic["status"]));
+                    break;
+
+                case "play1status":
+                    querry = querry.Where(e => e.Status == Convert.ToBoolean(ParaDic["status"]));
+                    break;
+            }
+
+                    return await querry.ToListAsync();
+        }
         public async Task<G120Player> UpdatePlayer(G120Player player)
         {
             var res = await _appDbContext.Players.FirstOrDefaultAsync(e => e.Id == player.Id);

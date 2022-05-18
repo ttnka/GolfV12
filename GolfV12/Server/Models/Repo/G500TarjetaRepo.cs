@@ -55,7 +55,14 @@ namespace GolfV12.Server.Models.Repo
                     querry = querry.Where(e => e.Creador == ParaDic["creador"] && 
                             e.Status == true);
                     break;
-
+                case "tar3creador":
+                    querry = querry.Where(e => e.Creador == ParaDic["creador"] && e.Estado == int.Parse(ParaDic["estado"]) && 
+                             e.Status == true ).OrderByDescending(e => e.Fecha);
+                        break;
+                case "tar4creador":
+                    querry = querry.Where(e => e.Creador == ParaDic["creador"] && e.Estado != int.Parse(ParaDic["estado"]) &&
+                             e.Status == true).OrderByDescending(e => e.Fecha);
+                    break;
             }
             return await querry.ToListAsync();
         }

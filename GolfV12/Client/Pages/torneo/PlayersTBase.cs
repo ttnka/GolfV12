@@ -46,7 +46,7 @@ namespace GolfV12.Client.Pages.torneo
         {
             var ElTeam = await TeamsTIServ.GetTeam(TeamTId);
             LosPlayers = await PlayersTIServ.Buscar(TeamTId,"");
-            LosJugadores = await JugadoresIServ.GetPlayers();
+            LosJugadores = await JugadoresIServ.Filtro("All");
             foreach (var player in LosJugadores)
             {
                 if (!LosNombres.ContainsKey(player.UserId)) 

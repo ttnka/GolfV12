@@ -1,0 +1,241 @@
+﻿@inherits MisTarjetasBase
+@inject NotificationService NS
+@using GolfV12.Shared;
+
+<!-- id, creador, fecha, campo, titulo, captura, consulta, estado, status --> 
+
+@if (ElEstado != 3) 
+{
+    <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Nueva Tarjeta" 
+                Click="@InsertRow" Disabled=@(TarjetaToInsert != null) />
+}
+ <RadzenDataGrid @ref=@TarjetaGrid AllowFiltering="true" AllowPaging="true" PageSize="50" 
+                AllowSorting="true" EditMode="DataGridEditMode.Single"
+                Data=@LasTarjetas TItem="G500Tarjeta" RowUpdate="@OnUpdateRow" 
+                RowCreate="@OnCreateRow" >
+        <Columns>
+            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Id" Title="Jugadores" Width="60px" Filterable="false" >
+                <Template Context="datos">
+                    @if (DicHijo.ContainsKey($"JugadoresTarjeta_{datos.Id}"))
+                    {
+                        @DicHijo[$"JugadoresTarjeta_{datos.Id}"]
+                    }
+                    else
+                    {
+                        <label>0</label>
+                    }
+                    @if(ElEstado != 3) 
+                    {
+                        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Click="@(arg => @InsertJugador(datos))"  />
+                    }
+                </Template>
+            </RadzenDataGridColumn>
+            
+            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Fecha" Title="Fecha" Width="100px" Filterable="false">
+                <Template Context="datos">
+                    @datos.Fecha.Day / @datos.Fecha.Month / @datos.Fecha.Year 
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenDatePicker @bind-Value="datos.Fecha" DateFormat="d"  />
+                </EditTemplate>
+                
+
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G500Tarjeta" Title="Admin" Property="creador" Width="150px" Filterable="false">
+                <Template Context="datos">
+                @if (DicHijo.ContainsKey($"Nombre_{datos.Creador}"))
+                {
+                    @DicHijo[$"Nombre_{datos.Creador}"];
+                }else
+                {
+                    <label>No hay nombre del Admin</label>
+                }
+                </Template>
+
+                <EditTemplate Context="datos">
+                    <RadzenDropDown Name="creador" AllowClear="false" 
+                        AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.Default" 
+                        FilterOperator="StringFilterOperator.Contains"  
+                        Data="@LosNombres"  @bind-Value=datos.Creador ValueProperty="Key" TextProperty="Value" 
+                        Style="width:100%; display: block;">
+                    </RadzenDropDown> 
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Campo" Title="Campo" Filterable="false"  Width="100px">
+                <Template Context="datos">
+                @if (DicHijo.ContainsKey($"Campo_{datos.Campo}"))
+                {
+                    @DicHijo[$"Campo_{datos.Campo}"];
+                }else
+                {
+                    <label>No hay info del campo</label>
+                }
+                </Template>
+
+                <EditTemplate Context="datos">
+                    <RadzenDropDown Name="Campo" AllowClear="false"  
+                    AllowFiltering="true"
+                        FilterCaseSensitivity="FilterCaseSensitivity.Default" 
+                        FilterOperator="StringFilterOperator.Contains"  
+                        Data="@LosCampos"  @bind-Value=datos.Campo
+                        ValueProperty="Key" TextProperty="Value" 
+                        Style="width:100%; display: block;">
+                    </RadzenDropDown> 
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Titulo" Title="Titulo" Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @datos.Titulo
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenTextBox Name="Titulo" @bind-Value="datos.Titulo"  />
+                    
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Captura" Title="Captura" Filterable="false"  Width="75px">
+                <Template Context="datos">
+                    @datos.Captura
+                    <!--
+               @if (DicHijo.ContainsKey($"Campo_{datos.Campo}"))
+                {
+                    @DicHijo[$"Campo_{datos.Campo}"];
+                }else
+                {
+                    <label>No hay info del campo</label>
+                }
+                --> 
+                </Template>
+
+                <EditTemplate Context="datos">
+                    <RadzenDropDown Name="Captura" AllowClear="false"   
+                    AllowFiltering="true"
+                        FilterCaseSensitivity="FilterCaseSensitivity.Default" 
+                        FilterOperator="StringFilterOperator.Contains"  
+                        Data="@LasCapturas"  @bind-Value=datos.Captura
+                        ValueProperty="Key" TextProperty="Value" 
+                        Style="width:100%; display: block;">
+                    </RadzenDropDown> 
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Consulta" Title="Consulta" Filterable="false"  Width="75px">
+                <Template Context="datos">
+                    @datos.Consulta
+                    
+                </Template>
+
+                <EditTemplate Context="datos">
+                    <RadzenDropDown Name="Consulta" AllowClear="false"   
+                    AllowFiltering="true"
+                        FilterCaseSensitivity="FilterCaseSensitivity.Default" 
+                        FilterOperator="StringFilterOperator.Contains"  
+                        Data="@LasConsultas"  @bind-Value=datos.Consulta
+                        ValueProperty="Key" TextProperty="Value" 
+                        Style="width:100%; display: block;">
+                    </RadzenDropDown> 
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G500Tarjeta" Context="sampleBlazorModelsSampleOrder" Filterable="false" 
+                    Sortable="false" TextAlign="TextAlign.Center" Width="120px" Title="Estado">
+                <Template Context="datos">
+                @if (datos.Estado <= 2)
+                {
+                    <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" 
+                        Click="@(args => EditRow(datos))" @onclick:stopPropagation="true">
+                    </RadzenButton>
+                        @if (datos.Estado == 1) 
+                    {
+                        <label>Programado</label>
+                    } else
+                    {
+                    <label>Jugando</label>
+                    }
+                } 
+                else 
+                {
+                    <label>Terminado</label>
+                }
+                
+
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Primary" Class="m-1" Click="@((args) => SaveRow(datos))">
+                    </RadzenButton>
+                    <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@((args) => CancelEdit(datos))">
+                    </RadzenButton>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+        </Columns>
+   </RadzenDataGrid>    
+
+
+
+@code {
+    G500Tarjeta TarjetaToInsert;
+    async Task InsertJugador(G500Tarjeta valorTarj)
+    {
+        await OnInsertJugador.InvokeAsync(valorTarj);
+    }
+
+
+    async Task EditRow(G500Tarjeta tarjeta)
+    {
+        await TarjetaGrid.EditRow(tarjeta);
+    }
+    async void OnUpdateRow(G500Tarjeta tarjeta)
+    {
+        if (tarjeta == TarjetaToInsert) TarjetaToInsert = null;
+        await TarjetaIServ.AddTarjeta(tarjeta);
+    }
+    async Task SaveRow(G500Tarjeta tarjeta)
+    {
+
+        LaTarjeta.Creador = UserIdLog;
+        if (LaTarjeta.Fecha < DateTime.Now.Date.AddDays(-1) || LaTarjeta.Fecha > DateTime.Now.Date.AddDays(365)) LaTarjeta.Fecha = DateTime.Now.Date;
+        LaTarjeta.Estado = 1;
+        LaTarjeta.Status = true;
+        await TarjetaGrid.UpdateRow(tarjeta);
+        await LeerTarjetas();
+
+        /*
+        ElMesage.Severity = NotificationSeverity.Warning;
+        ElMesage.Summary = "Error!";
+        ElMesage.Detail = "El JUGADOR ES OBLIGATORIO!";
+        ShowNotification(ElMesage);
+    */
+    }
+    void CancelEdit(G500Tarjeta tarjeta)
+    {
+        if (tarjeta == TarjetaToInsert) TarjetaToInsert = null;
+        TarjetaGrid.CancelEditRow(tarjeta);
+    }
+    async Task InsertRow()
+    {
+        TarjetaToInsert = new G500Tarjeta();
+        TarjetaToInsert.Fecha = DateTime.Now.Date;
+        TarjetaToInsert.Creador = UserIdLog;
+        TarjetaToInsert.Estado = 1;
+        TarjetaToInsert.Status = true;
+        await TarjetaGrid.InsertRow(TarjetaToInsert);
+    }
+    async void OnCreateRow(G500Tarjeta tarjeta)
+    {
+        tarjeta.Fecha = DateTime.Now.Date;
+        tarjeta.Creador = UserIdLog;
+        if (tarjeta == TarjetaToInsert) TarjetaToInsert = null;
+        await TarjetaIServ.AddTarjeta(tarjeta);
+        // HcpGrid.CancelEditRow(hcp);
+        // ShowNotification(ElMesage);
+    }
+
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+}

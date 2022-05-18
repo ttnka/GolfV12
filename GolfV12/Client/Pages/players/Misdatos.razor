@@ -4,9 +4,8 @@
 @inject NotificationService NS
 @inherits MisdatosBase
 
-<h3>Mis Datos</h3>
 
-@if(Midata == null)
+@if(Midata == null || !NombresGeneral.Any()  || !CamposGeneral.Any() )
 {
     <div class=spinner></div>
 }
@@ -14,12 +13,30 @@ else
 {
     <RadzenTabs RenderMode="TabRenderMode.Client" @bind-SelectedIndex=selectedIndex >
     <Tabs>
-        <RadzenTabsItem Text="Customers">
-            Customers
+        <RadzenTabsItem Text="Lista de Tarjetas">
+            <RadzenCard>
+               <MisTarjetas ElEstado="1" DicHijo=@DicGeneral LosNombres=@NombresGeneral LosCampos=@CamposGeneral OnInsertJugador=@AgregarJugadores /> 
+               <br />
+               <MisTarjetas ElEstado="3" DicHijo=@DicGeneral LosNombres=@NombresGeneral LosCampos=@CamposGeneral />
+            </RadzenCard>
         </RadzenTabsItem>
+
+        <RadzenTabsItem Text="Jugadores" Disabled=@(TarjetaGeneral == null)>
+            <RadzenCard>
+                <LosJugadores DicHijo=@DicGeneral LosNombres=@NombresGeneral TarjetaHijo=@TarjetaGeneral LosJugadores=JugadoresGeneral/>
+            </RadzenCard>
+        </RadzenTabsItem>
+
         <RadzenTabsItem Text="Favoritos">
             Favoritos
         </RadzenTabsItem>
+
+        <RadzenTabsItem Text="Mi Hcp">
+            <RadzenCard>
+                <MiListaHcp DicHijo=@DicGeneral LosCampos=@CamposGeneral />
+            </RadzenCard>
+        </RadzenTabsItem>
+
         <RadzenTabsItem Text="Mis Datos">
             
             <EditForm Model="@Midata" OnSubmit="actualizarMisDatos">
@@ -58,14 +75,8 @@ else
                 <RadzenButton style="width: 160px" ButtonType="ButtonType.Submit" Text="Actualizar" Disabled=@EditarMisDatos />
             
             </EditForm>
-            <RadzenCard>
-                <MiHcp />
-            </RadzenCard>
-
-            <RadzenCard>
-                Listado de Mis Handy
-            </RadzenCard>
-
+            <br />
+            
         </RadzenTabsItem>
 
         
@@ -81,7 +92,7 @@ else
 
 @code {
 
-    int selectedIndex = 0;
+    
 
     async void actualizarMisDatos()
     {

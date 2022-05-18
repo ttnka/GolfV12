@@ -37,7 +37,7 @@ namespace GolfV12.Client.Pages.Sistema
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
-            ElUsuario = await PlayerIServ.GetPlayer(UserIdLog);
+            ElUsuario = (await PlayerIServ.Filtro($"play1id_-_userid_-_{UserIdLog}")).FirstOrDefault() ;
             await NombresEscritore();
             await EscribirBitacoraUno(ElUsuario.UserId, BitaAcciones.Consultar, false,
                 "Consulto el listado de la bitacora."); 
@@ -47,7 +47,7 @@ namespace GolfV12.Client.Pages.Sistema
         protected async Task NombresEscritore()
         {
             TodosPlayer.Add("Vacio", "No hay nombre");
-            var AllNames =  await PlayerIServ.GetPlayers();
+            var AllNames =  await PlayerIServ.Filtro("All");
             foreach( var nombres in AllNames )
             {
                 if (!TodosPlayer.ContainsKey(nombres.UserId))

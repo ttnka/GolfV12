@@ -28,7 +28,7 @@ namespace GolfV12.Client.Pages.Tarjeta
             var autState = await AuthStateTask;
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
-            ElUser = await PlayerIServ.GetPlayer(UserIdLog);
+            ElUser = (await PlayerIServ.Filtro($"play1id_-_{UserIdLog}")).FirstOrDefault();
 
             LosCampos = await CampoIServ.GetCampos();
 

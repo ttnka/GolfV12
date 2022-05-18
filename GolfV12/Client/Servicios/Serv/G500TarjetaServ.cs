@@ -29,8 +29,10 @@ namespace GolfV12.Client.Servicios.Serv
             if (!string.IsNullOrEmpty(clave) & clave.Count()> 13)
             {
                 var parametros = clave.Split("_-_");
+                /*
                 string titulo = "id,creador,fecha,campo,titulo,estado,status";
                 var titulos = titulo.Split(",");
+                */
                 for (int i = 1; i < parametros.Length; i += 2)
                 {
                     if (!ParaDic.ContainsKey(parametros[i])) 
@@ -49,6 +51,14 @@ namespace GolfV12.Client.Servicios.Serv
                         break;
                     case "tar2creador":
                         resultado += "tar2creador_-_creador_-_" + ParaDic["creador"] + "_-_status_-_true";
+                        break;
+                    case "tar3creador":
+                        resultado += "tar3creador_-_creador_-_" + ParaDic["creador"] + "_-_estado_-_" +
+                                ParaDic["estado"] + "_-_status_-_true";
+                        break;
+                    case "tar4creador":
+                        resultado += "tar4creador_-_creador_-_" + ParaDic["creador"] + "_-_estado_-_" +
+                                ParaDic["estado"] + "_-_status_-_true";
                         break;
                 }
                // resultado = resultado.Substring(0, resultado.Length - 3);

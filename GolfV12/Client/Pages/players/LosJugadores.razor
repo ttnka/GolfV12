@@ -1,0 +1,141 @@
+﻿@inherits LosJugadoresBase
+@inject NotificationService NS
+@using GolfV12.Shared;
+
+<!-- id, tarjeta, player, hcp, estado, status --> 
+
+
+    <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Agregar Jugador" 
+                Click="@InsertRow" Disabled=@(JugadorToInsert != null) />
+
+ <RadzenDataGrid @ref=@JugadoresGrid AllowFiltering="true" AllowPaging="true" PageSize="50" 
+                AllowSorting="true" EditMode="DataGridEditMode.Single"
+                Data=@LosJugadores TItem="G510Jugador" RowUpdate="@OnUpdateRow" 
+                RowCreate="@OnCreateRow" >
+        <Columns>
+            <RadzenDataGridColumn TItem="G510Jugador" Property="Id" Title="Id" Width="60px" Filterable="false" >
+                <Template Context="datos">
+                    @if (DatosDic.ContainsKey($"RenglonJugador_{datos.Id}"))
+                    {
+                        @DatosDic[$"RenglonJugador_{datos.Id}"]
+                    }
+                    else
+                    {
+                        <label>0</label>
+                    }
+                    
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G510Jugador" Title="Jugador" Property="Player" Width="150px" Filterable="false">
+                <Template Context="datos">
+                @if (DicHijo.ContainsKey($"Nombre_{datos.Player}"))
+                {
+                    @DicHijo[$"Nombre_{datos.Player}"];
+                }else
+                {
+                    <label>No hay nombre del Jugador</label>
+                }
+                </Template>
+
+                <EditTemplate Context="datos">
+                    <RadzenDropDown Name="Player" AllowClear="false" 
+                        AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.Default" 
+                        FilterOperator="StringFilterOperator.Contains"  
+                        Data="@LosNombres"  @bind-Value=datos.Player ValueProperty="Key" TextProperty="Value" 
+                        Style="width:100%; display: block;">
+                    </RadzenDropDown> 
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G510Jugador" Property="Hcp" Title="Hcp" Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @datos.Hcp
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="Hcp" @bind-Value="datos.Hcp"  />
+                    
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G510Jugador" Context="sampleBlazorModelsSampleOrder" Filterable="false" 
+                    Sortable="false" TextAlign="TextAlign.Center" Width="120px" Title="Estado">
+                <Template Context="datos">
+                @if (TarjetaHijo.Estado <= 2)
+                {
+                    <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" 
+                        Click="@(args => EditRow(datos))" @onclick:stopPropagation="true">
+                    </RadzenButton>
+                }                 
+
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Primary" Class="m-1" Click="@((args) => SaveRow(datos))">
+                    </RadzenButton>
+                    <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@((args) => CancelEdit(datos))">
+                    </RadzenButton>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+        </Columns>
+   </RadzenDataGrid>    
+
+
+
+@code {
+    G510Jugador JugadorToInsert;
+
+    async Task EditRow(G510Jugador jugador)
+    {
+        await JugadoresGrid.EditRow(jugador);
+    }
+    async void OnUpdateRow(G510Jugador jugador)
+    {
+        if (jugador == JugadorToInsert) JugadorToInsert = null;
+        await JugadorIServ.AddJugador(jugador);
+    }
+    async Task SaveRow(G510Jugador jugador)
+    {
+        jugador.Tarjeta = TarjetaHijo.Id;
+
+        await JugadoresGrid.UpdateRow(jugador);
+    }
+    void CancelEdit(G510Jugador jugador)
+    {
+        if (jugador == JugadorToInsert) JugadorToInsert = null;
+        JugadoresGrid.CancelEditRow(jugador);
+    }
+    async Task InsertRow()
+    {
+        JugadorToInsert = new G510Jugador();
+        JugadorToInsert.Tarjeta = TarjetaHijo.Id;
+        JugadorToInsert.Estado = 1;
+        JugadorToInsert.Status = true;
+        await JugadoresGrid.InsertRow(JugadorToInsert);
+    }
+    async void OnCreateRow(G510Jugador jugador)
+    {
+        if (jugador == JugadorToInsert) JugadorToInsert = null;
+
+        if (!DatosDic.ContainsKey($"Tarjeta_{TarjetaHijo.Id}_Jugador_{jugador.Id}"))
+        {
+            G510Jugador resultado = new G510Jugador();
+            resultado = await JugadorIServ.AddJugador(jugador);
+            await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false,
+                $"El usuario agrego un nuevo jugador {DicHijo[$"Nombre_{resultado.Player}"]} {resultado.Player}");
+            DatosDic.Add($"Tarjeta_{TarjetaHijo.Id}_Jugador_{jugador.Id}", jugador.Id.ToString());
+        }
+        else
+        {
+            CancelEdit(jugador);
+        }
+
+        // HcpGrid.CancelEditRow(hcp);
+        // ShowNotification(ElMesage);
+    }
+
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+}

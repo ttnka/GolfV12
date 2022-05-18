@@ -56,7 +56,7 @@ namespace GolfV12.Client.Pages.Tarjeta
             {
                 claveP = $"tar1creador_-_creador_-_{PlayerId}";
             }
-            AllPlayers = await PlayersServ.GetPlayers();
+            AllPlayers = await PlayersServ.Filtro("All");
             if (AllPlayers != null)
             {
                 foreach (var player in AllPlayers)

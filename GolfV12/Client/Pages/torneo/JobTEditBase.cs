@@ -59,7 +59,7 @@ namespace GolfV12.Client.Pages.torneo
         protected async Task LeerNombres()
         {
             //List<KeyValuePair<string, string>> NamesTemp;
-            var AllNames = await PlayerISer.GetPlayers();
+            var AllNames = await PlayerISer.Filtro("All");
             foreach (var name in AllNames)
             {
                 NamesTemp.Add(new KeyValuePair<string, string>(name.UserId,

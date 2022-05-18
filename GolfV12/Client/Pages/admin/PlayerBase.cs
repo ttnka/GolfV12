@@ -9,9 +9,9 @@ namespace GolfV12.Client.Pages.admin
     public class PlayerBase : ComponentBase
     {
         [Inject]
-        public IG120PlayerServ iG120PlayerServ { get; set; }
+        public IG120PlayerServ PlayerIServ { get; set; }
         [Inject]
-        public IG110OrganizacionServ  iG110OrgServ { get; set; }
+        public IG110OrganizacionServ  OrgIServ { get; set; }
         public IEnumerable<G120Player> LosJugadores { get; set; } = Enumerable.Empty<G120Player>();
         public Dictionary<int, string> LasOrg { get; set; } = new Dictionary<int, string>();      
         public NavigationManager MN { get; set; }
@@ -23,7 +23,7 @@ namespace GolfV12.Client.Pages.admin
             var user = autState.User;
             if (user.Identity.IsAuthenticated) userIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
-            LosJugadores = await iG120PlayerServ.GetPlayers();
+            LosJugadores = await PlayerIServ.Filtro("All");
             await OrganizacionesLeer();
             await EscribirBitacoraUno(userIdLog, BitaAcciones.Consultar, false,
                 "Consulto el listado de jugadores");
@@ -32,7 +32,7 @@ namespace GolfV12.Client.Pages.admin
         public async Task OrganizacionesLeer()
         {
             LasOrg.Add(0, "No hay datos");
-            var OrgAll = await iG110OrgServ.Filtro("org1_-_id_-_0");
+            var OrgAll = await OrgIServ.Filtro("org1_-_id_-_0");
             foreach(var org in OrgAll)
             {
                 if (!LasOrg.ContainsKey(org.Id)) LasOrg.Add(org.Id, $"{org.Clave} {org.Nombre}");

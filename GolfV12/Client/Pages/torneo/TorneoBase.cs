@@ -38,7 +38,7 @@ namespace GolfV12.Client.Pages.torneo
 
         protected async Task LeerPlayers()
         {
-            var Players = await PlayerIServ.GetPlayers();
+            var Players = await PlayerIServ.Filtro("All");
             foreach (var player in Players)
             {
                 if (!AllPlayers.ContainsKey(player.UserId)) AllPlayers.Add(player.UserId,

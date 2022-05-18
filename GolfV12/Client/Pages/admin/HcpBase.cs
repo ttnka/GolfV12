@@ -48,7 +48,7 @@ namespace GolfV12.Client.Pages.admin
             LosPlayers.Add("Vacio", "No se encontro nombre de registro");
             if (string.IsNullOrEmpty(PlayerId)) 
             { 
-                var Allplayers = await PlayerServ.GetPlayers();
+                var Allplayers = await PlayerServ.Filtro("All");
                 foreach (var player in Allplayers)
                 {
                     if (!LosPlayers.ContainsKey(player.UserId)) LosPlayers.Add(player.UserId, 
@@ -57,7 +57,7 @@ namespace GolfV12.Client.Pages.admin
             } 
             else
             { 
-                var Oneplayer = await PlayerServ.GetPlayer(PlayerId); 
+                var Oneplayer = (await PlayerServ.Filtro($"play1id_-_userid_-_{PlayerId}")).FirstOrDefault(); 
                 var textTemp = string.Empty;
                 if(Oneplayer != null) 
                     { 

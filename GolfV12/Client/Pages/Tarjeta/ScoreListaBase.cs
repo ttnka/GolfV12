@@ -51,7 +51,7 @@ namespace GolfV12.Client.Pages.Tarjeta
         protected async Task LeerNombres()
         {
             //List<KeyValuePair<string, string>> NamesTemp;
-            var AllNames = await PlayersIServ.GetPlayers();
+            var AllNames = await PlayersIServ.Filtro("All");
             
             foreach (var name in AllNames)
             {

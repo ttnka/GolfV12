@@ -16,7 +16,7 @@ namespace GolfV12.Server.Controllers
         }
         /*
         [HttpGet("{filtro}")]
-        public async Task<ActionResult<IEnumerable<G120Player>>> Buscar(string? userId,
+        public async Task<ActionResult<IEnumerable<G120Player>>> Filtro(string? userId,
             int org, string? apodo, string? nombre, string? paterno)
         {
             try
@@ -31,7 +31,7 @@ namespace GolfV12.Server.Controllers
                     "buscando jugadores");
             }
         }
-        */
+        
         [HttpGet]
         public async Task<ActionResult> GetPlayers()
         {
@@ -59,15 +59,30 @@ namespace GolfV12.Server.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error al leer la base de datos, buscando un jugador");
             }
         }
-        
+        */
+        [HttpGet("{filtro}")]
+        public async Task<ActionResult<IEnumerable<G120Player>>> Filtro(string? clave)
+        {
+            try
+            {
+                var resultado = await _playerIFace.Filtro(clave);
+                return resultado.Any() ? Ok(resultado) : NotFound();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error al leer la base de datos, " +
+                    "buscando jugadores");
+            }
+        }
         [HttpPost]
         public async Task<ActionResult<G120Player>> NewPlayer(G120Player player)
         {
             try
             {
                 if (player == null) return BadRequest();
-                var newPlayer = await _playerIFace.AddPlayer(player);
-                return CreatedAtAction(nameof(GetPlayer), new { userId = player.UserId }, newPlayer);
+                return await _playerIFace.AddPlayer(player);
+                
+                //return CreatedAtAction(nameof(GetPlayer), new { userId = player.UserId }, newPlayer);
             }
             catch (Exception)
             {
