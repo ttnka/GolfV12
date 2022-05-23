@@ -78,6 +78,7 @@ namespace GolfV12.Server.Models.Repo
                 {
                     res.Tarjeta = jugador.Tarjeta;
                     res.Player = jugador.Player;
+                    res.Hcp = jugador.Hcp;
                     res.Estado = jugador.Estado;
                     res.Status = jugador.Status;
                 }

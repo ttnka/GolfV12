@@ -1,0 +1,306 @@
+﻿@page "/players/scores/{tarjetaId}"
+@using GolfV12.Shared;
+@inject NotificationService NS
+@inherits LosScoresBase
+
+<h3>La Tarjeta</h3>
+<div class="row">
+
+</div> 
+
+@if (LosScores.Any() && LosJugadores.Any() && DatosDic.Any())
+{
+    <RadzenCard>
+        <RadzenAccordion>
+                <Items>
+                    <RadzenAccordionItem Text="Captura" Icon="add_circle_outline">
+
+                        <RadzenFieldset Text="Agrega Golpes a la tarjeta">
+                            <div class="row">
+
+                            </div> 
+                            <hr>
+                                                
+                        </RadzenFieldset>
+
+                    </RadzenAccordionItem>
+                    <RadzenAccordionItem Text="Tarjeta" Icon="account_box">
+                        Details for Employees
+                    </RadzenAccordionItem>
+                    <RadzenAccordionItem Text="Bolitas" Icon="accessibility">
+                        Details for Customers
+                    </RadzenAccordionItem>
+                </Items>
+            </RadzenAccordion>
+        </RadzenCard>           
+
+
+    <RadzenDataGrid @ref="ScoreGrid" AllowFiltering="true" AllowPaging="true" PageSize="50" 
+                AllowSorting="true" AllowColumnResize="false" Style="width: 1500px"
+                RowRender="@RowRender" ExpandMode="DataGridExpandMode.Single" AllowGrouping="true"
+                Data="@LosScores" TItem="TarjetaMolde">
+                
+        <Template Context="datos1">
+            <RadzenCard Style="margin-bottom:20px">
+                Jugador:
+                @if (@DatosDic.ContainsKey(@datos1.UserId))
+                    { @DatosDic[$"Nombre_{datos1.UserId}"]; } 
+                else 
+                    {  <label>No hay nombre del jugador!</label>  };
+            </RadzenCard>
+            <RadzenTabs>
+                <Tabs>
+                    <RadzenTabsItem Text="Detalle de Apuesta ">
+                        <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@LosScores" TItem="TarjetaMolde">
+                            <Columns>
+                                <RadzenDataGridColumn TItem="TarjetaMolde" Property="Renglon" Title="Renglon" />
+                                <RadzenDataGridColumn TItem="TarjetaMolde" Property="UserId" Title="Jugador" />
+                              
+                            </Columns>
+                        </RadzenDataGrid>
+                    </RadzenTabsItem>
+                    <RadzenTabsItem Text="Extras">
+                        <RadzenDataList WrapItems="true" AllowPaging="true" Data="@LosScores" TItem="TarjetaMolde" PageSize="10">
+                            <Template Context="datos2">
+                                <RadzenCard Style="width:100px; height:100px">
+                                    <h4 class="text-thin">Jugador</h4>
+                                    <b>@datos2.UserId</b>
+                                </RadzenCard>
+                            </Template>
+                        </RadzenDataList>
+                    </RadzenTabsItem>
+                </Tabs>
+            </RadzenTabs>
+        </Template>
+<!-- AQUI EMPIEZA REPORTE-->
+        
+        <Columns>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="Hcp" Title="Hcp" Width="60px" Filterable=false >
+                
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="Hcp" TValue=int @bind-Value=@datos.hcp ShowUpDown=false  Min=-5 Max=35 
+                        Change="(arg => RenglonAddUpdateHcp(datos.hcpId, TarjetaId, datos.UserId, datos.hcp))" />
+
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="UserId" Title="Jugador" Width="150px">
+                
+                <Template Context="datos">
+
+                    @DatosDic[$"Nombre_{datos.UserId}"]
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H1" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+                
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H1" TValue=int @bind-Value=@datos.H1 ShowUpDown=false Min=0 Max=15  
+                         Change="(arg => RenglonAddUpdate(1, datos.UserId, datos.H1, datos.H1Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde" Title="H2" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+                
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H2" TValue=int @bind-Value=@datos.H2 ShowUpDown=false Min=0 Max=15
+                        Change="(arg => RenglonAddUpdate(2, datos.UserId, datos.H2, datos.H2Id ))"/>
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde" Title="H3" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+                
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H3" TValue=int @bind-Value=@datos.H3 ShowUpDown=false Min=0 Max=15
+                        Change="(arg => RenglonAddUpdate(3, datos.UserId, datos.H3, datos.H3Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde" Title="H4" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H4" TValue=int @bind-Value=@datos.H4 ShowUpDown=false Min=0 Max=15 
+                        Change="(arg => RenglonAddUpdate(4, datos.UserId, datos.H4, datos.H4Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde" Title="H5" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H5" TValue=int @bind-Value=@datos.H5 ShowUpDown=false Min=0 Max=15 
+                        Change="(arg => RenglonAddUpdate(5, datos.UserId, datos.H5, datos.H5Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde" Title="H6" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H6" TValue=int @bind-Value=@datos.H6 ShowUpDown=false Min=0 Max=15 
+                        Change="(arg => RenglonAddUpdate(6, datos.UserId, datos.H6, datos.H6Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde" Title="H7" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H7" TValue=int @bind-Value=@datos.H7 ShowUpDown=false Min=0 Max=15 
+                        Change="(arg => RenglonAddUpdate(7, datos.UserId, datos.H7, datos.H7Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde" Title="H8" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H8" TValue=int @bind-Value=@datos.H8 ShowUpDown=false Min=0 Max=15 
+                        Change="(arg => RenglonAddUpdate(8, datos.UserId, datos.H8, datos.H8Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde" Title="H9" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H9" TValue=int @bind-Value=@datos.H9 ShowUpDown=false Min=0 Max=15 
+                        Change="(arg => RenglonAddUpdate(9, datos.UserId, datos.H9, datos.H9Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde" Title="F9" FormatString="{0:d}" Width="60px" Filterable=false >
+                <Template Context="datos"> 
+                    @if (@DatosDic.ContainsKey($"Jugador_{datos.UserId}_F9"))
+                    {
+                        @DatosDic[$"Jugador_{datos.UserId}_F9"]
+                    }
+                    else
+                    {
+                        <b>0</b>
+                    }
+                </Template>
+            
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H10" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H10" TValue=int @bind-Value=@datos.H10 ShowUpDown=false Min=0 Max=15  
+                         Change="(arg => RenglonAddUpdate(10, datos.UserId, datos.H10, datos.H10Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H11" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H11" TValue=int @bind-Value=@datos.H11 ShowUpDown=false Min=0 Max=15  
+                         Change="(arg => RenglonAddUpdate(11, datos.UserId, datos.H11, datos.H11Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H12" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H12" TValue=int @bind-Value=@datos.H12 ShowUpDown=false Min=0 Max=15  
+                         Change="(arg => RenglonAddUpdate(12, datos.UserId, datos.H12, datos.H12Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H13" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H13" TValue=int @bind-Value=@datos.H13 ShowUpDown=false Min=0 Max=15  
+                         Change="(arg => RenglonAddUpdate(13, datos.UserId, datos.H13, datos.H13Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H14" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H14" TValue=int @bind-Value=@datos.H14 ShowUpDown=false Min=0 Max=15  
+                         Change="(arg => RenglonAddUpdate(14, datos.UserId, datos.H14, datos.H14Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H15" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H15" TValue=int @bind-Value=@datos.H15 ShowUpDown=false Min=0 Max=15  
+                         Change="(arg => RenglonAddUpdate(15, datos.UserId, datos.H15, datos.H15Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H16" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H16" TValue=int @bind-Value=@datos.H16 ShowUpDown=false Min=0 Max=15  
+                         Change="(arg => RenglonAddUpdate(16, datos.UserId, datos.H16, datos.H16Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H17" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H17" TValue=int @bind-Value=@datos.H17 ShowUpDown=false Min=0 Max=15  
+                         Change="(arg => RenglonAddUpdate(17, datos.UserId, datos.H17, datos.H17Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H18" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+                <Template Context="datos"> 
+                    <RadzenNumeric Name="H18" TValue=int @bind-Value=@datos.H18 ShowUpDown=false Min=0 Max=15  
+                         Change="(arg => RenglonAddUpdate(18, datos.UserId, datos.H18, datos.H18Id ))" />
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="B9" FormatString="{0:d}" Width="60px"Filterable=false >
+                <Template Context="datos"> 
+                    @if (@DatosDic.ContainsKey($"Jugador_{datos.UserId}_B9"))
+                    {
+                        @DatosDic[$"Jugador_{datos.UserId}_B9"]
+                    }
+                    else
+                    {
+                        <b>0</b>
+                    }
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="Total" FormatString="{0:d}" Width="60px" Filterable=false>
+                <Template Context="datos"> 
+                    @if (@DatosDic.ContainsKey($"Jugador_{datos.UserId}_Total"))
+                    {
+                        @DatosDic[$"Jugador_{datos.UserId}_Total"]
+                    }
+                    else
+                    {
+                        <b>0</b>
+                    }
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+   
+} 
+
+else
+{
+    <div class="spinner"></div>
+}
+
+--Tatanka--
+@code {
+
+
+    async void RenglonAddUpdate(int hoyoT, string jugadorIdd, int scoredd, string iddd)
+    {
+        G520Score scoreTemp = new();
+        scoreTemp.Player = jugadorIdd;
+        scoreTemp.Hoyo = hoyoT;
+        scoreTemp.Score = scoredd;
+        scoreTemp.Tarjeta = TarjetaId;
+        scoreTemp.Id = iddd;
+
+        await AddUpdateScore(scoreTemp);
+
+        //Console.WriteLine($"Jugador {scoreTemp.Player} -- hoyo {scoreTemp.Hoyo} -- scoredd {scoreTemp.Score} -- nomas"); 
+    }
+    async void RenglonAddUpdateHcp(string hcpId, string hcpTarj, string hcpPlayer, int hcp) {
+        G510Jugador jugadorTemp = new();
+        jugadorTemp.Id = hcpId;
+        jugadorTemp.Tarjeta = hcpTarj;
+        jugadorTemp.Player = hcpPlayer;
+        jugadorTemp.Hcp = hcp;
+        await UpdateHcpPlayer(jugadorTemp);
+    }
+
+    void Cancel(){}
+    void RowRender(RowRenderEventArgs<TarjetaMolde> args)
+    {
+
+        //args.Expandable = args.Data.ShipCountry == "France" || args.Data.ShipCountry == "Brazil";
+    }
+}
+

@@ -87,3 +87,43 @@ a, .btn-link {
 .OcultarObjeto {
     display: none;
 }
+.i-circle-green {
+    background: #ff0000;
+    color: #fff;
+    padding: 5px 20px;
+    border-radius: 50%;
+    font-size: 35px;
+}
+
+.i-circle-red {
+    background: #ff0000;
+    color: #fff;
+    padding: 5px 20px;
+    border-radius: 50%;
+    font-size: 35px;
+}
+.i-circle-blue {
+    background: #ff0000;
+    color: #fff;
+    padding: 5px 20px;
+    border-radius: 50%;
+    font-size: 35px;
+}
+.i-circle-black {
+    background: #ff0000;
+    color: #fff;
+    padding: 5px 20px;
+    border-radius: 50%;
+    font-size: 35px;
+}
+
+.i-cuadrado-black {
+    font-size: 8px;
+    font-weight: bold;
+    letter-spacing: 0px;
+    background: black;
+    color: white;
+    height: 50px;
+    width: 50px;
+    line-height: 50px;
+}

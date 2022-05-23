@@ -26,7 +26,10 @@
                     }
                     @if(ElEstado != 3) 
                     {
+                        <!--
                         <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Click="@(arg => @InsertJugador(datos))"  />
+                        -->
+                        <RadzenLink Icon="add_circle_outline" Path=@($"/players/jugadores/{datos.Id}") />
                     }
                 </Template>
             </RadzenDataGridColumn>
@@ -148,6 +151,7 @@
                     <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" 
                         Click="@(args => EditRow(datos))" @onclick:stopPropagation="true">
                     </RadzenButton>
+                    <RadzenLink Icon="add_circle_outline" Text="Scores" Path=@($"/players/scores/{datos.Id}") />
                         @if (datos.Estado == 1) 
                     {
                         <label>Programado</label>
