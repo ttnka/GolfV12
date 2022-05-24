@@ -25,7 +25,7 @@ namespace GolfV12.Server.Models.Repo
             // clave = org1
             // ejeplo = organizaciones?clave=org1_-_nombre_-_ivan_-_desc_-_conocido
             IQueryable<G500Tarjeta> querry = _appDbContext.Tarjetas;
-            if (string.IsNullOrWhiteSpace(clave)) return await querry.ToListAsync();
+            if (string.IsNullOrWhiteSpace(clave) || clave.Count() < 10) return await querry.ToListAsync();
 
             string[] parametros = clave.Split("_-_");
             Dictionary<string, string> ParaDic = new Dictionary<string, string>();

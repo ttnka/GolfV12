@@ -171,6 +171,7 @@ namespace GolfV12.Client.Pages.players
                         tarjetaMolde.H18 = DatosDic.ContainsKey($"Jugador_{TM.Player}_Hoyo_{18}") ?
                                 int.Parse(DatosDic[$"Jugador_{TM.Player}_Hoyo_{18}"]) : 0;
                     }
+
                     {
                         tarjetaMolde.H1Id = DatosDic.ContainsKey($"Jugador_{TM.Player}_HoyoId_{1}") ?
                                 (DatosDic[$"Jugador_{TM.Player}_HoyoId_{1}"]) : " ";

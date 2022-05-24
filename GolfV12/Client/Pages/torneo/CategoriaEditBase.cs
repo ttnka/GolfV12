@@ -51,10 +51,7 @@ namespace GolfV12.Client.Pages.torneo
                 LaCategoria = await CatIServ.GetCategoria(CategoriaId);
             }
         }
-        protected async Task LeerDatos()
-        {
-
-        }
+        
 
         public async Task SaveCat()
         {

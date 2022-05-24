@@ -25,7 +25,7 @@ namespace GolfV12.Client.Servicios.Serv
             // clave = jug1
             // ejeplo = G510Jugador/filtro?clave=jug1_-_titulo_-_juegodellunes_-_campo_-_1
             var resultado = "/api/G510Jugador/filtro?clave=";
-            if (!string.IsNullOrEmpty(clave))
+            if (!string.IsNullOrEmpty(clave) & clave.Count() > 13)
             {
                 var parametros = clave.Split("_-_");
                 // "id,tarjeta,player,estado,status";

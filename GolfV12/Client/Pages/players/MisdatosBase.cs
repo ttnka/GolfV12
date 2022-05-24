@@ -115,31 +115,38 @@ namespace GolfV12.Client.Pages.players
                 }
             }
         }
+        
         protected async Task LeerJugadores()
         {
             var JugadorTemp = await JugadorIServ.Filtro("All");
             if (DicGeneral.ContainsKey($"TarjetasCreador"))
             {
                 var tarjetasTemp = DicGeneral[$"TarjetasCreador"].Split(",");
-                foreach (var t in tarjetasTemp)
+                if (tarjetasTemp.Any())
                 {
-                    if (!DicGeneral.ContainsKey($"JugadoresTarjeta_{t}"))
+                    foreach (var t in tarjetasTemp)
                     {
-                        DicGeneral.Add($"JugadoresTarjeta_{t}", JugadorTemp.Count(e => e.Tarjeta == t).ToString());
-
+                        if (!DicGeneral.ContainsKey($"JugadoresTarjeta_{t}"))
+                        {
+                            DicGeneral.Add($"JugadoresTarjeta_{t}", JugadorTemp.Count(e => e.Tarjeta == t).ToString());
+                        }
                     }
                 }
             }
-            foreach (var t in JugadorTemp)
+            if (JugadorTemp.Any())
             {
-                if(!DicGeneral.ContainsKey($"Tarjeta_{t.Tarjeta}_jugador_{t.Player}"))
+                foreach (var t in JugadorTemp)
                 {
-                    DicGeneral.Add($"Tarjeta_{t.Tarjeta}_jugador_{t.Player}", t.Player.ToString());
-                }               
-            }
+                    if(!DicGeneral.ContainsKey($"Tarjeta_{t.Tarjeta}_jugador_{t.Player}"))
+                    {
+                        DicGeneral.Add($"Tarjeta_{t.Tarjeta}_jugador_{t.Player}", t.Player.ToString());
+                    }               
+                }
+            } 
 
             JugadoresGeneral = (await JugadorIServ.Filtro($"jug2tarjeta_-_tarjeta_-_{TarjetaGeneral.Id}")).ToList();
         }
+        
         public async Task MisDatosUpdate()
         {
             var resultado = await PlayerIServ.UpdatePlayer(Midata);

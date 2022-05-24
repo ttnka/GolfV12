@@ -85,7 +85,7 @@ namespace GolfV12.Client.Pages.players
             {
                 LosJugadores = await JugadorIServ.Filtro($"jug2tarjeta_-_tarjeta_-_{TarjetaId}");
                 if (LosJugadores.Any())
-                {
+                { 
                     int renglon = 1;
                     foreach (var jugadorx in LosJugadores)
                     {

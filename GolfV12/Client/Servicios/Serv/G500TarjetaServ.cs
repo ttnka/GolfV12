@@ -26,7 +26,7 @@ namespace GolfV12.Client.Servicios.Serv
             // ejeplo = G500Tarjeta/filtro?clave=tar1_-_titulo=juegodellunes_-_campo=1
             var resultado = "/api/G500Tarjeta/filtro?clave=";
             Dictionary<string, string> ParaDic = new Dictionary<string, string>();
-            if (!string.IsNullOrEmpty(clave) & clave.Count()> 13)
+            if (!string.IsNullOrEmpty(clave) & clave.Count() > 13)
             {
                 var parametros = clave.Split("_-_");
                 /*
@@ -61,7 +61,7 @@ namespace GolfV12.Client.Servicios.Serv
                                 ParaDic["estado"] + "_-_status_-_true";
                         break;
                 }
-               // resultado = resultado.Substring(0, resultado.Length - 3);
+               
             }
             return await _httpClient.GetFromJsonAsync<IEnumerable<G500Tarjeta>>(resultado);
         }

@@ -68,7 +68,7 @@ namespace GolfV12.Client.Pages.Tarjeta
 
             LasTarjetas = await TarjetaServ.Filtro(claveP);
 
-            LosParticipantes = await ParticipantesIServ.Filtro("");
+            LosParticipantes = await ParticipantesIServ.Filtro("All");
             
             if (LosParticipantes.Count() > 0)
             {

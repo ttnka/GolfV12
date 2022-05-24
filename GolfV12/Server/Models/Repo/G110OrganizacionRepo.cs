@@ -52,10 +52,10 @@ namespace GolfV12.Server.Models.Repo
             if (string.IsNullOrWhiteSpace(clave)) return await querry.ToListAsync();
             
             string[] parametros = clave.Split("_-_");
-            
+            int i = 1;
             if (parametros[0] == "org1")
             {
-                for(int i = 1; i < parametros.Length; i++)
+                for(i = 1; i < parametros.Length; i++)
                 {
                     DatoTemp1 = parametros[i];
                     DatoTemp2 = parametros[i+1];
@@ -76,8 +76,8 @@ namespace GolfV12.Server.Models.Repo
                             break ;
                             
                     }  
-                    return await querry.ToListAsync();
-                }
+                 }
+                
             }
             return await querry.ToListAsync();
          }

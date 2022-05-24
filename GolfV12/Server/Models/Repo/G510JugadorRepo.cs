@@ -25,7 +25,12 @@ namespace GolfV12.Server.Models.Repo
             // clave = jug1
             // ejeplo = jugador?clave=jug1_-_player_-_ivan_-_desc=conocido
             IQueryable<G510Jugador> querry = _appDbContext.Jugadores;
-            if (string.IsNullOrWhiteSpace(clave)) return await querry.ToListAsync();
+            if (string.IsNullOrWhiteSpace(clave) || clave.Count() < 10)
+            {
+                var res = await querry.ToListAsync();
+                return res;
+            }    
+                //return await querry.ToListAsync();
 
             string[] parametros = clave.Split("_-_");
             Dictionary<string, string> Condiciones = new Dictionary<string, string>();

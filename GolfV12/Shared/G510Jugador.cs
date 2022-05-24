@@ -14,7 +14,7 @@ namespace GolfV12.Shared
         public string Tarjeta { get; set; } = string.Empty;
         public string Player { get; set; } = string.Empty;
         public decimal Hcp { get; set; } = 0;
-        public TeamsTemp Team { get; set; } = TeamsTemp.Hole_in_One;
+        // public TeamsTemp Team { get; set; } = TeamsTemp.Hole_in_One;
         public int Estado { get; set; } = 2;
         public bool Status { get; set; } = true;
     }
