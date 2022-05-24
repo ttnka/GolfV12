@@ -54,8 +54,10 @@ namespace GolfV12.Client.Servicios.Serv
             if (!string.IsNullOrEmpty(clave) && clave.Count() > 13)
             {
                 var parametros = clave.Split("_-_");
+                /*
                 string titulo = "userid,nombre,paterno,materno,apodo,bday,nivel,organizacionid,estado,status";
                 var titulos = titulo.Split(",");
+                */
                 for (int i = 1; i < parametros.Length; i += 2)
                 {
                     if (!ParaDic.ContainsKey(parametros[i]))

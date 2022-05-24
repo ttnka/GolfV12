@@ -16,6 +16,23 @@ namespace GolfV12.Server.Controllers
         }
 
         [HttpGet("{filtro}")]
+        public async Task<ActionResult<IEnumerable<G176Hoyo>>> Filtro(string? clave)
+        {
+            try
+            {
+                var resultado = await _hoyoIFace.Filtro(clave);
+                return Ok(resultado);
+                //return resultado.Any() ? Ok(resultado) : NotFound();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Error al leer la base de datos, buscando Hoyos del campo");
+            }
+        }
+
+        /*
+        [HttpGet("{filtro}")]
         public async Task<ActionResult<IEnumerable<G176Hoyo>>> Buscar(int campo, 
                 string? ruta, int hoyoN)
         {
@@ -60,14 +77,19 @@ namespace GolfV12.Server.Controllers
                     "Error al leer la base de datos, buscando un hoyo del campo");
             }
         }
+        */
+
         [HttpPost]
         public async Task<ActionResult<G176Hoyo>> NewHoyo(G176Hoyo hoyo)
         {
             try
             {
                 if (hoyo == null) return BadRequest();
+                return await _hoyoIFace.AddHoyo(hoyo);
+                /*
                 var newHoyo = await _hoyoIFace.AddHoyo(hoyo);
                 return CreatedAtAction(nameof(GetHoyo), new { hoyoId = hoyo.Id }, newHoyo);
+                */
             }
             catch (Exception)
             {

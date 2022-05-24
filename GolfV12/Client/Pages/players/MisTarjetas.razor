@@ -37,6 +37,12 @@
             <RadzenDataGridColumn TItem="G500Tarjeta" Property="Fecha" Title="Fecha" Width="100px" Filterable="false">
                 <Template Context="datos">
                     @datos.Fecha.Day / @datos.Fecha.Month / @datos.Fecha.Year 
+                    @if (datos.Estado < 3)
+                    {
+                        <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" 
+                        Click="@(args => EditRow(datos))" @onclick:stopPropagation="true">
+                        </RadzenButton>
+                    }
                 </Template>
                 <EditTemplate Context="datos">
                     <RadzenDatePicker @bind-Value="datos.Fecha" DateFormat="d"  />
@@ -99,7 +105,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Captura" Title="Captura" Filterable="false"  Width="75px">
+            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Captura" Title="Captura" Filterable="false"  Width="100px">
                 <Template Context="datos">
                     @datos.Captura
                     <!--
@@ -125,7 +131,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Consulta" Title="Consulta" Filterable="false"  Width="75px">
+            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Consulta" Title="Consulta" Filterable="false"  Width="100px">
                 <Template Context="datos">
                     @datos.Consulta
                     
@@ -146,12 +152,18 @@
             <RadzenDataGridColumn TItem="G500Tarjeta" Context="sampleBlazorModelsSampleOrder" Filterable="false" 
                     Sortable="false" TextAlign="TextAlign.Center" Width="120px" Title="Estado">
                 <Template Context="datos">
+                    @if (DicHijo.ContainsKey($"JugadoresTarjeta_{datos.Id}"))
+                    {
+                    @if (DicHijo[$"JugadoresTarjeta_{datos.Id}"] != "0")
+                    {
+                        <RadzenLink Icon="add_circle_outline" Text="Scores" Path=@($"/players/scores/{datos.Id}") />
+                    }
+                    }
+                
                 @if (datos.Estado <= 2)
                 {
-                    <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" 
-                        Click="@(args => EditRow(datos))" @onclick:stopPropagation="true">
-                    </RadzenButton>
-                    <RadzenLink Icon="add_circle_outline" Text="Scores" Path=@($"/players/scores/{datos.Id}") />
+                    
+                    
                         @if (datos.Estado == 1) 
                     {
                         <label>Programado</label>
@@ -225,6 +237,8 @@
         TarjetaToInsert.Fecha = DateTime.Now.Date;
         TarjetaToInsert.Creador = UserIdLog;
         TarjetaToInsert.Estado = 1;
+        TarjetaToInsert.Captura = Torneo2Edit.Jugadores;
+        TarjetaToInsert.Consulta = TorneoView.Todos;
         TarjetaToInsert.Status = true;
         await TarjetaGrid.InsertRow(TarjetaToInsert);
     }

@@ -43,13 +43,13 @@ namespace GolfV12.Client.Pages.admin
             }
             else
             {
-                ElHoyo = await HoyoIServ.GetHoyo(HoyoId);
+                ElHoyo = (await HoyoIServ.Filtro($"hoy1id_-_id_-_{HoyoId}")).FirstOrDefault() ;
             }
             ElCampo = await CampoIServ.GetCampo(CampoId);
         }
         public async Task BuscarNextHoyo(string ruta)
         {
-            var LosHoyos = await HoyoIServ.Buscar(CampoId, ruta, 0);
+            var LosHoyos = await HoyoIServ.Filtro($"hoy1campo_-_campo_-_{CampoId}");
             foreach (var l in LosHoyos)
             {
                 if (HoyoNext <= l.Hoyo) HoyoNext = l.Hoyo + 1;

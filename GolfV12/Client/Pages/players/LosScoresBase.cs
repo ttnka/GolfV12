@@ -2,6 +2,7 @@
 using GolfV12.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Radzen;
 using Radzen.Blazor;
 
 namespace GolfV12.Client.Pages.players
@@ -10,10 +11,14 @@ namespace GolfV12.Client.Pages.players
     {
         [Parameter]
         public string TarjetaId { get; set; } = string.Empty;
+        public G500Tarjeta LaTarjeta { get; set; } = new G500Tarjeta();
+        [Inject]
+        public IG500TarjetaServ TarjetasIServ { get; set; }
 
         [Inject]
         public IG120PlayerServ NombresIServ { get; set; }
-
+        [Inject]
+        public IG176HoyoServ HoyoIServ { get; set; }
         [Inject]
         public IG510JugadorServ JugadorIServ { get; set; }
         public IEnumerable<G510Jugador> LosJugadores { get; set; } = new List<G510Jugador>();
@@ -24,7 +29,6 @@ namespace GolfV12.Client.Pages.players
         public IEnumerable<TarjetaMolde> LosScores { get; set; } = new List<TarjetaMolde>();
         public G520Score ElScore { get; set; } = new G520Score();
 
-        public int ElHoyo { get; set; } = 1;
         public IEnumerable<int> LosHoyos { get; set; } = new List<int>();
         public Dictionary<string, string> DatosDic { get; set; } = new Dictionary<string, string>();
         public RadzenDataGrid<TarjetaMolde> ScoreGrid { get; set; } = new();
@@ -39,31 +43,92 @@ namespace GolfV12.Client.Pages.players
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
-            await LeerNombres();
             
             await LeerJugadores();
             await LeerScores();
             LeerLosHoyos();
+            await LeerPermisos();
 
             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
                 $"El usuario consulto el listado de jugadores de la tarjeta {TarjetaId}");
         }
-        protected async Task LeerNombres()
+        protected void ListaInvolucrados(string useridInt)
         {
-            var nombTemp = await NombresIServ.Filtro("all");
-            foreach (var nomb in nombTemp)
+            if (DatosDic.ContainsKey($"Involucrados_{TarjetaId}"))
             {
-                if (!DatosDic.ContainsKey($"Nombre_{nomb.UserId}")) DatosDic.Add($"Nombre_{nomb.UserId}", $"{nomb.Apodo} {nomb.Nombre} {nomb.Paterno}");
+                DatosDic[$"Involucrados_{TarjetaId}"] += $",{useridInt}";
+            }
+            else
+            {
+                DatosDic.Add ($"Involucrados_{TarjetaId}", useridInt);
+            }
+        }
+        protected async Task LeerPermisos()
+        {
+            LaTarjeta = (await TarjetasIServ.Filtro($"tar1id_-_id_-_{TarjetaId}")).FirstOrDefault();
+            
+            if (!DatosDic.ContainsKey($"PermisoLeer_{TarjetaId}_Usuario_{UserIdLog}"))
+            {
+                DatosDic.Add($"PermisoLeer_{TarjetaId}_Usuario_{UserIdLog}", "No");
+                DatosDic.Add($"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}", "No");
+            }
+            if (LaTarjeta != null)
+            {
+                string[] involucrados = DatosDic[$"Involucrados_{TarjetaId}"].Split(",");
+                // LEER creador captura, jugador todos
+                if (LaTarjeta.Consulta == TorneoView.Capturista)
+                {
+                    // PENDIENTE
+                }
+                else
+                {   
+                    if (involucrados.Any(UserIdLog.Contains))
+                        DatosDic[$"PermisoLeer_{TarjetaId}_Usuario_{UserIdLog}"] = "Si";
+                }
+                // Escribir Creador Captura dif jugador
+
+                if (LaTarjeta.Captura == Torneo2Edit.Creador && LaTarjeta.Captura == Torneo2Edit.Jugadores)
+                {
+                    if (involucrados.Any(UserIdLog.Contains))
+                        DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] = "Si";
+                }
+
+                // Leer Par y Dificultad
+
+                var ParTemp = await HoyoIServ.Filtro($"hoy1campo_-_campo_-_{LaTarjeta.Campo}");
+                if (ParTemp != null)
+                {
+                    foreach (var item in ParTemp)
+                    {
+                        if (!DatosDic.ContainsKey($"HoyoPar_{item.Hoyo}"))
+                        {
+                            DatosDic.Add($"HoyoPar_{item.Hoyo}", item.Par.ToString());
+                            DatosDic.Add($"HoyoH_{item.Hoyo}", item.HcpHombres.ToString());
+                            DatosDic.Add($"HoyoW_{item.Hoyo}", item.HcpMujeres.ToString());
+                        }
+                    }
+                }
             }
         }
         protected async Task LeerJugadores()
         {
             var JugadoresTemp = await JugadorIServ.Filtro($"jug2tarjeta_-_tarjeta_-_{TarjetaId}");
-            LosJugadores = JugadoresTemp;
-            foreach (var nomb in JugadoresTemp)
+            LosJugadores = JugadoresTemp.AsEnumerable();
+            if (JugadoresTemp != null )
             {
-                TotalesCal(nomb.Player, 0, 0, "");
-            }
+                foreach (var nomb in JugadoresTemp)
+                {
+                    if (!DatosDic.ContainsKey($"Nombre_{nomb.Player}"))
+                    {
+                        var PlayerName = (await NombresIServ.Filtro($"play1id_-_userid_-_{nomb.Player}")).FirstOrDefault();
+                        if (PlayerName != null) 
+                            DatosDic.Add($"Nombre_{PlayerName.UserId}", 
+                                $"{PlayerName.Apodo} {PlayerName.Nombre} {PlayerName.Paterno}");
+                    }
+                    ListaInvolucrados(nomb.Player);
+                    TotalesCal(nomb.Player, 0, 0, "");
+                }
+            }   
         }
         
         protected void TotalesCal(string jugador, int hoyo, int newScore, string scoreId)
@@ -103,10 +168,10 @@ namespace GolfV12.Client.Pages.players
         }
 
         protected async Task UpdateHcpPlayer(G510Jugador jugTemp)
-        {
+        {    
             var res = await JugadorIServ.UpdateJugador(jugTemp);
             if (res.Id == jugTemp.Id) await LeerScores();
-               
+            ActualizarEstado(0);
         }
         protected async Task LeerScores()
         {
@@ -171,7 +236,16 @@ namespace GolfV12.Client.Pages.players
                         tarjetaMolde.H18 = DatosDic.ContainsKey($"Jugador_{TM.Player}_Hoyo_{18}") ?
                                 int.Parse(DatosDic[$"Jugador_{TM.Player}_Hoyo_{18}"]) : 0;
                     }
+                    {
+                        tarjetaMolde.F9 = tarjetaMolde.H1 + tarjetaMolde.H2 + tarjetaMolde.H3 +
+                                            tarjetaMolde.H4 + tarjetaMolde.H5 + tarjetaMolde.H6 +
+                                            tarjetaMolde.H7 + tarjetaMolde.H8 + tarjetaMolde.H9;
 
+                        tarjetaMolde.B9 = tarjetaMolde.H10 + tarjetaMolde.H11 + tarjetaMolde.H12 +
+                                            tarjetaMolde.H13 + tarjetaMolde.H14 + tarjetaMolde.H15 +
+                                            tarjetaMolde.H16 + tarjetaMolde.H17 + tarjetaMolde.H18;
+                        tarjetaMolde.Total = tarjetaMolde.F9 + tarjetaMolde.B9;
+                    }
                     {
                         tarjetaMolde.H1Id = DatosDic.ContainsKey($"Jugador_{TM.Player}_HoyoId_{1}") ?
                                 (DatosDic[$"Jugador_{TM.Player}_HoyoId_{1}"]) : " ";
@@ -225,16 +299,39 @@ namespace GolfV12.Client.Pages.players
             }
             LosHoyos = ListaTemp.AsEnumerable();    
         }
+        protected async void ActualizarEstado(int edo)
+        {
+            if (edo == 3)
+                LaTarjeta.Estado = 3;
+            if (LaTarjeta.Estado == 1)
+                LaTarjeta.Estado = 2;
+            await TarjetasIServ.UpdateTarjeta(LaTarjeta);
+            if (edo == 3) NM.NavigateTo("/players/misdatos/");
+        }
         protected async Task AddUpdateScore(G520Score Datos)
         {
             var res = DatosDic.ContainsKey($"Jugador_{Datos.Player}_Hoyo_{Datos.Hoyo}") ?
                 await ScoreIServ.UpdateScore(Datos) : await ScoreIServ.AddScore(Datos);
 
+            ActualizarEstado(0);
             TotalesCal(Datos.Player, Datos.Hoyo, Datos.Score, Datos.Id);
-            
         }
 
-        
+        [Inject]
+        public NotificationService NS { get; set; } = new();
+        public NotificationMessage ElMesage { get; set; } =
+            new NotificationMessage()
+            {
+                Severity = NotificationSeverity.Error,
+                Summary = "Cuerpo",
+                Detail = "Detalles ",
+                Duration = 3000
+            };
+
+        public void ShowNotification(NotificationMessage message)
+        {
+            NS.Notify(message);
+        }
 
         [CascadingParameter]
         public Task<AuthenticationState> AuthStateTask { get; set; }

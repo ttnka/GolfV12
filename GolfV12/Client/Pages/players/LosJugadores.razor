@@ -6,10 +6,25 @@
 <!-- id, tarjeta, player, hcp, estado, status --> 
 <h3>Lista de Jugadores de la Tarjeta</h3>
 
-    <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Agregar Jugador" 
+<div class="form-grup row">        
+        <div class="col-sm-9">
+            <div class="nav-item px-3">
+                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Agregar Jugador" 
                 Click="@InsertRow" Disabled=@(JugadorToInsert != null) />
-
- <RadzenDataGrid @ref=@JugadoresGrid AllowFiltering="true" AllowPaging="true" PageSize="50" 
+            </div>
+        </div>
+        
+        <div class="col-sm-3">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href=@($"/players/misdatos/")>
+                <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a listado de tarjetas
+                </NavLink>
+            </div>
+        </div>
+    </div>
+@if(LosJugadores != null)
+{
+     <RadzenDataGrid @ref=@JugadoresGrid AllowFiltering="true" AllowPaging="true" PageSize="50" 
                 AllowSorting="true" EditMode="DataGridEditMode.Single"
                 Data=@LosJugadores TItem="G510Jugador" RowUpdate="@OnUpdateRow" 
                 RowCreate="@OnCreateRow" >
@@ -78,9 +93,15 @@
             </RadzenDataGridColumn>
 
         </Columns>
-   </RadzenDataGrid>    
-
+   </RadzenDataGrid>  
+}
+else
+{
+    <div class="spinner"></div>
+}
 --Tatanka--
+
+
 
 @code {
     G510Jugador JugadorToInsert;
@@ -116,6 +137,11 @@
     async void OnCreateRow(G510Jugador jugador)
     {
         if (jugador == JugadorToInsert) JugadorToInsert = null;
+        if (TarjetaUnica.Creador != UserIdLog)
+        {
+            CancelEdit(jugador);
+        }
+
 
         if (!DatosDic.ContainsKey($"Tarjeta_{TarjetaId}_Jugador_{jugador.Player}"))
         {

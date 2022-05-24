@@ -49,6 +49,11 @@ namespace GolfV12.Shared
         public int H18 { get; set; } = 0;
         public string H18Id { get; set; } = string.Empty;
 
-
+        public int F9 { get; set; } = 0;
+        public int F9Hcp { get; set; } = 0;
+        public int B9 { get; set; } = 0;
+        public int B9Hcp { get; set; } = 0;
+        public int Total { get; set; } = 0;
+        public int TotalHcp { get; set; } = 0;
     }
 }

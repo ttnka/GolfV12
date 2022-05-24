@@ -21,6 +21,56 @@ namespace GolfV12.Server.Models.Repo
             return res.Entity;
         }
 
+        public async Task<IEnumerable<G176Hoyo>> Filtro(string? clave)
+        {
+            // clave = Hoy1
+            // ejeplo = G176Hoyo/filtro?clave=hoy1id_-_id_-_1_-_campo_-_2
+            IQueryable<G176Hoyo> querry = _appDbContext.Hoyos;
+            if (string.IsNullOrWhiteSpace(clave) || clave.Count() < 10) return await querry.ToListAsync();
+
+            string[] parametros = clave.Split("_-_");
+            Dictionary<string, string> ParaDic = new Dictionary<string, string>();
+
+            for (int i = 1; i < parametros.Length; i += 2)
+            {
+                if (!ParaDic.ContainsKey(parametros[i]))
+                    ParaDic.Add(parametros[i], parametros[i + 1]);
+            }
+
+            switch (parametros[0])
+            {
+                case "hoy1id":
+                    querry = querry.Where(e => e.Id == int.Parse(ParaDic["id"]));
+                    break;
+
+                case "hoy2id":
+                    querry = querry.Where(e => e.Id == int.Parse(ParaDic["id"]) &&
+                            e.Status == true);
+                    break;
+
+                case "hoy1campo":
+                    querry = querry.Where(e => e.CampoId == int.Parse(ParaDic["campo"]));
+                    break;
+
+                case "hoy2campo":
+                    querry = querry.Where(e => e.CampoId == int.Parse(ParaDic["campo"]) &&
+                            e.Status == true);
+                    break;
+                /*
+                case "hoy3hoyo":
+                    querry = querry.Where(e => e.CampoId == int.Parse(ParaDic["campo"]) && e.Hoyo == int.Parse(ParaDic["hoyo"]) &&
+                             e.Status == true).OrderByDescending(e => e.Fecha);
+                    break;
+                case "tar4creador":
+                    querry = querry.Where(e => e.Creador == ParaDic["creador"] && e.Estado != int.Parse(ParaDic["estado"]) &&
+                             e.Status == true).OrderByDescending(e => e.Fecha);
+                    break;
+                */
+            }
+            return await querry.ToListAsync();
+        }
+
+        /*
         public async Task<IEnumerable<G176Hoyo>> Buscar(int campo, string? ruta, int hoyoN)
         {
             IQueryable<G176Hoyo> querry = _appDbContext.Hoyos;
@@ -41,7 +91,7 @@ namespace GolfV12.Server.Models.Repo
         {
             return await _appDbContext.Hoyos.ToListAsync(); 
         }
-
+        */
         public async Task<G176Hoyo> UpdateHoyo(G176Hoyo hoyo)
         {
             var res = await _appDbContext.Hoyos.FirstOrDefaultAsync(e =>e.Id == hoyo.Id);
