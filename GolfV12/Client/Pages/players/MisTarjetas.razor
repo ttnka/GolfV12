@@ -16,27 +16,27 @@
         <Columns>
             <RadzenDataGridColumn TItem="G500Tarjeta" Property="Id" Title="Jugadores" Width="60px" Filterable="false" >
                 <Template Context="datos">
-                    @if (DicHijo.ContainsKey($"JugXtarjeta_{datos.Id}"))
+                    @if (DatosDic.ContainsKey($"JugXtarjeta_{datos.Id}"))
                     {
-                        @DicHijo[$"JugXtarjeta_{datos.Id}"]
+                        @DatosDic[$"JugXtarjeta_{datos.Id}"]
                     }
                     else
                     {
                         <label>0</label>
                     }
-                    @if(ElEstado == 5 && datos.Creador == UserIdLog ) 
+                    @if(ElEstado !=3  && datos.Creador == UserIdLog ) 
                     {
                         <!--
                         <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Click="@(arg => @InsertJugador(datos))"  />
                         -->
                         <RadzenLink Icon="add_circle_outline" Path=@($"/players/jugadores/{datos.Id}") />
                     }
-                    <RadzenLink Icon="add_circle_outline" Text="Scores" Path=@($"/players/scores/{datos.Id}") />
+                    
 
                 </Template>
             </RadzenDataGridColumn>
             
-            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Fecha" Title="Fecha" Width="100px" Filterable="false">
+            <RadzenDataGridColumn TItem="G500Tarjeta" Property="Fecha" Title="Fecha" Width="100px" Filterable="false" >
                 <Template Context="datos">
                     @datos.Fecha.Day / @datos.Fecha.Month / @datos.Fecha.Year 
                           @if (datos.Estado < 3 && datos.Creador == UserIdLog)
@@ -155,11 +155,11 @@
             <RadzenDataGridColumn TItem="G500Tarjeta" Context="sampleBlazorModelsSampleOrder" Filterable="false" 
                     Sortable="false" TextAlign="TextAlign.Center" Width="120px" Title="Estado">
                 <Template Context="datos">
-                    @if (DicHijo.ContainsKey($"JugadoresTarjeta_{datos.Id}"))
+                    @if (DatosDic.ContainsKey($"JugXtarjeta_{datos.Id}"))
                     {
-                    @if (DicHijo[$"JugadoresTarjeta_{datos.Id}"] != "0")
+                    @if (DatosDic[$"JugXtarjeta_{datos.Id}"] != "0")
                     {
-                        
+                        <RadzenLink Icon="add_circle_outline" Text="Scores" Path=@($"/players/scores/{datos.Id}") />
                     }
                     }
                 

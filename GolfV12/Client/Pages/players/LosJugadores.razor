@@ -29,11 +29,11 @@
                 Data=@LosJugadores TItem="G510Jugador" RowUpdate="@OnUpdateRow" 
                 RowCreate="@OnCreateRow" >
         <Columns>
-            <RadzenDataGridColumn TItem="G510Jugador" Property="Id" Title="Id" Width="60px" Filterable="false" >
+            <RadzenDataGridColumn TItem="G510Jugador" Property="Id" Title="Id" Width="60px" Filterable="false" Sortable="false">
                 <Template Context="datos">
-                    @if (DatosDic.ContainsKey($"RenglonJugador_{datos.Id}"))
+                    @if (DatosDic.ContainsKey($"RenglonJugador_{datos.Player}"))
                     {
-                        @DatosDic[$"RenglonJugador_{datos.Id}"]
+                        @DatosDic[$"RenglonJugador_{datos.Player}"]
                     }
                     else
                     {
@@ -73,6 +73,25 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
+            <RadzenDataGridColumn TItem="G510Jugador" Property="Status" Title="Juega" Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @if(datos.Status)
+                        {
+                            <b>Si Juega</b>
+                        }
+                        else
+                        {
+                            <b>No Juega</b>
+                        }
+                    
+                </Template>
+                <EditTemplate Context="datos">
+                       No Juega! <RadzenSwitch Name="Status" @bind-Value="datos.Status" Disabled=@(!Mostrar) /> Si!
+
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            
+
             <RadzenDataGridColumn TItem="G510Jugador" Context="sampleBlazorModelsSampleOrder" Filterable="false" 
                     Sortable="false" TextAlign="TextAlign.Center" Width="120px" Title="Estado">
                 <Template Context="datos">
@@ -105,6 +124,7 @@ else
 
 @code {
     G510Jugador JugadorToInsert;
+    bool Mostrar = true;
 
     async Task EditRow(G510Jugador jugador)
     {
@@ -113,7 +133,8 @@ else
     async void OnUpdateRow(G510Jugador jugador)
     {
         if (jugador == JugadorToInsert) JugadorToInsert = null;
-        await JugadorIServ.AddJugador(jugador);
+        
+        await JugadorIServ.UpdateJugador(jugador);
     }
     async Task SaveRow(G510Jugador jugador)
     {
@@ -132,11 +153,13 @@ else
         JugadorToInsert.Tarjeta = TarjetaId;
         JugadorToInsert.Estado = 1;
         JugadorToInsert.Status = true;
+        Mostrar = false;
         await JugadoresGrid.InsertRow(JugadorToInsert);
     }
     async void OnCreateRow(G510Jugador jugador)
     {
         if (jugador == JugadorToInsert) JugadorToInsert = null;
+        
         if (TarjetaUnica.Creador != UserIdLog)
         {
             CancelEdit(jugador);

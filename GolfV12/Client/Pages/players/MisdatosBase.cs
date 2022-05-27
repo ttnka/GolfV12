@@ -56,7 +56,7 @@ namespace GolfV12.Client.Pages.players
             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
                 "El Usuario Consulto sus datos");
         }
-        protected async void AgregarJugadores(G500Tarjeta tarj)
+        protected void AgregarJugadores(G500Tarjeta tarj)
         {
             selectedIndex = 1;
             TarjetaGeneral = tarj;

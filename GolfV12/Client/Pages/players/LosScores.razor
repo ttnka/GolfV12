@@ -56,9 +56,8 @@
                 </Items>
             </RadzenAccordion>
         </RadzenCard>           
-
-
-
+        <RadzenButton Icon="save" style="margin-bottom: 10px" Text="Guardar los datos" 
+                        Click="@(arg => Guardar())" Disabled=@(ListaScores.Count == 0) />
     <RadzenDataGrid @ref="ScoreGrid" AllowFiltering="true" AllowPaging="true" PageSize="50" 
                 AllowSorting="true" AllowColumnResize="true" Style="width: 1500px"
                 RowRender="@RowRender" ExpandMode="DataGridExpandMode.Single" AllowGrouping="false"
@@ -784,7 +783,7 @@ else
                     indiceId = "Upd";
                 }
                 ListaScores.Add(new KeyValuePair<string, G520Score>($"{scoreTemp.Id}_{indiceId}", scoreTemp));
-                        if (!Calculando) await UpDateWrite("Add");
+                //if (!Calculando) await UpDateWrite("Add");
                 //await AddUpdateScore(scoreTemp);
 
                 ActualizarEstado(0);
@@ -816,11 +815,15 @@ else
             ShowNotification(ElMesage);
         }
 
-       
+
         //Console.WriteLine($"Jugador {scoreTemp.Player} -- hoyo {scoreTemp.Hoyo} -- scoredd {scoreTemp.Score} -- nomas"); 
     }
 
-    
+    async void Guardar()
+    {
+        await UpDateWrite("Add");
+    }
+
 
     async void RenglonAddUpdateHcp(string hcpId, string hcpTarj, string hcpPlayer, int hcp) 
     {

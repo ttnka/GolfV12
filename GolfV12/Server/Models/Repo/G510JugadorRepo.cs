@@ -76,7 +76,7 @@ namespace GolfV12.Server.Models.Repo
             {
                 if (jugador.Status == false)
                 {
-                    res.Tarjeta = jugador.Tarjeta;
+                    res.Tarjeta = "Borrar";
                     res.Status = false;
                 }
                 else

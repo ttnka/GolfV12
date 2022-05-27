@@ -73,71 +73,54 @@ namespace GolfV12.Client.Pages.players
             {
                 foreach (var jt in JugTar)
                 {
-                    ListaParticipa(jt.Tarjeta); 
+                    ListaParticipa(jt.Tarjeta);        
                 }
             }
             string[] ParticipaArray = new string[0];
             if (DatosDic.ContainsKey($"Participa_{UserIdLog}"))
                 {
-                var PATemp = DatosDic[$"Participa_{UserIdLog}"];
-                ParticipaArray = PATemp.Split(",");
+                    var PATemp = DatosDic[$"Participa_{UserIdLog}"];
+                    ParticipaArray = PATemp.Split(",");
                 }
             var TarjAll = await TarjetaIServ.Filtro("All");
             if (TarjAll != null )
             {
                 foreach (var Tarj in TarjAll)
                 {
-                    if (Tarj.Estado == ElEstado)
+                    var registrala = 0;
+                    if (ElEstado == 3)
                     {
-                        if (ParticipaArray.Any(x => x == Tarj.Id) || Tarj.Creador == UserIdLog)
+                        if ((ParticipaArray.Any(x => x == Tarj.Id) || Tarj.Creador == UserIdLog) && Tarj.Estado == 3)
                         { 
                             if (!ParticipaArray.Any(x => x==Tarj.Id)) ListaParticipa(Tarj.Id);
-                            LsParticipa.Add(Tarj);
+                            registrala = 1;
                         }
-                    }
-                }
-                LasTarjetas = LsParticipa.AsEnumerable();
-            }
-        }
-
-/*
-        // OLD LEER DATOS DE SCORES522
-        protected async Task LeerDatos()
-        {
-            List<G500Tarjeta> LParticipa = new();
-            string[] ParticipaSt = new string[0];
-            //var TarjJugador = await JugadorIServ.Filtro($"jug2player_-_player_-_{UserIdLog}");
-            var TarjJugador = await ScoresIServ.Filtro($"sco1player_-_player_-_{UserIdLog}");
-            if (TarjJugador != null)
-            {
-                foreach (var tj in TarjJugador)
-                {
-                    JugXtarjeta(tj.Tarjeta, TarjJugador.Count(e => e.Tarjeta == tj.Tarjeta));
-                    ListaParticipa(tj.Tarjeta);
-                }
-               // TarjJugador.Count(e => )
-            }
-            //var TarjCreador = await TarjetaIServ.Filtro($"tar4creador_-_creador_-_{UserIdLog}_-_estado_-_{ElEstado}");
-            var TarjCreador = await TarjetaIServ.Filtro($"All");
-            if (TarjCreador != null)
-            {
-                if (DicHijo.ContainsKey($"Participa_{UserIdLog}"))
-                {
-                    var ParticipaTemp = DicHijo[$"Participa_{UserIdLog}"];
-                    ParticipaSt = ParticipaTemp.Split(",");
-                    foreach (var tc in TarjCreador)
+                    } 
+                    else
                     {
-                        ListaParticipa(tc.Id);
-                        if (tc.Estado == ElEstado && (ParticipaSt.Any(tc.Id.Contains) || tc.Creador == UserIdLog))
+                        if ((ParticipaArray.Any(x => x == Tarj.Id) || Tarj.Creador == UserIdLog) && Tarj.Estado != 3)
                         {
-                            LParticipa.Add(tc);
+                            if (!ParticipaArray.Any(x => x == Tarj.Id)) ListaParticipa(Tarj.Id);
+                            registrala=1;
                         }
-
                     }
+                    if (registrala == 1)
+                    {
+                        LsParticipa.Add(Tarj);
+                        var numJug = await JugadorIServ.Filtro($"tar1id_-_id_-_{Tarj.Id}");
+                        if (numJug != null)
+                        {
+                            foreach (var item in numJug)
+                            {
+                                JugXtarjeta(item.Tarjeta, numJug.Count(x => x.Tarjeta == item.Tarjeta));
+                            }
+                        }
+                    }      
                 }
             }
+                LasTarjetas = LsParticipa.AsEnumerable();
         }
-  */      
+
         protected void ListaParticipa(string tarjId)
         {
             if (DatosDic.ContainsKey($"Participa_{UserIdLog}"))
