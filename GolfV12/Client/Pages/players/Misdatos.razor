@@ -5,7 +5,7 @@
 @inherits MisdatosBase
 
 
-@if(Midata == null || !NombresGeneral.Any()  || !CamposGeneral.Any() )
+@if(!NombresGeneral.Any()  || !CamposGeneral.Any() )
 {
     <div class=spinner></div>
 }
@@ -15,9 +15,17 @@ else
     <Tabs>
         <RadzenTabsItem Text="Lista de Tarjetas">
             <RadzenCard>
-               <MisTarjetas ElEstado="1" DicHijo=@DicGeneral LosNombres=@NombresGeneral LosCampos=@CamposGeneral OnInsertJugador=@AgregarJugadores /> 
-               <br />
-               <MisTarjetas ElEstado="3" DicHijo=@DicGeneral LosNombres=@NombresGeneral LosCampos=@CamposGeneral />
+
+                <MisTarjetas ElEstado="1" DicHijo=@DicGeneral LosNombres=@NombresGeneral LosCampos=@CamposGeneral OnInsertJugador=@AgregarJugadores />
+                <br />
+                <br />
+                <hr >
+                <h3>Listado historico de tarjetas</h3>
+                <MisTarjetas ElEstado="3" DicHijo=@DicGeneral LosNombres=@NombresGeneral LosCampos=@CamposGeneral />
+               
+               
+               
+               
             </RadzenCard>
         </RadzenTabsItem>
 
@@ -38,44 +46,9 @@ else
         </RadzenTabsItem>
 
         <RadzenTabsItem Text="Mis Datos">
-            
-            <EditForm Model="@Midata" OnSubmit="actualizarMisDatos">
-                <div class="form-grup row">
-                    <label for="disdatos" class="col-sm-2 col-form-label">Deseas Editar tus datos?</label>
-                    <div class="col-sm-10">
-                        Si!<RadzenSwitch Name="Disdatos" @bind-value="EditarMisDatos"  />No!
-                        
-                    </div>
-                </div>
-                <div class="form-grup row">
-                    <label for="apodo" class="col-sm-2 col-form-label">Apodo</label>
-                    <div class="col-sm-10">
-                        <RadzenTextBox @bind-Value="Midata.Apodo" class="form-control" Disabled=@EditarMisDatos />
-                    </div>
-                </div>
-                <div class="form-grup row">
-                    <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
-                    <div class="col-sm-10">
-                        <RadzenTextBox @bind-Value="Midata.Nombre" class="form-control" Disabled=@EditarMisDatos/>
-                    </div>
-                </div>
-                <div class="form-grup row">
-                    <label for="paterno" class="col-sm-2 col-form-label">Paterno</label>
-                    <div class="col-sm-10">
-                        <RadzenTextBox @bind-Value="Midata.Paterno" class="form-control" Disabled=@EditarMisDatos />
-                    </div>
-                </div>
-                <div class="form-grup row">
-                    <label for="materno" class="col-sm-2 col-form-label">Materno</label>
-                    <div class="col-sm-10">
-                        <RadzenTextBox @bind-Value="Midata.Materno" class="form-control" Disabled=@EditarMisDatos />
-                    </div>
-                </div>
-                
-                <RadzenButton style="width: 160px" ButtonType="ButtonType.Submit" Text="Actualizar" Disabled=@EditarMisDatos />
-            
-            </EditForm>
-            <br />
+            <RadzenCard>
+                <MiNombre />
+            </RadzenCard>
             
         </RadzenTabsItem>
 
@@ -92,14 +65,12 @@ else
 
 @code {
 
-    
-
-    async void actualizarMisDatos()
-    {
-        await MisDatosUpdate();
-        ShowNotification(elMesage);
+   /*
+    * <MisTarjetas ElEstado="1" DicHijo=@DicGeneral LosNombres=@NombresGeneral LosCampos=@CamposGeneral OnInsertJugador=@AgregarJugadores />
+    * <MisTarjetas ElEstado="3" DicHijo=@DicGeneral LosNombres=@NombresGeneral LosCampos=@CamposGeneral />
+    */
         
-    }
+    
     public void ShowNotification(NotificationMessage message)
     {
         NS.Notify(message);

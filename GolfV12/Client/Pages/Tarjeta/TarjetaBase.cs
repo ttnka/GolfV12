@@ -70,13 +70,13 @@ namespace GolfV12.Client.Pages.Tarjeta
 
             LosParticipantes = await ParticipantesIServ.Filtro("All");
             
-            if (LosParticipantes.Count() > 0)
+            if (LasTarjetas.Count() > 0 && LosParticipantes.Count() > 0)
             {
                 foreach (var tarj in LasTarjetas)
                 {
-                    if (!LosNombres.ContainsKey($"Jugadores_{tarj.Id}"))
+                    if (!LosNombres.ContainsKey($"NumJugadores_{tarj.Id}"))
                     {
-                        LosNombres.Add($"Jugadores_{tarj.Id}", LosParticipantes.Count(e => e.Tarjeta.Contains(tarj.Id)).ToString());
+                        LosNombres.Add($"NumJugadores_{tarj.Id}", LosParticipantes.Count(e => e.Tarjeta.Contains(tarj.Id)).ToString());
                     }
                     foreach (var participante in LosParticipantes.Where(e => e.Tarjeta.Contains(tarj.Id)))
                     {

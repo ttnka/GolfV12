@@ -41,9 +41,9 @@
 
             <RadzenDataGridColumn TItem="G500Tarjeta" Property="Id" Title="Jugadores">
                 <Template Context="data">
-                        @if (LosNombres.ContainsKey($"Jugadores_{ data.Id}")) 
+                        @if (LosNombres.ContainsKey($"NumJugadores_{ data.Id}")) 
                         {
-                            @LosNombres[$"Jugadores_{data.Id}"]
+                            @LosNombres[$"NumJugadores_{data.Id}"]
                         } 
                     else 
                     {<label> 0 </label>}

@@ -1,6 +1,6 @@
 ﻿@page "/players/scores/{tarjetaId}"
 @using GolfV12.Shared;
-@inject NotificationService NS
+
 @inherits LosScoresBase
 
 
@@ -9,22 +9,28 @@
 {
 
     <RadzenCard>
-        <div class="row"> 
-                <div class="col-sm-12">
-                    <div class="col-sm-3">
-                        <h3>La Tarjeta</h3>
-                    </div>
-                    <div class="col-sm-4">
-                        <RadzenButton Icon="save" style="margin-bottom: 10px" Text="Cerrar la Tarjeta" 
+
+    <div class="form-grup row">        
+        <div class="col-sm-4">
+            <div class="nav-item px-3">
+                 <h3>La Tarjeta</h3>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="nav-item px-3">
+                 <RadzenButton Icon="save" style="margin-bottom: 10px" Text="Cerrar la Tarjeta" 
                         Click="@(arg => ActualizarEstado(3))" Disabled=@(LaTarjeta.Creador != UserIdLog) />
-                    </div>
-                    <div class="col-sm-4">
-                        <NavLink class="nav-link" href=@($"/players/misdatos/")>
+            </div>
+        </div>        
+        <div class="col-sm-4">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href=@($"/players/misdatos/")>
                             <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a lista tarjetas 
                         </NavLink>
-                    </div>
-                </div>
-           </div>
+            </div>
+        </div>
+    </div>
+
     </RadzenCard>
    
     <RadzenCard>
@@ -54,7 +60,7 @@
 
 
     <RadzenDataGrid @ref="ScoreGrid" AllowFiltering="true" AllowPaging="true" PageSize="50" 
-                AllowSorting="true" AllowColumnResize="false" Style="width: 1500px"
+                AllowSorting="true" AllowColumnResize="true" Style="width: 1500px"
                 RowRender="@RowRender" ExpandMode="DataGridExpandMode.Single" AllowGrouping="false"
                 Data="@LosScores" TItem="TarjetaMolde">
                 
@@ -97,8 +103,18 @@
             <RadzenDataGridColumn TItem="TarjetaMolde" Property="Hcp" Title="Hcp" Width="60px" Filterable=false >
                 
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="Hcp" TValue=int @bind-Value=@datos.hcp ShowUpDown=false  Min=-5 Max=35 
+                    @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="Hcp" TValue=int @bind-Value=@datos.hcp ShowUpDown=false  Min=-5 Max=35 
                         Change="(arg => RenglonAddUpdateHcp(datos.hcpId, TarjetaId, datos.UserId, datos.hcp))" />
+                    }
+                    else
+                    {
+                        @datos.hcp
+                    }
+                    
 
                 </Template>
                 
@@ -108,6 +124,7 @@
                 
                 <Template Context="datos">
                     @DatosDic[$"Nombre_{datos.UserId}"]
+
                 </Template>
                 <FooterTemplate>
                     <table>
@@ -124,11 +141,21 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H1" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H1" Title="H1" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
                 
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H1" TValue=int @bind-Value=@datos.H1 ShowUpDown=false Min=0 Max=15  
+                    @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H1" TValue=int @bind-Value=@datos.H1 ShowUpDown=false Min=0 Max=15  
                          Change="(arg => RenglonAddUpdate(1, datos.UserId, datos.H1, datos.H1Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H1
+                    }
+                       
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_1")){
@@ -147,11 +174,23 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde" Title="H2" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H2" Title="H2" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
                 
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H2" TValue=int @bind-Value=@datos.H2 ShowUpDown=false Min=0 Max=15
+
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H2" TValue=int @bind-Value=@datos.H2 ShowUpDown=false Min=0 Max=15
                         Change="(arg => RenglonAddUpdate(2, datos.UserId, datos.H2, datos.H2Id ))"/>
+                    }
+                    else
+                    {
+                        @datos.H2
+                    }
+
+                    
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_2")){
@@ -170,11 +209,21 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde" Title="H3" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H3" Title="H3" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
                 
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H3" TValue=int @bind-Value=@datos.H3 ShowUpDown=false Min=0 Max=15
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H3" TValue=int @bind-Value=@datos.H3 ShowUpDown=false Min=0 Max=15
                         Change="(arg => RenglonAddUpdate(3, datos.UserId, datos.H3, datos.H3Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H3
+                    }
+                    
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_3")){
@@ -193,10 +242,20 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde" Title="H4" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H4" Title="H4" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H4" TValue=int @bind-Value=@datos.H4 ShowUpDown=false Min=0 Max=15 
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H4" TValue=int @bind-Value=@datos.H4 ShowUpDown=false Min=0 Max=15 
                         Change="(arg => RenglonAddUpdate(4, datos.UserId, datos.H4, datos.H4Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H4
+                    }
+                    
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_4")){
@@ -215,10 +274,20 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde" Title="H5" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H5" Title="H5" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H5" TValue=int @bind-Value=@datos.H5 ShowUpDown=false Min=0 Max=15 
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H5" TValue=int @bind-Value=@datos.H5 ShowUpDown=false Min=0 Max=15 
                         Change="(arg => RenglonAddUpdate(5, datos.UserId, datos.H5, datos.H5Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H5
+                    }
+                    
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_5")){
@@ -237,10 +306,20 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde" Title="H6" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H6" Title="H6" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H6" TValue=int @bind-Value=@datos.H6 ShowUpDown=false Min=0 Max=15 
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H6" TValue=int @bind-Value=@datos.H6 ShowUpDown=false Min=0 Max=15 
                         Change="(arg => RenglonAddUpdate(6, datos.UserId, datos.H6, datos.H6Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H6
+                    }
+                    
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_6")){
@@ -259,10 +338,20 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde" Title="H7" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H7" Title="H7" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H7" TValue=int @bind-Value=@datos.H7 ShowUpDown=false Min=0 Max=15 
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H7" TValue=int @bind-Value=@datos.H7 ShowUpDown=false Min=0 Max=15 
                         Change="(arg => RenglonAddUpdate(7, datos.UserId, datos.H7, datos.H7Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H7
+                    }
+                    
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_7")){
@@ -281,10 +370,20 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde" Title="H8" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H8" Title="H8" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H8" TValue=int @bind-Value=@datos.H8 ShowUpDown=false Min=0 Max=15 
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H8" TValue=int @bind-Value=@datos.H8 ShowUpDown=false Min=0 Max=15 
                         Change="(arg => RenglonAddUpdate(8, datos.UserId, datos.H8, datos.H8Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H8
+                    }
+                    
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_8")){
@@ -303,10 +402,20 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde" Title="H9" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H9" Title="H9" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H9" TValue=int @bind-Value=@datos.H9 ShowUpDown=false Min=0 Max=15 
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H9" TValue=int @bind-Value=@datos.H9 ShowUpDown=false Min=0 Max=15 
                         Change="(arg => RenglonAddUpdate(9, datos.UserId, datos.H9, datos.H9Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H9
+                    }
+                    
                 </Template>
                 <FooterTemplate >
                     @if(DatosDic.ContainsKey("HoyoPar_9")){
@@ -325,24 +434,27 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde" Title="F9" FormatString="{0:d}" Width="60px" Filterable=false >
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="F9" Title="F9" FormatString="{0:d}" Width="60px" Filterable=false >
                 <Template Context="datos"> 
-                    @if (@DatosDic.ContainsKey($"Jugador_{datos.UserId}_F9"))
-                    {
-                        @DatosDic[$"Jugador_{datos.UserId}_F9"]
-                    }
-                    else
-                    {
-                        <b>0</b>
-                    }
+                    <b>@datos.F9</b>  
                 </Template>
             
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H10" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H10" Title="H10" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H10" TValue=int @bind-Value=@datos.H10 ShowUpDown=false Min=0 Max=15  
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H10" TValue=int @bind-Value=@datos.H10 ShowUpDown=false Min=0 Max=15  
                          Change="(arg => RenglonAddUpdate(10, datos.UserId, datos.H10, datos.H10Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H10
+                    }
+                    
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_10")){
@@ -361,10 +473,20 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H11" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H11"  Title="H11" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H11" TValue=int @bind-Value=@datos.H11 ShowUpDown=false Min=0 Max=15  
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H11" TValue=int @bind-Value=@datos.H11 ShowUpDown=false Min=0 Max=15  
                          Change="(arg => RenglonAddUpdate(11, datos.UserId, datos.H11, datos.H11Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H11
+                    }
+                    
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_11")){
@@ -383,10 +505,20 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H12" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H12" Title="H12" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H12" TValue=int @bind-Value=@datos.H12 ShowUpDown=false Min=0 Max=15  
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H12" TValue=int @bind-Value=@datos.H12 ShowUpDown=false Min=0 Max=15  
                          Change="(arg => RenglonAddUpdate(12, datos.UserId, datos.H12, datos.H12Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H12
+                    }
+                    
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_12")){
@@ -405,10 +537,20 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H13" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H13" Title="H13" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H13" TValue=int @bind-Value=@datos.H13 ShowUpDown=false Min=0 Max=15  
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H13" TValue=int @bind-Value=@datos.H13 ShowUpDown=false Min=0 Max=15  
                          Change="(arg => RenglonAddUpdate(13, datos.UserId, datos.H13, datos.H13Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H13
+                    }
+                    
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_13")){
@@ -427,10 +569,20 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H14" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H14" Title="H14" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H14" TValue=int @bind-Value=@datos.H14 ShowUpDown=false Min=0 Max=15  
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H14" TValue=int @bind-Value=@datos.H14 ShowUpDown=false Min=0 Max=15  
                          Change="(arg => RenglonAddUpdate(14, datos.UserId, datos.H14, datos.H14Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H14
+                    }
+                    
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_14")){
@@ -449,10 +601,20 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H15" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H15" Title="H15" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H15" TValue=int @bind-Value=@datos.H15 ShowUpDown=false Min=0 Max=15  
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H15" TValue=int @bind-Value=@datos.H15 ShowUpDown=false Min=0 Max=15  
                          Change="(arg => RenglonAddUpdate(15, datos.UserId, datos.H15, datos.H15Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H15
+                    }
+                    
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_15")){
@@ -471,10 +633,20 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H16" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H16" Title="H16" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H16" TValue=int @bind-Value=@datos.H16 ShowUpDown=false Min=0 Max=15  
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H16" TValue=int @bind-Value=@datos.H16 ShowUpDown=false Min=0 Max=15  
                          Change="(arg => RenglonAddUpdate(16, datos.UserId, datos.H16, datos.H16Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H16
+                    }
+                    
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_16")){
@@ -493,10 +665,20 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H17" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H17" Title="H17" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H17" TValue=int @bind-Value=@datos.H17 ShowUpDown=false Min=0 Max=15  
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H17" TValue=int @bind-Value=@datos.H17 ShowUpDown=false Min=0 Max=15  
                          Change="(arg => RenglonAddUpdate(17, datos.UserId, datos.H17, datos.H17Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H17
+                    }
+                    
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_17")){
@@ -515,10 +697,20 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="H18" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H18" Title="H18" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
                 <Template Context="datos"> 
-                    <RadzenNumeric Name="H18" TValue=int @bind-Value=@datos.H18 ShowUpDown=false Min=0 Max=15  
+                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
+                        (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
+                       @datos.UserId == UserIdLog))
+                    {
+                        <RadzenNumeric Name="H18" TValue=int @bind-Value=@datos.H18 ShowUpDown=false Min=0 Max=15  
                          Change="(arg => RenglonAddUpdate(18, datos.UserId, datos.H18, datos.H18Id ))" />
+                    }
+                    else
+                    {
+                        @datos.H18
+                    }
+                    
                 </Template>
                 <FooterTemplate>
                     @if(DatosDic.ContainsKey("HoyoPar_18")){
@@ -537,28 +729,19 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="B9" FormatString="{0:d}" Width="60px"Filterable=false >
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="B9"  Title="B9" FormatString="{0:d}" Width="60px"Filterable=false >
                 <Template Context="datos"> 
-                    @if (@DatosDic.ContainsKey($"Jugador_{datos.UserId}_B9"))
-                    {
-                        @DatosDic[$"Jugador_{datos.UserId}_B9"]
-                    }
-                    else
-                    {
-                        <b>0</b>
-                    }
+                    <b>@datos.B9</b>
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="TarjetaMolde"  Title="Total" FormatString="{0:d}" Width="60px" Filterable=false>
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="Total" Title="Total" FormatString="{0:d}" Width="60px" Filterable=false>
                 <Template Context="datos"> 
-                    @if (@DatosDic.ContainsKey($"Jugador_{datos.UserId}_Total"))
-                    {
-                        @DatosDic[$"Jugador_{datos.UserId}_Total"]
-                    }
-                    else
-                    {
-                        <b>0</b>
-                    }
+                  <b>@datos.Total</b>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="TotalHcp" Title="Neto F-B-T" FormatString="{0:d}" Width="100px" Filterable=false>
+                <Template Context="datos"> 
+                   @($"{@datos.F9Hcp} {@datos.B9Hcp} {@datos.TotalHcp}")
                 </Template>
             </RadzenDataGridColumn>
         </Columns>
@@ -579,16 +762,34 @@ else
     {
         if (LaTarjeta.Estado != 3 )
         {
-            if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "Si")
+            if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] != "0")
             {
+
                 G520Score scoreTemp = new();
+                scoreTemp.Estado = 2;
                 scoreTemp.Player = jugadorIdd;
                 scoreTemp.Hoyo = hoyoT;
                 scoreTemp.Score = scoredd;
                 scoreTemp.Tarjeta = TarjetaId;
                 scoreTemp.Id = iddd;
+                string indiceId = string.Empty;
+                if (iddd.Count() < 10 )
+                {
+                    scoreTemp.Estado = 1;
+                    scoreTemp.Id = ($"{TarjetaId}_{jugadorIdd}_{hoyoT}");
+                    indiceId = "Add";
+                }
+                else
+                {
+                    indiceId = "Upd";
+                }
+                ListaScores.Add(new KeyValuePair<string, G520Score>($"{scoreTemp.Id}_{indiceId}", scoreTemp));
+                        if (!Calculando) await UpDateWrite("Add");
+                //await AddUpdateScore(scoreTemp);
 
-                await AddUpdateScore(scoreTemp);
+                ActualizarEstado(0);
+
+                TotalesCal(scoreTemp.Player, scoreTemp.Hoyo, scoreTemp.Score, scoreTemp.Id);
 
                 ElMesage.Severity = NotificationSeverity.Success;
                 ElMesage.Summary = "Exito!";
@@ -603,6 +804,7 @@ else
                 ElMesage.Detail = "No tienes permiso para escribir!";
                 ElMesage.Duration = 5000;
                 ShowNotification(ElMesage);
+                //await LeerScores();
             }
         }
         else
@@ -614,21 +816,32 @@ else
             ShowNotification(ElMesage);
         }
 
-
+       
         //Console.WriteLine($"Jugador {scoreTemp.Player} -- hoyo {scoreTemp.Hoyo} -- scoredd {scoreTemp.Score} -- nomas"); 
     }
+
+    
+
     async void RenglonAddUpdateHcp(string hcpId, string hcpTarj, string hcpPlayer, int hcp) 
     {
         if (LaTarjeta.Estado != 3) 
         {
-            if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "Si")
+            if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] != "0")
             {
+                
                 G510Jugador jugadorTemp = new();
                 jugadorTemp.Id = hcpId;
                 jugadorTemp.Tarjeta = hcpTarj;
                 jugadorTemp.Player = hcpPlayer;
                 jugadorTemp.Hcp = hcp;
-                await UpdateHcpPlayer(jugadorTemp);
+                
+                var resp = await JugadorIServ.UpdateJugador(jugadorTemp);
+                if (resp != null)
+                {
+                    await LeerScores();
+                    
+                }
+
                 
                 ElMesage.Severity = NotificationSeverity.Success;
                 ElMesage.Summary = "HcPlayer!";
@@ -652,7 +865,9 @@ else
             ElMesage.Detail = "Tarjeta Cerrada, no se actualiza!!!";
             ElMesage.Duration = 5000;
             ShowNotification(ElMesage);
+            
         }
+        
     }
 
     void RowRender(RowRenderEventArgs<TarjetaMolde> args)

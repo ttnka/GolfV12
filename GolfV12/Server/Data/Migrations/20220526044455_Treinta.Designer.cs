@@ -4,6 +4,7 @@ using GolfV12.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GolfV12.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220526044455_Treinta")]
+    partial class Treinta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1085,42 +1087,6 @@ namespace GolfV12.Server.Data.Migrations
                     b.ToTable("Tarjetas");
                 });
 
-            modelBuilder.Entity("GolfV12.Shared.G502Tarjetas", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Campo")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Captura")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Consulta")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Creador")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Estado")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Titulo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tarjetas502");
-                });
-
             modelBuilder.Entity("GolfV12.Shared.G510Jugador", b =>
                 {
                     b.Property<string>("Id")
@@ -1185,104 +1151,6 @@ namespace GolfV12.Server.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MyScore");
-                });
-
-            modelBuilder.Entity("GolfV12.Shared.G522Scores", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Categoria")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Estado")
-                        .HasColumnType("int");
-
-                    b.Property<string>("G502TarjetasId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("H1")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H10")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H11")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H12")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H13")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H14")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H15")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H16")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H17")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H18")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H2")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H3")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H4")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H5")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H6")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H7")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H8")
-                        .HasColumnType("int");
-
-                    b.Property<int>("H9")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Hcp")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("HcpB9")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Player")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Renglon")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Tarjeta")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Teams")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("G502TarjetasId");
-
-                    b.ToTable("MyScore522");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -1422,13 +1290,6 @@ namespace GolfV12.Server.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("GolfV12.Shared.G522Scores", b =>
-                {
-                    b.HasOne("GolfV12.Shared.G502Tarjetas", null)
-                        .WithMany("Scores")
-                        .HasForeignKey("G502TarjetasId");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -1478,11 +1339,6 @@ namespace GolfV12.Server.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("GolfV12.Shared.G502Tarjetas", b =>
-                {
-                    b.Navigation("Scores");
                 });
 #pragma warning restore 612, 618
         }

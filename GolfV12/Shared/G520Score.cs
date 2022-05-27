@@ -10,7 +10,7 @@ namespace GolfV12.Shared
     public class G520Score
     {
         [Key]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string Id { get; set; } = string.Empty;
         public string Tarjeta { get; set; } = string.Empty;
         public int Campo { get; set; } = 0;
         public string Player { get; set; } = string.Empty;

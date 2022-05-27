@@ -34,6 +34,9 @@ namespace GolfV12.Client.Pages.players
         public RadzenDataGrid<TarjetaMolde> ScoreGrid { get; set; } = new();
         [Inject]
         public NavigationManager NM { get; set; }
+        public bool Calculando { get; set; } = false;
+        public List<KeyValuePair<string, G510Jugador>> ListaHcp { get; set; } = new List<KeyValuePair<string, G510Jugador>>();
+        public List<KeyValuePair<string, G520Score>> ListaScores { get; set; } = new List<KeyValuePair<string, G520Score>>();
 
         protected override async Task OnInitializedAsync()
         {
@@ -51,6 +54,7 @@ namespace GolfV12.Client.Pages.players
 
             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
                 $"El usuario consulto el listado de jugadores de la tarjeta {TarjetaId}");
+            
         }
         protected void ListaInvolucrados(string useridInt)
         {
@@ -69,8 +73,8 @@ namespace GolfV12.Client.Pages.players
             
             if (!DatosDic.ContainsKey($"PermisoLeer_{TarjetaId}_Usuario_{UserIdLog}"))
             {
-                DatosDic.Add($"PermisoLeer_{TarjetaId}_Usuario_{UserIdLog}", "No");
-                DatosDic.Add($"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}", "No");
+                DatosDic.Add($"PermisoLeer_{TarjetaId}_Usuario_{UserIdLog}", "0");
+                DatosDic.Add($"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}", "0");
             }
             if (LaTarjeta != null)
             {
@@ -83,14 +87,24 @@ namespace GolfV12.Client.Pages.players
                 else
                 {   
                     if (involucrados.Any(UserIdLog.Contains))
-                        DatosDic[$"PermisoLeer_{TarjetaId}_Usuario_{UserIdLog}"] = "Si";
+                        DatosDic[$"PermisoLeer_{TarjetaId}_Usuario_{UserIdLog}"] = "1";
                 }
                 // Escribir Creador Captura dif jugador
 
-                if (LaTarjeta.Captura == Torneo2Edit.Creador && LaTarjeta.Captura == Torneo2Edit.Jugadores)
-                {
-                    if (involucrados.Any(UserIdLog.Contains))
-                        DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] = "Si";
+                if (LaTarjeta.Estado != 3)
+                {                
+                    if ((LaTarjeta.Captura == Torneo2Edit.Jugadores &&
+                                involucrados.Any(UserIdLog.Contains)))
+                                            DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] = "1";
+
+                    /* Esta caso es solo cada jugador sin creador 
+                        if ((LaTarjeta.Captura == Torneo2Edit.Creador &&
+                                    LaTarjeta.Creador == UserIdLog))
+                                                DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] = "2";
+                    */
+
+                    if (LaTarjeta.Creador == UserIdLog)
+                        DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] = "2";
                 }
 
                 // Leer Par y Dificultad
@@ -126,53 +140,11 @@ namespace GolfV12.Client.Pages.players
                                 $"{PlayerName.Apodo} {PlayerName.Nombre} {PlayerName.Paterno}");
                     }
                     ListaInvolucrados(nomb.Player);
-                    TotalesCal(nomb.Player, 0, 0, "");
+                    //TotalesCal(nomb.Player, 0, 0, "");
                 }
             }   
         }
-        
-        protected void TotalesCal(string jugador, int hoyo, int newScore, string scoreId)
-        {
-            string acumula = $"Jugador_{jugador}_";
-            acumula += hoyo < 10 ? "F9" : "B9";
-            
-            if ( hoyo == 0)
-            {
-                if (!DatosDic.ContainsKey(acumula))
-                    DatosDic.Add($"Jugador_{ jugador}_Total", "0");
-                    DatosDic.Add($"Jugador_{ jugador}_F9", "0");
-                    DatosDic.Add($"Jugador_{ jugador}_B9", "0");
-            } 
-            else
-            {
-                if (!DatosDic.ContainsKey($"Jugador_{jugador}_Hoyo_{hoyo}"))
-                {
-                    DatosDic.Add($"Jugador_{jugador}_Hoyo_{hoyo}", newScore.ToString());
-                    DatosDic.Add($"Jugador_{jugador}_HoyoId_{hoyo}", scoreId);
-                    DatosDic[$"Jugador_{jugador}_Total"] = 
-                        (int.Parse(DatosDic[$"Jugador_{jugador}_Total"]) + newScore).ToString();
-
-                    DatosDic[acumula] = (int.Parse(DatosDic[acumula]) + newScore).ToString();
-                }
-                else
-                {
-                    int OldScore = int.Parse(DatosDic[$"Jugador_{jugador}_Hoyo_{hoyo}"]);
-                    DatosDic[$"Jugador_{jugador}_Hoyo_{hoyo}"] = newScore.ToString();
-
-                    DatosDic[$"Jugador_{jugador}_Total"] = 
-                        (int.Parse(DatosDic[$"Jugador_{jugador}_Total"]) + newScore - OldScore).ToString();
-                    DatosDic[acumula] = 
-                        (int.Parse(DatosDic[acumula]) + newScore - OldScore).ToString();
-                }
-            }
-        }
-
-        protected async Task UpdateHcpPlayer(G510Jugador jugTemp)
-        {    
-            var res = await JugadorIServ.UpdateJugador(jugTemp);
-            if (res.Id == jugTemp.Id) await LeerScores();
-            ActualizarEstado(0);
-        }
+    
         protected async Task LeerScores()
         {
             var LosDatosTemp = await ScoreIServ.Filtro($"sco2tarjeta_-_tarjeta_-_{TarjetaId}");
@@ -182,9 +154,10 @@ namespace GolfV12.Client.Pages.players
             {
                 foreach (var jugTemp in LosDatosTemp)
                 {
-                    TotalesCal(jugTemp.Player, jugTemp.Hoyo, jugTemp.Score, jugTemp.Id);     
+                    TotalesCal(jugTemp.Player, jugTemp.Hoyo, jugTemp.Score, jugTemp.Id);
                 }
             }
+            
             if (LosJugadores != null)
             {
                 int renglon = 0;
@@ -236,16 +209,7 @@ namespace GolfV12.Client.Pages.players
                         tarjetaMolde.H18 = DatosDic.ContainsKey($"Jugador_{TM.Player}_Hoyo_{18}") ?
                                 int.Parse(DatosDic[$"Jugador_{TM.Player}_Hoyo_{18}"]) : 0;
                     }
-                    {
-                        tarjetaMolde.F9 = tarjetaMolde.H1 + tarjetaMolde.H2 + tarjetaMolde.H3 +
-                                            tarjetaMolde.H4 + tarjetaMolde.H5 + tarjetaMolde.H6 +
-                                            tarjetaMolde.H7 + tarjetaMolde.H8 + tarjetaMolde.H9;
-
-                        tarjetaMolde.B9 = tarjetaMolde.H10 + tarjetaMolde.H11 + tarjetaMolde.H12 +
-                                            tarjetaMolde.H13 + tarjetaMolde.H14 + tarjetaMolde.H15 +
-                                            tarjetaMolde.H16 + tarjetaMolde.H17 + tarjetaMolde.H18;
-                        tarjetaMolde.Total = tarjetaMolde.F9 + tarjetaMolde.B9;
-                    }
+                
                     {
                         tarjetaMolde.H1Id = DatosDic.ContainsKey($"Jugador_{TM.Player}_HoyoId_{1}") ?
                                 (DatosDic[$"Jugador_{TM.Player}_HoyoId_{1}"]) : " ";
@@ -289,8 +253,81 @@ namespace GolfV12.Client.Pages.players
                 }
             }          
             LosScores = ListaTM.AsEnumerable();
+            
         }
-        protected void LeerLosHoyos()
+
+    protected async Task UpDateWrite(string tipo) 
+    {
+            Console.WriteLine($"Mios Entro UPDateWrite listaScore tiene {ListaScores.Count()} y valor de calculado {Calculando}");
+            Calculando = true;
+            List<string> Intentados = new List<string>();
+            List<string> Logrados = new List<string>();
+            string indexNuevo = string.Empty;
+            string indexLogrado = string.Empty;
+            int freno = 0;
+            if (tipo != "Hcp")
+            {
+                do
+                {
+                    Console.WriteLine($"Mios Entro Do listaScore tiene {ListaScores.Count()} y valor de calculado {Calculando}");
+                    if (freno == 5) break;
+                    freno++;
+                    if (ListaScores.Any()) {
+                        Console.WriteLine($"Mios Entro IF listaScore tiene {ListaScores.Count()}");
+                    foreach (var nuevo in ListaScores)
+                    {
+                            Console.WriteLine($"Mios Entro Each listaScore tiene {ListaScores.Count()}");
+                            //{TarjetaId}_{jugadorIdd}_{hoyoT _{UserIdLog}}
+                            indexNuevo = nuevo.Key;
+                        Intentados.Add(indexNuevo);
+                        G520Score res = indexNuevo.Substring(indexNuevo.Length - 3, 3) == "Add" ?
+                            await ScoreIServ.AddScore(nuevo.Value) :
+                            await ScoreIServ.UpdateScore(nuevo.Value);
+
+                        if (res != null)
+                        {
+                                Console.WriteLine($"Mios agrego o actualizo listaScore tiene {ListaScores.Count()}");
+                                indexLogrado = $"{res.Tarjeta}_{res.Player}_{res.Hoyo}_{UserIdLog}";
+                            Logrados.Add(indexLogrado);
+                            if (indexNuevo == indexLogrado)
+                            {
+                                    Console.WriteLine($"Mios antes de borrar listaScore tiene {ListaScores.Count()}");
+                                    TotalesCal(res.Player, res.Hoyo, res.Score, res.Id);
+                                ListaScores.Remove(new KeyValuePair<string, G520Score>(indexLogrado, res));
+                                    Console.WriteLine($"despues de borrar listaScore tiene {ListaScores.Count()}");
+                                }
+                        }
+                    }
+                }
+                } while (ListaScores.Count() > 0);
+                Console.WriteLine($"Mios salio Do listaScore tiene {ListaScores.Count()} y valor de calculado {Calculando}");
+            }
+            else
+            {
+                foreach (var nuevo in ListaHcp)
+                {
+                    indexNuevo = nuevo.Key;
+                    Intentados.Add(indexNuevo);
+                    G510Jugador res = await JugadorIServ.UpdateJugador(nuevo.Value);
+                    if (res != null )
+                    {
+                        indexLogrado = $"{res.Tarjeta}_{res.Player}";
+                        Logrados.Add(indexLogrado);
+                        if (indexNuevo == indexLogrado)
+                        {
+                            ListaHcp.Remove(new KeyValuePair<string, G510Jugador>(indexLogrado, res));
+                        }
+                    }
+                }
+            }
+
+            Calculando = false;
+            Console.WriteLine($"Mios antes leerScore listaScore tiene {ListaScores.Count()}");
+            await LeerScores();
+            Console.WriteLine($"Mios despues leerscore listaScore tiene {ListaScores.Count()}");
+        }
+
+    protected void LeerLosHoyos()
         {
             IList<int> ListaTemp = new List<int>();
             for (int i = 1; i < 19; i++)
@@ -308,14 +345,20 @@ namespace GolfV12.Client.Pages.players
             await TarjetasIServ.UpdateTarjeta(LaTarjeta);
             if (edo == 3) NM.NavigateTo("/players/misdatos/");
         }
-        protected async Task AddUpdateScore(G520Score Datos)
+        
+        protected void TotalesCal(string jugador, int hoyo, int newScore, string scoreId)
         {
-            var res = DatosDic.ContainsKey($"Jugador_{Datos.Player}_Hoyo_{Datos.Hoyo}") ?
-                await ScoreIServ.UpdateScore(Datos) : await ScoreIServ.AddScore(Datos);
-
-            ActualizarEstado(0);
-            TotalesCal(Datos.Player, Datos.Hoyo, Datos.Score, Datos.Id);
+            if (!DatosDic.ContainsKey($"Jugador_{jugador}_Hoyo_{hoyo}"))
+            {
+                DatosDic.Add($"Jugador_{jugador}_Hoyo_{hoyo}", newScore.ToString());
+                DatosDic.Add($"Jugador_{jugador}_HoyoId_{hoyo}", scoreId);
+            }
+            else
+            {
+                DatosDic[$"Jugador_{jugador}_Hoyo_{hoyo}"] = newScore.ToString();
+            }
         }
+
 
         [Inject]
         public NotificationService NS { get; set; } = new();

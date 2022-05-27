@@ -1,0 +1,72 @@
+﻿@using GolfV12.Client.Servicios.IFaceServ;
+@using GolfV12.Shared;
+@inject NotificationService NS
+@inherits MiNombreBase
+
+@if(Midata == null  )
+{
+    <div class=spinner></div>
+}
+else
+{
+    <EditForm Model="@Midata" OnSubmit="actualizarMisDatos">
+                <div class="form-grup row">
+                    <label for="disdatos" class="col-sm-2 col-form-label">Deseas Editar tus datos?</label>
+                    <div class="col-sm-10">
+                        No!<RadzenSwitch Name="Disdatos" @bind-value="EditarMisDatos"  />Si!
+                        
+                    </div>
+                </div>
+                <div class="form-grup row">
+                    <label for="apodo" class="col-sm-2 col-form-label">Apodo</label>
+                    <div class="col-sm-10">
+                        <RadzenTextBox @bind-Value="Midata.Apodo" class="form-control" Disabled=@(!EditarMisDatos) />
+                    </div>
+                </div>
+                <div class="form-grup row">
+                    <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
+                    <div class="col-sm-10">
+                        <RadzenTextBox @bind-Value="Midata.Nombre" class="form-control" Disabled=@(!EditarMisDatos)/>
+                    </div>
+                </div>
+                <div class="form-grup row">
+                    <label for="paterno" class="col-sm-2 col-form-label">Paterno</label>
+                    <div class="col-sm-10">
+                        <RadzenTextBox @bind-Value="Midata.Paterno" class="form-control" Disabled=@(!EditarMisDatos) />
+                    </div>
+                </div>
+                <div class="form-grup row">
+                    <label for="materno" class="col-sm-2 col-form-label">Materno</label>
+                    <div class="col-sm-10">
+                        <RadzenTextBox @bind-Value="Midata.Materno" class="form-control" Disabled=@(!EditarMisDatos) />
+                    </div>
+                </div>
+                <div class="form-grup row">
+                    <div class="col-sm-12">
+                        <RadzenButton Icon="save" style="margin-bottom: 10px" Text="Actualizar" 
+                                    ButtonType="ButtonType.Submit" Disabled=@(!EditarMisDatos) />
+                    </div>
+                </div> 
+                
+            </EditForm>
+}
+
+
+@code {
+
+    
+
+    async void actualizarMisDatos()
+    {
+        await MisDatosUpdate();
+        ShowNotification(elMesage);
+        
+    }
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+    
+
+}
+

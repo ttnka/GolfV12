@@ -69,9 +69,13 @@ builder.Services.AddHttpClient<IG280FormatoTServ, G280FormatoTServ>(client =>
 
 builder.Services.AddHttpClient<IG500TarjetaServ, G500TarjetaServ>(client =>
 { client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+builder.Services.AddHttpClient<IG502TarjetasServ, G502TarjetasServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
 builder.Services.AddHttpClient<IG510JugadorServ, G510JugadorServ>(client =>
 { client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
 builder.Services.AddHttpClient<IG520ScoreServ, G520ScoreServ>(client =>
+{ client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
+builder.Services.AddHttpClient<IG522ScoresServ, G522ScoresServ>(client =>
 { client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress); });
 
 

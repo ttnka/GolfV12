@@ -68,7 +68,7 @@ namespace GolfV12.Client.Pages.players
         }
         protected async Task LeerTarjeta()
         {
-            var TUTemp = await TarjetaIServ.Filtro($"tar2tarjeta_-_tarjeta_-_{TarjetaId}");
+            var TUTemp = await TarjetaIServ.Filtro($"tar2id_-_id_-_{TarjetaId}");
             if (TUTemp != null)
             {
                 TarjetaUnica = TUTemp.FirstOrDefault();

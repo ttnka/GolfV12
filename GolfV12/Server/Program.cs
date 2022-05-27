@@ -15,7 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddIdentityServer()
@@ -48,8 +48,10 @@ builder.Services.AddScoped<IG250ExtrasTipo,     G250ExtrasTipoRepo>();
 builder.Services.AddScoped<IG280FormatoT,       G280FormatoTRepo>();
 
 builder.Services.AddScoped<IG500Tarjeta, G500TarjetaRepo>();
+builder.Services.AddScoped<IG502Tarjetas, G502TarjetasRepo>();
 builder.Services.AddScoped<IG510Jugador, G510JugadorRepo>();
 builder.Services.AddScoped<IG520Score, G520ScoreRepo>();
+builder.Services.AddScoped<IG522Scores, G522ScoresRepo>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

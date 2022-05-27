@@ -16,29 +16,31 @@
         <Columns>
             <RadzenDataGridColumn TItem="G500Tarjeta" Property="Id" Title="Jugadores" Width="60px" Filterable="false" >
                 <Template Context="datos">
-                    @if (DicHijo.ContainsKey($"JugadoresTarjeta_{datos.Id}"))
+                    @if (DicHijo.ContainsKey($"JugXtarjeta_{datos.Id}"))
                     {
-                        @DicHijo[$"JugadoresTarjeta_{datos.Id}"]
+                        @DicHijo[$"JugXtarjeta_{datos.Id}"]
                     }
                     else
                     {
                         <label>0</label>
                     }
-                    @if(ElEstado != 3) 
+                    @if(ElEstado == 5 && datos.Creador == UserIdLog ) 
                     {
                         <!--
                         <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Click="@(arg => @InsertJugador(datos))"  />
                         -->
                         <RadzenLink Icon="add_circle_outline" Path=@($"/players/jugadores/{datos.Id}") />
                     }
+                    <RadzenLink Icon="add_circle_outline" Text="Scores" Path=@($"/players/scores/{datos.Id}") />
+
                 </Template>
             </RadzenDataGridColumn>
             
             <RadzenDataGridColumn TItem="G500Tarjeta" Property="Fecha" Title="Fecha" Width="100px" Filterable="false">
                 <Template Context="datos">
                     @datos.Fecha.Day / @datos.Fecha.Month / @datos.Fecha.Year 
-                    @if (datos.Estado < 3)
-                    {
+                          @if (datos.Estado < 3 && datos.Creador == UserIdLog)
+              {
                         <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" 
                         Click="@(args => EditRow(datos))" @onclick:stopPropagation="true">
                         </RadzenButton>
@@ -61,7 +63,7 @@
                     <label>No hay nombre del Admin</label>
                 }
                 </Template>
-
+                <!--
                 <EditTemplate Context="datos">
                     <RadzenDropDown Name="creador" AllowClear="false" 
                         AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.Default" 
@@ -70,6 +72,7 @@
                         Style="width:100%; display: block;">
                     </RadzenDropDown> 
                 </EditTemplate>
+                -->
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G500Tarjeta" Property="Campo" Title="Campo" Filterable="false"  Width="100px">
@@ -156,7 +159,7 @@
                     {
                     @if (DicHijo[$"JugadoresTarjeta_{datos.Id}"] != "0")
                     {
-                        <RadzenLink Icon="add_circle_outline" Text="Scores" Path=@($"/players/scores/{datos.Id}") />
+                        
                     }
                     }
                 
@@ -207,17 +210,20 @@
     async void OnUpdateRow(G500Tarjeta tarjeta)
     {
         if (tarjeta == TarjetaToInsert) TarjetaToInsert = null;
-        await TarjetaIServ.AddTarjeta(tarjeta);
+        if (tarjeta.Fecha.Date < DateTime.Now.Date.AddDays(-1) || tarjeta.Fecha.Date > DateTime.Now.Date.AddDays(365))
+                                tarjeta.Fecha = DateTime.Now.Date;
+        await TarjetaIServ.UpdateTarjeta(tarjeta);
     }
     async Task SaveRow(G500Tarjeta tarjeta)
     {
 
         LaTarjeta.Creador = UserIdLog;
-        if (LaTarjeta.Fecha < DateTime.Now.Date.AddDays(-1) || LaTarjeta.Fecha > DateTime.Now.Date.AddDays(365)) LaTarjeta.Fecha = DateTime.Now.Date;
+        if (LaTarjeta.Fecha.Date < DateTime.Now.Date.AddDays(-1) || LaTarjeta.Fecha.Date > DateTime.Now.Date.AddDays(365)) 
+                                        LaTarjeta.Fecha = DateTime.Now.Date;
         LaTarjeta.Estado = 1;
         LaTarjeta.Status = true;
         await TarjetaGrid.UpdateRow(tarjeta);
-        await LeerTarjetas();
+        //await LeerTarjetas();
 
         /*
         ElMesage.Severity = NotificationSeverity.Warning;
@@ -234,7 +240,6 @@
     async Task InsertRow()
     {
         TarjetaToInsert = new G500Tarjeta();
-        TarjetaToInsert.Fecha = DateTime.Now.Date;
         TarjetaToInsert.Creador = UserIdLog;
         TarjetaToInsert.Estado = 1;
         TarjetaToInsert.Captura = Torneo2Edit.Jugadores;

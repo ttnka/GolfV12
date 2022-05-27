@@ -19,31 +19,7 @@ namespace GolfV12.Client.Servicios.Serv
             return newPlayer.IsSuccessStatusCode ? await newPlayer.Content.ReadFromJsonAsync<G120Player>() :
              null;
         }
-        /*
-        public async Task<IEnumerable<G120Player>> Buscar(string? userId, int org, string? apodo, string? nombre, string? paterno)
-        {
-            var resultado = "";
-            if (!string.IsNullOrEmpty(userId)) resultado = "userId=" + userId + "&";
-            if (org > -1)  resultado = resultado + "org=" + org + "&"; 
-            if (!string.IsNullOrEmpty(apodo)) { resultado = resultado + "apodo=" + apodo + "&"; }
-            if (!string.IsNullOrEmpty(nombre)) { resultado = resultado + "nombre=" + nombre + "&"; }
-            if (!string.IsNullOrEmpty(paterno)) { resultado = resultado + "paterno=" + paterno + "&"; }
-            if (resultado != "") { resultado = "/api/G120player/filtro?" + resultado; }
-            return await _httpClient.GetFromJsonAsync<IEnumerable<G120Player>>(resultado);
-        }
-
-        
-        public async Task<G120Player> GetPlayer(string userId)
-        {
-            return await _httpClient.GetFromJsonAsync<G120Player>($"/api/G120player/{userId}");
-        }
-        
-        public async Task<IEnumerable<G120Player>> GetPlayers()
-        {
-            return await _httpClient.GetFromJsonAsync<IEnumerable<G120Player>>("/api/G120player/");
-        }
-        */
-
+   
         public async Task<IEnumerable<G120Player>> Filtro(string? clave)
         {
 
@@ -54,10 +30,7 @@ namespace GolfV12.Client.Servicios.Serv
             if (!string.IsNullOrEmpty(clave) && clave.Count() > 13)
             {
                 var parametros = clave.Split("_-_");
-                /*
-                string titulo = "userid,nombre,paterno,materno,apodo,bday,nivel,organizacionid,estado,status";
-                var titulos = titulo.Split(",");
-                */
+                
                 for (int i = 1; i < parametros.Length; i += 2)
                 {
                     if (!ParaDic.ContainsKey(parametros[i]))

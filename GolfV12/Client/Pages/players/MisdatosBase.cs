@@ -31,18 +31,16 @@ namespace GolfV12.Client.Pages.players
         [Inject]
         public IG500TarjetaServ TarjetaIServ { get; set; }
         public G500Tarjeta TarjetaGeneral { get; set; } = new G500Tarjeta();
+        //public G502Tarjetas CardGeneral { get; set; } = new G502Tarjetas();
         
         [Inject]
         public IG510JugadorServ JugadorIServ { get; set; }
         public IEnumerable<G510Jugador> JugadoresGeneral { get; set; } = new List<G510Jugador>();
-        protected List<KeyValuePair<int, string>> JugadoresList { get; set; } =
-                new List<KeyValuePair<int, string>>();
 
         public Dictionary<string, string> DicGeneral { get; set; } = new Dictionary<string, string>();
 
         public int selectedIndex { get; set; } = 0;
-        protected G120Player Midata { get; set; } = new G120Player();
-        //protected WBita WB { get; set; } = new WBita();
+        
         public bool EditarMisDatos { get; set; } = true;
         protected override async Task OnInitializedAsync()
         {
@@ -52,21 +50,19 @@ namespace GolfV12.Client.Pages.players
 
             await LeerNombres();
             await LeerCampos();
-            await LeerTarjetas();
-            await LeerJugadores();
-            
+            //await LeerJugadores();
 
-            Midata = await ElPlayerServ.GetPlayer(UserIdLog);
+            
             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
-                "Consulto sus datos");
+                "El Usuario Consulto sus datos");
         }
         protected async void AgregarJugadores(G500Tarjeta tarj)
         {
             selectedIndex = 1;
             TarjetaGeneral = tarj;
-            await LeerJugadores();
+            //await LeerJugadores();
         } 
-
+        
         protected async Task LeerNombres()
         {
             var NameTemp = await PlayerIServ.Filtro("all");
@@ -93,46 +89,11 @@ namespace GolfV12.Client.Pages.players
             }
             CamposGeneral = CamposList.AsEnumerable();
         }
-        protected async Task LeerTarjetas()
-        {
-            var TarjTemp = await TarjetaIServ.Filtro($"tar2creador_-_creador_-_{UserIdLog}");
-            var renglon = 1;
-            foreach (var t in TarjTemp)
-            {
-
-                if (!DicGeneral.ContainsKey($"CreadorTarjeta_{t.Creador}"))
-                {
-                    DicGeneral.Add($"CreadorTarjeta_{t.Creador}", t.Id);
-                    DicGeneral.Add($"RenglonTarjeta_{t.Id}", renglon.ToString());
-                    renglon++;
-                }
-                if (!DicGeneral.ContainsKey($"TarjetasCreador"))
-                {
-                    DicGeneral.Add($"TarjetasCreador", $"{t.Id}");
-                } else
-                {
-                    DicGeneral[$"TarjetasCreador"] += $",{t.Id}";
-                }
-            }
-        }
-        
+        /*
         protected async Task LeerJugadores()
         {
             var JugadorTemp = await JugadorIServ.Filtro("All");
-            if (DicGeneral.ContainsKey($"TarjetasCreador"))
-            {
-                var tarjetasTemp = DicGeneral[$"TarjetasCreador"].Split(",");
-                if (tarjetasTemp.Any())
-                {
-                    foreach (var t in tarjetasTemp)
-                    {
-                        if (!DicGeneral.ContainsKey($"JugadoresTarjeta_{t}"))
-                        {
-                            DicGeneral.Add($"JugadoresTarjeta_{t}", JugadorTemp.Count(e => e.Tarjeta == t).ToString());
-                        }
-                    }
-                }
-            }
+            
             if (JugadorTemp.Any())
             {
                 foreach (var t in JugadorTemp)
@@ -140,29 +101,39 @@ namespace GolfV12.Client.Pages.players
                     if(!DicGeneral.ContainsKey($"Tarjeta_{t.Tarjeta}_jugador_{t.Player}"))
                     {
                         DicGeneral.Add($"Tarjeta_{t.Tarjeta}_jugador_{t.Player}", t.Player.ToString());
-                    }               
+                    }
+                    if (t.Player == UserIdLog) ListaParticipa(t.Tarjeta);
+                    if (!DicGeneral.ContainsKey($"JugadoresXtarjeta_{t.Tarjeta}"))
+                    {
+                        DicGeneral.Add($"JugadoresXtarjeta_{t.Tarjeta}", t.Player);
+                    }
+                    else
+                    {
+                        DicGeneral[$"JugadoresXtarjeta_{t.Tarjeta}"] += $",{t.Player}";
+                    }       
                 }
+
+                
+//           DicGeneral.Add($"JugadoresTarjeta_{t}", JugadorTemp.Count(e => e.Tarjeta == t).ToString());
+
             } 
 
             JugadoresGeneral = (await JugadorIServ.Filtro($"jug2tarjeta_-_tarjeta_-_{TarjetaGeneral.Id}")).ToList();
         }
-        
-        public async Task MisDatosUpdate()
+        */
+        /*
+        protected void ListaParticipa(string tarjId)
         {
-            var resultado = await PlayerIServ.UpdatePlayer(Midata);
-            if (resultado != null)
+            if (DicGeneral.ContainsKey($"Participa_{UserIdLog}"))
             {
-                await EscribirBitacoraUno(UserIdLog, BitaAcciones.Editar, false,
-                    $"Actualizo sus datos Nombre {Midata.Nombre} Apellido {Midata.Paterno} {Midata.Materno} " +
-                    $"Apodo {Midata.Apodo} {Midata.Estado}");
-                elMesage.Summary = "Registro Actualizado ";
-                elMesage.Detail = "Exitosamente!!!";
-                EditarMisDatos = true;
+                DicGeneral[$"Participa_{UserIdLog}"] += $",{tarjId}";
+            }
+            else
+            {
+                DicGeneral.Add($"Participa_{UserIdLog}", tarjId);
             }
         }
-
-        
-
+        */
         // Mensaje de Actualizacion
         public NotificationMessage elMesage { get; set; } = new NotificationMessage() { 
                 Severity = NotificationSeverity.Success, Summary = "Cuerpo", Detail = "Detalles ", Duration = 3000 };
