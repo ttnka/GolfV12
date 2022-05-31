@@ -43,6 +43,7 @@ builder.Services.AddScoped<IG208CategoriaT,     G208CategoriaTRepo>();
 builder.Services.AddScoped<IG220TeamT,          G220TeamTRepo>();
 builder.Services.AddScoped<IG222PlayerT,        G222PlayerTRepo>();
 builder.Services.AddScoped<IG224RolT,           G224RolTRepo>();
+builder.Services.AddScoped<IG242Extras,         G242ExtrasRepo>();
 builder.Services.AddScoped<IG249TiroEst,        G249TiroEstRepo>();
 builder.Services.AddScoped<IG250ExtrasTipo,     G250ExtrasTipoRepo>();
 builder.Services.AddScoped<IG280FormatoT,       G280FormatoTRepo>();

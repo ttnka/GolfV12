@@ -14,6 +14,7 @@ namespace GolfV12.Server.Controllers
         {
             this._extraTIFace = extraTIFace;
         }
+        /*
         [HttpGet("{filtro}")]
         public async Task<ActionResult<IEnumerable<G250ExtrasTipo>>> Buscar(string? titulo, 
             string? creador, string? grupo, bool publico)
@@ -59,14 +60,35 @@ namespace GolfV12.Server.Controllers
                     "Error al leer la base de datos, buscando un tipo extra de tiro");
             }
         }
+        */
+
+        [HttpGet("{filtro}")]
+        public async Task<ActionResult<IEnumerable<G250ExtrasTipo>>> Filtro(string? clave)
+        {
+            try
+            {
+                var resultado = await _extraTIFace.Filtro(clave);
+                return Ok(resultado);
+                //return resultado.Any() ? Ok(resultado) : NotFound();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error al leer la base de datos, " +
+                    "buscando tipos de tiros extras");
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<G250ExtrasTipo>> AddExtrasTipo(G250ExtrasTipo extrasTipo)
         {
             try
             {
                 if (extrasTipo == null) return BadRequest();
+                return await _extraTIFace.AddExtrasTipo(extrasTipo);
+                /*
                 var newExtrasTipo = await _extraTIFace.AddExtrasTipo(extrasTipo);
                 return CreatedAtAction(nameof(GetExtrasTipo), new { extrasTipoId = extrasTipo.Id }, newExtrasTipo);
+                */
             }
             catch (Exception)
             {

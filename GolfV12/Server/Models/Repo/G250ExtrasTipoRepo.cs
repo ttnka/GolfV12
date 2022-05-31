@@ -19,7 +19,7 @@ namespace GolfV12.Server.Models.Repo
             await _appDbContext.SaveChangesAsync();
             return res.Entity;
         }
-
+        /*
         public async Task<IEnumerable<G250ExtrasTipo>> Buscar(string? titulo, string? creador, 
             string? grupo, bool publico)
         {
@@ -42,7 +42,69 @@ namespace GolfV12.Server.Models.Repo
         {
             return await _appDbContext.ExtrasTipos.ToListAsync();
         }
+        */
+        public async Task<IEnumerable<G250ExtrasTipo>> Filtro(string? clave)
+        {
+            // clave = exttipo1
+            // ejeplo = exttipo?clave=exttipo1_-_nombre_-_ivan_-_desc_-_conocido
+            // Id, titulo, creador, grupo, publico
+            IQueryable<G250ExtrasTipo> querry = _appDbContext.ExtrasTipos;
+            if (string.IsNullOrEmpty(clave) || clave == "all") return await querry.ToListAsync();
+            string[] parametros = clave.Split("_-_");
+            
+            Dictionary<string, string> ParaDic = new Dictionary<string, string>();
 
+            for (int i = 1; i < parametros.Length; i += 2)
+            {
+                if (!ParaDic.ContainsKey(parametros[i]))
+                    ParaDic.Add(parametros[i], parametros[i + 1]);
+            }
+
+            switch (parametros[0])
+            {
+                case "exttipo1id":
+                    querry = querry.Where(e => e.Id == int.Parse(ParaDic["id"]));
+                    break;
+
+                case "exttipo2id":
+                    querry = querry.Where(e => e.Id == int.Parse(ParaDic["id"]) && e.Status == true);
+                    break;
+
+                case "exttipo3id":
+                    querry = querry.Where(e => e.Id == int.Parse(ParaDic["id"]) && e.Estado == int.Parse(ParaDic["nivel"]) &&
+                                            e.Status == true);
+                    break;
+
+                case "exttipo1creador":
+                    querry = querry.Where(e => e.Creador == ParaDic["creador"]);
+                    break;
+
+                case "exttipo2creador":
+                    querry = querry.Where(e => e.Creador == ParaDic["creador"] && e.Status == true);
+                    break;
+
+                case "exttipo3creador":
+                    querry = querry.Where(e => e.Creador == ParaDic["creador"] && e.Estado == int.Parse(ParaDic["estado"]) && 
+                            e.Status == true);
+                    break;
+
+                case "exttipo1publico":
+                    querry = querry.Where(e => e.Publico == Convert.ToBoolean(ParaDic["publico"]));
+                    break;
+
+                case "exttipo2publico":
+                    querry = querry.Where(e => e.Publico == Convert.ToBoolean(ParaDic["publico"]) &&
+                                e.Status == Convert.ToBoolean(ParaDic["status"]));
+                    break;
+                /*
+                case "exttipo3publico":
+                    querry = querry.Where(e => e.Status == Convert.ToBoolean(ParaDic["status"]));
+                    break;
+                */
+            }
+
+            return await querry.ToListAsync();
+        }
         public async Task<G250ExtrasTipo> UpdateExtrasTipo(G250ExtrasTipo extrasTipo)
         {
             var res = await _appDbContext.ExtrasTipos.FirstOrDefaultAsync(e => e.Id == extrasTipo.Id);

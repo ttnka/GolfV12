@@ -10,8 +10,8 @@ namespace GolfV12.Shared
     {
         public int Renglon { get; set; } = 0;
         public string UserId { get; set; } = string.Empty;
-        public int hcp { get; set; } = 0;
-        public string hcpId { get; set; } = string.Empty;
+        public int Hcp { get; set; } = 0;
+        public string HcpId { get; set; } = string.Empty;
         public int H1 { get; set; } = 0;
         public string H1Id { get; set; } = string.Empty;
         public int H2 { get; set; } = 0;
@@ -63,10 +63,10 @@ namespace GolfV12.Shared
                 
                 if (HcpB9 == false)
                     sumando = 1;
-                if (hcp % 2 == 0)
+                if (Hcp % 2 == 0)
                     sumando = 0;
 
-                return F9 - (hcp + sumando) / 2;
+                return F9 - (Hcp + sumando) / 2;
             }
         }
         public int B9
@@ -84,10 +84,10 @@ namespace GolfV12.Shared
                 
                 if (HcpB9 == true)
                     sumando = 1;
-                if (hcp % 2 == 0)
+                if (Hcp % 2 == 0)
                     sumando = 0;
 
-                return B9 - (hcp + sumando) / 2;
+                return B9 - (Hcp + sumando) / 2;
             }
         }
 

@@ -22,7 +22,6 @@ namespace GolfV12.Client.Servicios.Serv
    
         public async Task<IEnumerable<G120Player>> Filtro(string? clave)
         {
-
             // clave = Play1
             // ejeplo = G120Player/filtro?clave=play1_-_userId=abc12_-_campo=1
             var resultado = "/api/G120Player/filtro?clave=";
@@ -45,7 +44,7 @@ namespace GolfV12.Client.Servicios.Serv
                         resultado += "play2id_-_userid_-_" + ParaDic["userid"] + "_-_status_-_true";
                         break;
                     case "play3id":
-                        resultado += "pla32id_-_userid_-_" + ParaDic["userid"] + 
+                        resultado += "pla3id_-_userid_-_" + ParaDic["userid"] + 
                                         "nivel_-_" + ParaDic["nivel"] +"_-_status_-_true";
                         break;
                     case "play1nombre":

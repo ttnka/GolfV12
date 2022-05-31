@@ -11,13 +11,16 @@ namespace GolfV12.Shared
     {
         [Key]
         public int Id { get; set; }
+        public string Tarjeta { get; set; } = string.Empty;
         public int Rol { get; set; } = 0;
-        public string Player { get; set; }
+        public string Player { get; set; } = string.Empty;
         public int Hoyo { get; set; } = 0;
         public int TipoExtra { get; set; } = 0;
         public int Valor { get; set; } = 0;
         public int Estado { get; set; } = 2;
         public bool Status { get; set; } = true;
+        
+
 
     }
 }

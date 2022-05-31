@@ -19,7 +19,7 @@
         <div class="col-sm-4">
             <div class="nav-item px-3">
                  <RadzenButton Icon="save" style="margin-bottom: 10px" Text="Cerrar la Tarjeta" 
-                        Click="@(arg => ActualizarEstado(3))" Disabled=@(LaTarjeta.Creador != UserIdLog) />
+                        Click="@(arg => ActualizarEstado(3))" Disabled=@(LaTarjeta.Creador != UserIdLog || LaTarjeta.Estado == 3) />
             </div>
         </div>        
         <div class="col-sm-4">
@@ -47,8 +47,8 @@
                         </RadzenFieldset>
 
                     </RadzenAccordionItem>
-                    <RadzenAccordionItem Text="Tarjeta" Icon="account_box">
-                        Details for Employees
+                    <RadzenAccordionItem Text="Orden" Icon="account_box">
+                        <ElSort DatosDic=@DatosDic LosScores=@LosScores TarjetaId=@TarjetaId />
                     </RadzenAccordionItem>
                     <RadzenAccordionItem Text="Bolitas" Icon="accessibility">
                         Details for Customers
@@ -57,7 +57,7 @@
             </RadzenAccordion>
         </RadzenCard>           
         <RadzenButton Icon="save" style="margin-bottom: 10px" Text="Guardar los datos" 
-                        Click="@(arg => Guardar())" Disabled=@(ListaScores.Count == 0) />
+                        Click="@(arg => Guardar())" Disabled=@(!Calculando) />
     <RadzenDataGrid @ref="ScoreGrid" AllowFiltering="true" AllowPaging="true" PageSize="50" 
                 AllowSorting="true" AllowColumnResize="true" Style="width: 1500px"
                 RowRender="@RowRender" ExpandMode="DataGridExpandMode.Single" AllowGrouping="false"
@@ -101,17 +101,18 @@
 
             <RadzenDataGridColumn TItem="TarjetaMolde" Property="Hcp" Title="Hcp" Width="60px" Filterable=false >
                 
-                <Template Context="datos"> 
+                <Template Context="datos" > 
                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
                         (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
                        @datos.UserId == UserIdLog))
                     {
-                        <RadzenNumeric Name="Hcp" TValue=int @bind-Value=@datos.hcp ShowUpDown=false  Min=-5 Max=35 
-                        Change="(arg => RenglonAddUpdateHcp(datos.hcpId, TarjetaId, datos.UserId, datos.hcp))" />
+                        <RadzenNumeric Name="Hcp" TValue=int @bind-Value=@datos.Hcp ShowUpDown=false  Min=-5 Max=35 
+                        Change="(arg => RenglonAddUpdateHcp(datos.HcpId, TarjetaId, datos.UserId, datos.Hcp))" />
                     }
                     else
                     {
-                        @datos.hcp
+                       <div class="circulo">@datos.Hcp</div>
+                       <label class="circulo">1</label>
                     }
                     
 
@@ -152,7 +153,16 @@
                     }
                     else
                     {
-                        @datos.H1
+                        <div class="circulo">@datos.H1</div> 
+                        <label style=" border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    padding:10px;
+    background: #fff;
+    border: 3px solid #000;
+    color: #000;    
+    text-align: center;
+    font: 12px Arial, sans-serif;" ><sup style="color: #FF0000">.</sup>1<sup style="color: #02A30A">*</sup></label>
                     }
                        
                 </Template>
@@ -182,11 +192,20 @@
                        @datos.UserId == UserIdLog))
                     {
                         <RadzenNumeric Name="H2" TValue=int @bind-Value=@datos.H2 ShowUpDown=false Min=0 Max=15
-                        Change="(arg => RenglonAddUpdate(2, datos.UserId, datos.H2, datos.H2Id ))"/>
+                        Change="(arg => RenglonAddUpdate(2, datos.UserId, datos.H2, datos.H2Id ))" />
                     }
                     else
                     {
-                        @datos.H2
+                        <label style=" border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    padding:10px;
+    background: #fff;
+    border: 3px solid #000;
+    color: #02A30A;    
+    text-align: center;
+    font: 14px Arial, sans-serif;" > @datos.H2</label> 
+                        
                     }
 
                     
@@ -757,13 +776,13 @@ else
 @code {
 
 
-    async void RenglonAddUpdate(int hoyoT, string jugadorIdd, int scoredd, string iddd)
+    void RenglonAddUpdate(int hoyoT, string jugadorIdd, int scoredd, string iddd)
     {
         if (LaTarjeta.Estado != 3 )
         {
             if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] != "0")
             {
-
+                Calculando = true;
                 G520Score scoreTemp = new();
                 scoreTemp.Estado = 2;
                 scoreTemp.Player = jugadorIdd;
@@ -771,28 +790,23 @@ else
                 scoreTemp.Score = scoredd;
                 scoreTemp.Tarjeta = TarjetaId;
                 scoreTemp.Id = iddd;
-                string indiceId = string.Empty;
+
                 if (iddd.Count() < 10 )
                 {
                     scoreTemp.Estado = 1;
-                    scoreTemp.Id = ($"{TarjetaId}_{jugadorIdd}_{hoyoT}");
-                    indiceId = "Add";
+                    scoreTemp.Id = ($"{TarjetaId}_{jugadorIdd}_{hoyoT}");   
                 }
-                else
-                {
-                    indiceId = "Upd";
-                }
-                ListaScores.Add(new KeyValuePair<string, G520Score>($"{scoreTemp.Id}_{indiceId}", scoreTemp));
-                //if (!Calculando) await UpDateWrite("Add");
-                //await AddUpdateScore(scoreTemp);
+
+                ListaScores.Add(scoreTemp);
+
 
                 ActualizarEstado(0);
 
                 TotalesCal(scoreTemp.Player, scoreTemp.Hoyo, scoreTemp.Score, scoreTemp.Id);
 
-                ElMesage.Severity = NotificationSeverity.Success;
-                ElMesage.Summary = "Exito!";
-                ElMesage.Detail = "Se actualizo el score!";
+                ElMesage.Severity = NotificationSeverity.Warning;
+                ElMesage.Summary = "Tengo el dato!";
+                ElMesage.Detail = "Necesitas dar Guardar!!";
                 ElMesage.Duration = 1000;
                 ShowNotification(ElMesage);
             }
@@ -803,7 +817,8 @@ else
                 ElMesage.Detail = "No tienes permiso para escribir!";
                 ElMesage.Duration = 5000;
                 ShowNotification(ElMesage);
-                //await LeerScores();
+
+                Calculando = false;
             }
         }
         else
@@ -813,10 +828,8 @@ else
             ElMesage.Detail = "Tarjeta Cerrada, no se actualiza!!!";
             ElMesage.Duration = 5000;
             ShowNotification(ElMesage);
+            Calculando = false;
         }
-
-
-        //Console.WriteLine($"Jugador {scoreTemp.Player} -- hoyo {scoreTemp.Hoyo} -- scoredd {scoreTemp.Score} -- nomas"); 
     }
 
     async void Guardar()
@@ -824,28 +837,24 @@ else
         await UpDateWrite("Add");
     }
 
-
     async void RenglonAddUpdateHcp(string hcpId, string hcpTarj, string hcpPlayer, int hcp) 
     {
         if (LaTarjeta.Estado != 3) 
         {
             if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] != "0")
             {
-                
                 G510Jugador jugadorTemp = new();
                 jugadorTemp.Id = hcpId;
                 jugadorTemp.Tarjeta = hcpTarj;
                 jugadorTemp.Player = hcpPlayer;
                 jugadorTemp.Hcp = hcp;
-                
+
                 var resp = await JugadorIServ.UpdateJugador(jugadorTemp);
                 if (resp != null)
                 {
-                    await LeerScores();
-                    
+                    await UpDateWrite("Hcp");
                 }
 
-                
                 ElMesage.Severity = NotificationSeverity.Success;
                 ElMesage.Summary = "HcPlayer!";
                 ElMesage.Detail = "Se actualizo el Handy!";
@@ -867,15 +876,12 @@ else
             ElMesage.Summary = "Cerrado!";
             ElMesage.Detail = "Tarjeta Cerrada, no se actualiza!!!";
             ElMesage.Duration = 5000;
-            ShowNotification(ElMesage);
-            
+            ShowNotification(ElMesage);   
         }
-        
     }
 
     void RowRender(RowRenderEventArgs<TarjetaMolde> args)
     {
-
         //args.Expandable = args.Data.ShipCountry == "France" || args.Data.ShipCountry == "Brazil";
     }
 }

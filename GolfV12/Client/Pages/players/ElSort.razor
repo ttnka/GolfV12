@@ -1,0 +1,178 @@
+﻿@inherits ElSortBase
+@inject NotificationService NS
+@using GolfV12.Shared;
+
+
+@if (LosScores.Any())
+{
+    <div class="form-grup row">        
+        <div class="col-sm-4">
+            <div class="nav-item px-3">
+                 <h3>La Tarjeta</h3>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="nav-item px-3">
+                 Hcp impar Front 9 <RadzenSwitch @bind-Value=ElHcpB9 Change="CalcularFB9" /> Back 9
+            </div>
+        </div>        
+        <div class="col-sm-4">
+            <div class="nav-item px-3">
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="form-grup row">        
+        <div class="col-sm-4">
+            <div class="nav-item px-3">
+                <b>Front 9</b>
+        <RadzenDataGrid @ref=F9Grid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+            Data="@LosScores" TItem="TarjetaMolde" ColumnWidth="500px" LogicalFilterOperator="LogicalFilterOperator.Or">
+        <Columns>
+               <RadzenDataGridColumn TItem="TarjetaMolde" Title="Lugar" Frozen="true" Sortable="false" Filterable="false" Width="40px" >
+                <Template Context="data">
+                                @if(DatosDic.ContainsKey($"TablaLugarF9_jugador_{data.UserId}"))
+                                {
+                                    @DatosDic[$"TablaLugarF9_jugador_{data.UserId}"]
+                                }
+                                else
+                                {
+                                    <b>0</b>
+                                }
+
+                            </Template>
+            </RadzenDataGridColumn>      
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="Hcp" Filterable="false" Title="Hcp" Frozen="true" Width="40px" TextAlign="TextAlign.Center" />
+            <RadzenDataGridColumn TItem="TarjetaMolde" Title="Jugador" Frozen="true" Sortable="false" Filterable="false" Width="200px" >
+                <Template Context="data">
+                                @if(DatosDic.ContainsKey($"Nombre_{data.UserId}"))
+                                {
+                                    @DatosDic[$"Nombre_{data.UserId}"]
+                                }
+                                else
+                                {
+                                    <b>No hay nombre del jugador!</b>
+                                }
+
+                            </Template>
+            </RadzenDataGridColumn>         
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="F9" Filterable="false" Title="Front 9" Width="70px" TextAlign="TextAlign.Center" />
+            
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="F9Hcp" Filterable="false" Title="Neto F9" Width="70px" TextAlign="TextAlign.Center" />
+            
+        </Columns>
+        </RadzenDataGrid>
+
+
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="nav-item px-3">
+                <b>Back 9</b>
+           <RadzenDataGrid @ref=B9Grid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+            Data="@LosScores" TItem="TarjetaMolde" ColumnWidth="500px" LogicalFilterOperator="LogicalFilterOperator.Or">
+        <Columns>
+            <RadzenDataGridColumn TItem="TarjetaMolde" Title="Lugar" Frozen="true" Sortable="false" Filterable="false" Width="40px" >
+                <Template Context="data">
+                                @if(DatosDic.ContainsKey($"TablaLugarB9_jugador_{data.UserId}"))
+                                {
+                                    @DatosDic[$"TablaLugarB9_jugador_{data.UserId}"]
+                                }
+                                else
+                                {
+                                    <b>0</b>
+                                }
+
+                            </Template>
+            </RadzenDataGridColumn>      
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="Hcp" Filterable="false" Title="Hcp" Frozen="true" Width="40px" TextAlign="TextAlign.Center" />
+            <RadzenDataGridColumn TItem="TarjetaMolde" Title="Jugador" Frozen="true" Sortable="false" Filterable="false" Width="200px" >
+                <Template Context="data">
+                                @if(DatosDic.ContainsKey($"Nombre_{data.UserId}"))
+                                {
+                                    @DatosDic[$"Nombre_{data.UserId}"]
+                                }
+                                else
+                                {
+                                    <b>No hay nombre del jugador!</b>
+                                }
+
+                            </Template>
+            </RadzenDataGridColumn>         
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="B9" Filterable="false" Title="Back 9" Width="70px" TextAlign="TextAlign.Center" />
+            
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="B9Hcp" Filterable="false" Title="Neto B9" Width="70px" TextAlign="TextAlign.Center" />
+            
+        </Columns>
+        </RadzenDataGrid>
+            </div>
+        </div>        
+        <div class="col-sm-4">
+            <div class="nav-item px-3">
+                <b>Total</b>
+             <RadzenDataGrid @ref=TotalGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" 
+                        AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" 
+                        ShowPagingSummary="true" Data="@LosScores" TItem="TarjetaMolde" ColumnWidth="500px" 
+                        LogicalFilterOperator="LogicalFilterOperator.Or" IsLoading="isLoading">
+        <Columns>
+           <RadzenDataGridColumn TItem="TarjetaMolde" Title="Lugar" Frozen="true" Sortable="false" Filterable="false" Width="40px" >
+                <Template Context="data">
+                                @if(DatosDic.ContainsKey($"TablaLugarTotal_jugador_{data.UserId}"))
+                                {
+                                    @DatosDic[$"TablaLugarTotal_jugador_{data.UserId}"]
+                                }
+                                else
+                                {
+                                    <b>0</b>
+                                }
+
+                            </Template>
+            </RadzenDataGridColumn>       
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="Hcp" Filterable="false" Title="Hcp" Frozen="true" Width="40px" TextAlign="TextAlign.Center" />
+            <RadzenDataGridColumn TItem="TarjetaMolde" Title="Jugador" Frozen="true" Sortable="false" Filterable="false" Width="200px" >
+                <Template Context="data">
+                                @if(DatosDic.ContainsKey($"Nombre_{data.UserId}"))
+                                {
+                                    @DatosDic[$"Nombre_{data.UserId}"]
+                                }
+                                else
+                                {
+                                    <b>No hay nombre del jugador!</b>
+                                }
+
+                            </Template>
+            </RadzenDataGridColumn>         
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="Total" Filterable="false" Title="Total" Width="70px" TextAlign="TextAlign.Center" />
+            
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="TotalHcp" Filterable="false" Title="Neto" Width="70px" TextAlign="TextAlign.Center" />
+            
+        </Columns>
+        </RadzenDataGrid>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="spinner"></div>
+}
+--Tatanka--
+
+@code {
+    protected void CalLugar(int tabla, string jugador, int golpes)
+    {
+        
+
+    }
+    /*
+    <RadzenButton Icon="save" style="margin-bottom: 10px" Text="Cerrar la Tarjeta" 
+                        Click="@(arg => ActualizarEstado(3))" Disabled=@(LaTarjeta.Creador != UserIdLog || LaTarjeta.Estado == 3) />
+
+                        <NavLink class="nav-link" href=@($"/players/misdatos/")>
+                            <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a lista tarjetas 
+                        </NavLink>
+    */
+
+    
+}

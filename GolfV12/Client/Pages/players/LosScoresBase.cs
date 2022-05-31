@@ -35,8 +35,8 @@ namespace GolfV12.Client.Pages.players
         [Inject]
         public NavigationManager NM { get; set; }
         public bool Calculando { get; set; } = false;
-        public List<KeyValuePair<string, G510Jugador>> ListaHcp { get; set; } = new List<KeyValuePair<string, G510Jugador>>();
-        public List<KeyValuePair<string, G520Score>> ListaScores { get; set; } = new List<KeyValuePair<string, G520Score>>();
+        public List<G510Jugador> ListaHcp { get; set; } = new List<G510Jugador>();
+        public List<G520Score> ListaScores { get; set; } = new List<G520Score>();
 
         protected override async Task OnInitializedAsync()
         {
@@ -169,8 +169,8 @@ namespace GolfV12.Client.Pages.players
 
                     tarjetaMolde.Renglon = renglon;
                     tarjetaMolde.UserId = TM.Player.ToString();
-                    tarjetaMolde.hcpId = TM.Id;
-                    tarjetaMolde.hcp = Decimal.ToInt32(TM.Hcp) < 1 ? 0  : Decimal.ToInt32(TM.Hcp);
+                    tarjetaMolde.HcpId = TM.Id;
+                    tarjetaMolde.Hcp = Decimal.ToInt32(TM.Hcp) < 1 ? 0  : Decimal.ToInt32(TM.Hcp);
                     {
                         tarjetaMolde.H1 = DatosDic.ContainsKey($"Jugador_{TM.Player}_Hoyo_{1}") ?
                                 int.Parse(DatosDic[$"Jugador_{TM.Player}_Hoyo_{1}"]) : 0;
@@ -258,69 +258,43 @@ namespace GolfV12.Client.Pages.players
 
     protected async Task UpDateWrite(string tipo) 
     {
-        List<string> Intentados = new List<string>();
-        List<string> Logrados = new List<string>();
-        string indexNuevo = string.Empty;
-        string indexLogrado = string.Empty;
-        int freno = 0;
         if (tipo != "Hcp")
-        {
-            do
-            {   
-                if (freno == 5) break;
-                freno++;
-                if (ListaScores.Any()) {
-                foreach (var nuevo in ListaScores)
-                {
-                    //{TarjetaId}_{jugadorIdd}_{hoyoT _{UserIdLog}}
-                    indexNuevo = nuevo.Key;
-                    Intentados.Add(indexNuevo);
-                    G520Score res = indexNuevo.Substring(indexNuevo.Length - 3, 3) == "Add" ?
-                        await ScoreIServ.AddScore(nuevo.Value) :
-                        await ScoreIServ.UpdateScore(nuevo.Value);
-
-                    if (res != null)
-                    {
-            
-                        indexLogrado = $"{res.Tarjeta}_{res.Player}_{res.Hoyo}_{UserIdLog}";
-                        Logrados.Add(indexLogrado);
-                        if (indexNuevo == indexLogrado)
-                        {
-            
-                            TotalesCal(res.Player, res.Hoyo, res.Score, res.Id);
-                            Console.WriteLine($"Mi antes de borrar listaScore tiene {ListaScores.Count()} el indexlogrado {indexLogrado}");
-                            ListaScores.Remove(new KeyValuePair<string, G520Score>(indexLogrado, res));
-                                Console.WriteLine($"Mi despues de borrar listaScore tiene {ListaScores.Count()}");
-                            }
-                    }
-                }
-            }
-            } while (ListaScores.Count() > 0);
-            
-        }
-        else
-        {
-            foreach (var nuevo in ListaHcp)
             {
-                indexNuevo = nuevo.Key;
-                Intentados.Add(indexNuevo);
-                G510Jugador res = await JugadorIServ.UpdateJugador(nuevo.Value);
-                if (res != null )
+                if ( ListaScores .Count > 0 )
                 {
-                    indexLogrado = $"{res.Tarjeta}_{res.Player}";
-                    Logrados.Add(indexLogrado);
-                    if (indexNuevo == indexLogrado)
+                    foreach (var item in ListaScores)
                     {
-                        ListaHcp.Remove(new KeyValuePair<string, G510Jugador>(indexLogrado, res));
+                        var res = item.Estado == 1 ?
+                           await ScoreIServ.AddScore(item) :
+                           await ScoreIServ.UpdateScore(item);
+
+                        if (res.Id != item.Id)
+                            await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, true,
+                        $"El usuario intento agragar un score a la tarjeta {item.Id}");
+
+                        //ListaScores.Remove(x => x.Id == item.Id);
                     }
                 }
+                ListaScores.RemoveAll(x => x.Id != "");
             }
-                
-        }
+        else
+            {
+                if (ListaHcp != null)
+                {
+                    foreach (var item in ListaHcp)
+                    {
+                        var resp = await JugadorIServ.UpdateJugador(item);
+                            if(resp.Id != item.Id)
+                            await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, true,
+                        $"El usuario intento actualizar HCP {item.Player}");
 
-        
+                        ListaHcp.Remove(item);
+                    }
+                }
+                ListaHcp.RemoveAll(x => x.Id != "");
+            }
         await LeerScores();
-        Console.WriteLine($"Lista tiene {ListaScores.Count()}");
+            Calculando = false;
     }
 
     protected void LeerLosHoyos()
