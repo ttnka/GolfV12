@@ -39,6 +39,15 @@ namespace GolfV12.Server.Data
         public DbSet<G249TiroEstadistica> TirosEst { get; set; }
         public DbSet<G250ExtrasTipo> ExtrasTipos { get; set; }
         public DbSet<G280FormatoT> FormatosT { get; set; }
+
+        public DbSet<G300Azar> Azar { get; set; }
+        public DbSet<G310Participantes> Participantes { get; set; }
+        public DbSet<G320Bolitas> Bolitas { get; set; }
+        public DbSet<G324Parejas> Parejas { get; set; }
+        public DbSet<G330Loba> Loba { get; set; }
+        public DbSet<G332LobaDet> LobaDet { get; set; }
+        public DbSet<G390TiposAzar> TiposAzar { get; set; }
+
         public DbSet<G500Tarjeta> Tarjetas { get; set; }
         public DbSet<G502Tarjetas> Tarjetas502 { get; set; }
         public DbSet<G510Jugador> Jugadores { get; set; }

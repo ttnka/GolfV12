@@ -48,7 +48,7 @@ namespace GolfV12.Server.Models.Repo
                     break;
 
                 case "exttipo3id":
-                    querry = querry.Where(e => e.Id == int.Parse(ParaDic["id"]) && e.Estado == int.Parse(ParaDic["nivel"]) &&
+                    querry = querry.Where(e => e.Id == int.Parse(ParaDic["id"]) && e.Estado == int.Parse(ParaDic["estado"]) &&
                                             e.Status == true);
                     break;
 

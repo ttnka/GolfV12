@@ -48,6 +48,8 @@ builder.Services.AddScoped<IG249TiroEst,        G249TiroEstRepo>();
 builder.Services.AddScoped<IG250ExtrasTipo,     G250ExtrasTipoRepo>();
 builder.Services.AddScoped<IG280FormatoT,       G280FormatoTRepo>();
 
+
+
 builder.Services.AddScoped<IG500Tarjeta, G500TarjetaRepo>();
 builder.Services.AddScoped<IG502Tarjetas, G502TarjetasRepo>();
 builder.Services.AddScoped<IG510Jugador, G510JugadorRepo>();
