@@ -19,30 +19,7 @@ namespace GolfV12.Server.Models.Repo
             await _appDbContext.SaveChangesAsync();
             return res.Entity;
         }
-        /*
-        public async Task<IEnumerable<G250ExtrasTipo>> Buscar(string? titulo, string? creador, 
-            string? grupo, bool publico)
-        {
-            IQueryable<G250ExtrasTipo> querry = _appDbContext.ExtrasTipos;
-            if (!string.IsNullOrEmpty(titulo)) querry = querry.Where(e => e.Titulo.Contains(titulo));
-            if (!string.IsNullOrEmpty(creador)) querry = querry.Where(e => e.Creador.Contains(creador));
-            if (!string.IsNullOrEmpty(grupo)) querry = querry.Where(e => e.Grupo.Contains(grupo));
-            if(publico) querry = querry.Where(e=>e.Publico == true);   
-            
-            return await querry.ToListAsync();
-        }
-
-        public async Task<G250ExtrasTipo> GetExtrasTipo(int extrasTipoId)
-        {
-            var res = await _appDbContext.ExtrasTipos.FirstOrDefaultAsync(e => e.Id == extrasTipoId);
-            return res != null ? res : new G250ExtrasTipo();
-        }
-
-        public async Task<IEnumerable<G250ExtrasTipo>> GetExtrasTipos()
-        {
-            return await _appDbContext.ExtrasTipos.ToListAsync();
-        }
-        */
+        
         public async Task<IEnumerable<G250ExtrasTipo>> Filtro(string? clave)
         {
             // clave = exttipo1
@@ -87,7 +64,10 @@ namespace GolfV12.Server.Models.Repo
                     querry = querry.Where(e => e.Creador == ParaDic["creador"] && e.Estado == int.Parse(ParaDic["estado"]) && 
                             e.Status == true);
                     break;
-
+                case "exttipo4creador":
+                    querry = querry.Where(e => (e.Creador == ParaDic["creador"] || e.Publico == true) &&
+                            e.Status == true);
+                    break;
                 case "exttipo1publico":
                     querry = querry.Where(e => e.Publico == Convert.ToBoolean(ParaDic["publico"]));
                     break;

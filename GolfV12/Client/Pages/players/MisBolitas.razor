@@ -1,0 +1,344 @@
+﻿@inherits MisBolitasBase
+@inject NotificationService NS
+@using GolfV12.Shared;
+
+
+@if (LasBolitas != null)
+{
+    
+    <RadzenCard>
+        <RadzenDataGrid @ref=BolitasGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" 
+                AllowSorting="true" PageSize="50" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" 
+                ShowPagingSummary="true" Data="@LasBolitas" TItem="TarjetaMolde" 
+                ColumnWidth="500px" LogicalFilterOperator="LogicalFilterOperator.Or">
+                <Columns>
+                     
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Title="Jugador" Frozen="true" Sortable="false" Filterable="false" Width="200px" >
+                        
+                        <Template Context="data">
+                                        @if(DatosDic.ContainsKey($"Nombre_{data.Hijo}"))
+                                        {
+                                             @data.Hijo.Substring(data.Hijo.Length-3, 3); @DatosDic[$"Nombre_{data.Hijo}"];
+                                        }
+                                        else
+                                        {
+                                            <b>No hay nombre del contrincante!</b>
+                                        }
+
+                                    </Template>
+                                    
+                        
+                                    <FooterTemplate>
+                    
+                    <table>
+                        <tr>
+                            <th style="text-align:center">Par</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">Caballeros</th>
+                        </tr>
+                        
+                    </table>
+                    
+                </FooterTemplate>
+                    </RadzenDataGridColumn>         
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H1" Filterable="false" Title="H1" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_1")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_1"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_1"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H2" Filterable="false" Title="H2" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_2")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_2"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_2"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H3" Filterable="false" Title="H3" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_3")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_3"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_3"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H4" Filterable="false" Title="H4" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_4")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_4"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_4"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H5" Filterable="false" Title="H5" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_5")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_5"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_5"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H6" Filterable="false" Title="H6" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_6")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_6"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_6"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H7" Filterable="false" Title="H7" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_7")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_7"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_7"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H8" Filterable="false" Title="H8" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_8")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_8"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_8"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H9" Filterable="false" Title="H9" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_9")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_9"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_9"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H10" Filterable="false" Title="H10" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_10")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_10"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_10"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H11" Filterable="false" Title="H11" Width="60px" TextAlign="TextAlign.Center" ><FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_11")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_11"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_11"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H12" Filterable="false" Title="H12" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_12")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_12"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_12"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H13" Filterable="false" Title="H13" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_13")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_13"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_13"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H14" Filterable="false" Title="H14" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_14")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_14"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_14"]</th>
+                        </tr>
+                       
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H15" Filterable="false" Title="H15" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_15")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_15"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_15"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H16" Filterable="false" Title="H16" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_16")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_16"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_16"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H17" Filterable="false" Title="H17" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_17")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_17"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_17"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="H18" Filterable="false" Title="H18" Width="60px" TextAlign="TextAlign.Center" >
+                        <FooterTemplate>
+                    @if(DatosDic.ContainsKey("HoyoPar_18")){
+                    <table>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoPar_18"]</th>
+                        </tr>
+                        <tr>
+                            <th style="text-align:center">@DatosDic["HoyoH_18"]</th>
+                        </tr>
+                        
+                    </table>
+                    }
+                </FooterTemplate>
+                        </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="TarjetaMolde" Property="Total" Filterable="false" Title="Total" Width="60px" TextAlign="TextAlign.Center" />
+                    
+            
+                </Columns>
+                </RadzenDataGrid>
+    </RadzenCard>
+
+}
+else
+{
+    <div class="spinner"></div>
+}
+--Tatanka--
+
+@code {
+    protected void CalLugar(int tabla, string jugador, int golpes)
+    {
+        
+
+    }
+    /*
+    <RadzenButton Icon="save" style="margin-bottom: 10px" Text="Cerrar la Tarjeta" 
+                        Click="@(arg => ActualizarEstado(3))" Disabled=@(LaTarjeta.Creador != UserIdLog || LaTarjeta.Estado == 3) />
+
+                        <NavLink class="nav-link" href=@($"/players/misdatos/")>
+                            <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a lista tarjetas 
+                        </NavLink>
+    */
+
+    
+}

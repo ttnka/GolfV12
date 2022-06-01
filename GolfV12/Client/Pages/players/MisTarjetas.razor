@@ -159,7 +159,11 @@
                     {
                     @if (DatosDic[$"JugXtarjeta_{datos.Id}"] != "0")
                     {
-                        <RadzenLink Icon="add_circle_outline" Text="Scores" Path=@($"/players/scores/{datos.Id}") />
+                        @if (datos.Estado != 3)
+                        {
+                            verTarjeta = "Scores";
+                        }
+                        <RadzenLink Icon="add_circle_outline" Text=@verTarjeta Path=@($"/players/scores/{datos.Id}") />
                     }
                     }
                 
@@ -197,6 +201,7 @@
 
 @code {
     G500Tarjeta TarjetaToInsert;
+    string verTarjeta = "Ver Resultado";
     async Task InsertJugador(G500Tarjeta valorTarj)
     {
         await OnInsertJugador.InvokeAsync(valorTarj);

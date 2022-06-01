@@ -19,36 +19,14 @@ namespace GolfV12.Client.Servicios.Serv
                 await newOrg.Content.ReadFromJsonAsync<G242Extras>() :
                 null;
         }
-        /*
-        public async Task<IEnumerable<G242Extras>> Buscar(int rol, string exter, int hoyo, int tipoExtra)
-        {
-            var resultado = "";
-            if (rol > 0) { resultado = "rol=" + rol + "&"; }
-            if (!string.IsNullOrEmpty(exter)) { resultado = resultado + "exter=" + exter + "&"; }
-            if (hoyo > 0) { resultado = resultado + "hoyo=" + hoyo + "&"; }
-            if (tipoExtra > 0) { resultado = resultado + "tipoextra=" + tipoExtra + "&"; }
-            if (resultado != "") { resultado = "/api/G242Extras/filtro?" + resultado; }
-            return await _httpClient.GetFromJsonAsync<IEnumerable<G242Extras>>(resultado);
-        }
-
-        public async Task<G242Extras> GetExtra(int extraId)
-        {
-            return await _httpClient.GetFromJsonAsync<G242Extras>($"/api/G242Extras/{extraId}");
-
-        }
         
-        public async Task<IEnumerable<G242Extras>> GetExtras()
-        {
-            return await _httpClient.GetFromJsonAsync<IEnumerable<G242Extras>>("/api/G242Extras/");
-        }
-        */
         public async Task<IEnumerable<G242Extras>> Filtro(string? clave)
         {
             // clave = ext1
             // ejeplo = G242Extra/filtro?clave=ext1_-_Id_-_abc12_-_
             var resultado = "/api/G242Extras/filtro?clave=";
             Dictionary<string, string> ParaDic = new Dictionary<string, string>();
-            if (!string.IsNullOrEmpty(clave) && clave.Count() > 13)
+            if (!string.IsNullOrEmpty(clave) && clave.Count() > 8)
             {
                 var parametros = clave.Split("_-_");
 

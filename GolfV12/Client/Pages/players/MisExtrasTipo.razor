@@ -1,0 +1,204 @@
+﻿@inherits MisExtrasTipoBase
+@using GolfV12.Shared;
+
+<h3>Lista de tipos de tiros Extras</h3>
+
+<div class="form-grup row">        
+        <div class="col-sm-9">
+            <div class="nav-item px-3">
+                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" 
+                    Text="Agregar ExtrasTipo" Click="@InsertRow" Disabled=@(ExtrasTipoToInsert != null) />
+            </div>
+        </div>
+        
+        <div class="col-sm-3">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href=@($"/players/misdatos/")>
+                <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a listado de tarjetas
+                </NavLink>
+            </div>
+        </div>
+ </div>
+@if(LosExtrasTipo.Any())
+{
+    <RadzenDataGrid @ref=@ExtrasTipoGrid AllowFiltering="true" AllowPaging="true" PageSize="50" 
+                AllowSorting="true" EditMode="DataGridEditMode.Single"
+                Data=@LosExtrasTipo TItem="G250ExtrasTipo" RowUpdate="@OnUpdateRow" 
+                RowCreate="@OnCreateRow" Width="1200px" >
+        <Columns>
+
+            <RadzenDataGridColumn TItem="G250ExtrasTipo" Property="Id" Title="Id" Width="60px" 
+            Filterable="false" Sortable="false" >
+                <Template Context="datos">
+                    @datos.Id 
+                    @if (!datos.Publico == true)
+                    {
+                        <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" 
+                        Click="@(args => EditRow(datos))" @onclick:stopPropagation="true">
+                        </RadzenButton>
+                    }  
+                    
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G250ExtrasTipo" Title="Titulo" Property="Titulo" 
+                Width="200px" Filterable="true" >
+                <Template Context="datos">
+                @datos.Titulo
+                </Template>
+
+                <EditTemplate Context="datos">
+                    <RadzenTextBox Name="Titulo" @bind-Value=datos.Titulo ></RadzenTextBox> 
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G250ExtrasTipo" Title="Descripcion" Property="Desc" 
+                Width="200px" Filterable="false" >
+                <Template Context="datos">
+                @datos.Desc
+                </Template>
+
+                <EditTemplate Context="datos">
+                    <RadzenTextArea Name="Desc" @bind-Value=datos.Desc ></RadzenTextArea>
+                </EditTemplate>
+
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G250ExtrasTipo" Property="Valor" Title="Valor" Width="60px" 
+                Filterable="false" Sortable="false">
+                <Template Context="datos">
+                    <div style="text-align:right">@datos.Valor</div> 
+                </Template>
+
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="Valor" @bind-Value=datos.Valor Min=1 Max=100></RadzenNumeric>
+                </EditTemplate>
+
+            </RadzenDataGridColumn>
+
+            
+
+            <RadzenDataGridColumn TItem="G250ExtrasTipo" Property="Publico" Title="Publico" 
+            Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @if(datos.Publico)
+                    {
+                        <b>Si!</b>
+                    }
+                    else
+                    {
+                        <b>Solo tuyo!</b>
+                    }
+                </Template>
+                <EditTemplate Context="datos">
+                    <b>Solo tuyo!</b>
+                    
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            
+
+            <RadzenDataGridColumn TItem="G250ExtrasTipo" Context="sampleBlazorModelsSampleOrder" 
+                    Filterable="false" Sortable="false" TextAlign="TextAlign.Center" 
+                    Width="120px" Title="Estado">
+                <Template Context="datos">
+                    @if(datos.Status == true)
+                    {
+                        <b>Activo</b>
+                    }
+                    else
+                    {
+                        <b>Suspendido</b>
+                    }
+                </Template>
+
+                <EditTemplate Context="datos">
+                    @if (isNew == false)
+                    {
+                        <b>Borrar este registro? Si </b><RadzenSwitch Name="Status" @bind-Value=datos.Status /> <b>No!</b>
+                    }
+                    
+                    <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Primary" Class="m-1" Click="@((args) => SaveRow(datos))">
+                    </RadzenButton>
+                    <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@((args) => CancelEdit(datos))">
+                    </RadzenButton>
+                </EditTemplate>
+
+            </RadzenDataGridColumn>
+
+        </Columns>
+   </RadzenDataGrid>  
+
+}
+
+else
+{
+    <div class="spinner"></div>
+}
+
+--Tatanka--
+
+
+
+@code 
+{
+    G250ExtrasTipo ExtrasTipoToInsert;
+    bool isNew = true;
+
+    async Task EditRow(G250ExtrasTipo extraT)
+    {
+        isNew = false;
+        await ExtrasTipoGrid.EditRow(extraT);
+    }
+
+    async void OnUpdateRow(G250ExtrasTipo extraT)
+    {
+        if (extraT == ExtrasTipoToInsert) ExtrasTipoToInsert = null;
+        await ExtTipoIServ.UpdateExtrasTipo(extraT);
+    }
+
+    async Task SaveRow(G250ExtrasTipo extraT)
+    {
+        await ExtrasTipoGrid.UpdateRow(extraT);
+    }
+
+    void CancelEdit(G250ExtrasTipo extraT)
+    {
+        if (extraT == ExtrasTipoToInsert) ExtrasTipoToInsert = null;
+        ExtrasTipoGrid.CancelEditRow(extraT);
+    }
+
+    async Task InsertRow()
+    {
+        isNew = true;
+        ExtrasTipoToInsert = new G250ExtrasTipo();
+        ExtrasTipoToInsert.Creador = UserIdLog;
+        ExtrasTipoToInsert.Grupo = "General";
+        ExtrasTipoToInsert.Publico = false;
+        ExtrasTipoToInsert.Estado = 1;
+        ExtrasTipoToInsert.Status = true;
+
+        await ExtrasTipoGrid.InsertRow(ExtrasTipoToInsert);
+    }
+
+    async void OnCreateRow(G250ExtrasTipo extraT)
+    {
+        if (extraT == ExtrasTipoToInsert) ExtrasTipoToInsert = null;
+
+        G250ExtrasTipo resultado = new G250ExtrasTipo();
+        extraT.Creador = UserIdLog;
+        extraT.Status = true;
+        extraT.Estado = 1;
+
+        resultado = await ExtTipoIServ.AddExtrasTipo(extraT);
+        await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false,
+            $"El usuario agrego un nuevo Extra {extraT.Titulo}");
+            
+    }
+
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+        
+ }

@@ -20,6 +20,9 @@ namespace GolfV12.Client.Pages.players
         [Inject]
         public IG176HoyoServ HoyoIServ { get; set; }
         [Inject]
+        public IG242ExtrasServ ExtrasIServ { get; set; }
+        public IEnumerable<G242Extras> LosExtrasP { get; set; } = new List<G242Extras>();
+        [Inject]
         public IG510JugadorServ JugadorIServ { get; set; }
         public IEnumerable<G510Jugador> LosJugadores { get; set; } = new List<G510Jugador>();
         public G510Jugador ElJugador { get; set; } = new G510Jugador();
@@ -46,11 +49,11 @@ namespace GolfV12.Client.Pages.players
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
-            
             await LeerJugadores();
             await LeerScores();
             LeerLosHoyos();
             await LeerPermisos();
+            await LeerExtras();
 
             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
                 $"El usuario consulto el listado de jugadores de la tarjeta {TarjetaId}");
@@ -255,7 +258,10 @@ namespace GolfV12.Client.Pages.players
             LosScores = ListaTM.AsEnumerable();
             
         }
-
+    protected async Task LeerExtras()
+        {
+            LosExtrasP = await ExtrasIServ.Filtro($"ext2tarjeta_-_tarjeta_-_{TarjetaId}");
+        }
     protected async Task UpDateWrite(string tipo) 
     {
         if (tipo != "Hcp")

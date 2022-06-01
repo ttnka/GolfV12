@@ -9,7 +9,9 @@ namespace GolfV12.Shared
     public class TarjetaMolde
     {
         public int Renglon { get; set; } = 0;
+        public string Tarjeta { get; set; } = string.Empty;
         public string UserId { get; set; } = string.Empty;
+        public string Hijo { get; set; } = string.Empty;
         public int Hcp { get; set; } = 0;
         public string HcpId { get; set; } = string.Empty;
         public int H1 { get; set; } = 0;

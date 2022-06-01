@@ -34,24 +34,17 @@
     </RadzenCard>
    
     <RadzenCard>
+
         <RadzenAccordion>
                 <Items>
                     <RadzenAccordionItem Text="Captura" Icon="add_circle_outline">
-
-                        <RadzenFieldset Text="Agrega Golpes a la tarjeta">
-                            <div class="row">
-
-                            </div> 
-                            <hr>
-                                                
-                        </RadzenFieldset>
 
                     </RadzenAccordionItem>
                     <RadzenAccordionItem Text="Orden" Icon="account_box">
                         <ElSort DatosDic=@DatosDic LosScores=@LosScores TarjetaId=@TarjetaId />
                     </RadzenAccordionItem>
                     <RadzenAccordionItem Text="Bolitas" Icon="accessibility">
-                        Details for Customers
+                        
                     </RadzenAccordionItem>
                 </Items>
             </RadzenAccordion>
@@ -74,13 +67,8 @@
             <RadzenTabs>
                 <Tabs>
                     <RadzenTabsItem Text="Detalle de Apuesta ">
-                        <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@LosScores" TItem="TarjetaMolde">
-                            <Columns>
-                                <RadzenDataGridColumn TItem="TarjetaMolde" Property="Renglon" Title="Renglon" />
-                                <RadzenDataGridColumn TItem="TarjetaMolde" Property="UserId" Title="Jugador" />
-                              
-                            </Columns>
-                        </RadzenDataGrid>
+                        <MisBolitas DatosDic=@DatosDic TarjetaId=@TarjetaId ElPadreId=@datos1.UserId LosScores=@LosScores />
+                        
                     </RadzenTabsItem>
                     <RadzenTabsItem Text="Extras">
                         <RadzenDataList WrapItems="true" AllowPaging="true" Data="@LosScores" TItem="TarjetaMolde" PageSize="10">
@@ -111,8 +99,16 @@
                     }
                     else
                     {
-                       <div class="circulo">@datos.Hcp</div>
-                       <label class="circulo">1</label>
+                       <label style="
+    width: 34px;
+    height: 34px;
+    padding:10px;
+    background: #fff;
+    border: 1px solid #000;
+    color: #000;    
+    text-align: center;
+    font: 12px Arial, sans-serif;;">@datos.Hcp</label>
+                       
                     }
                     
 
@@ -134,9 +130,7 @@
                         <tr>
                             <th><b>Caballeros</b></th>
                         </tr>
-                        <tr>
-                            <th><b>Mujeres</b></th>
-                        </tr>
+                        
                     </table>
                 </FooterTemplate>
             </RadzenDataGridColumn>
@@ -153,16 +147,16 @@
                     }
                     else
                     {
-                        <div class="circulo">@datos.H1</div> 
+                        <div></div> 
                         <label style=" border-radius: 50%;
     width: 34px;
     height: 34px;
     padding:10px;
     background: #fff;
-    border: 3px solid #000;
+    border: 1px solid #000;
     color: #000;    
     text-align: center;
-    font: 12px Arial, sans-serif;" ><sup style="color: #FF0000">.</sup>1<sup style="color: #02A30A">*</sup></label>
+    font: 12px Arial, sans-serif;" >@datos.H1</label>
                     }
                        
                 </Template>
@@ -175,9 +169,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_1"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_1"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -201,7 +193,7 @@
     height: 34px;
     padding:10px;
     background: #fff;
-    border: 3px solid #000;
+    border: 1px solid #000;
     color: #02A30A;    
     text-align: center;
     font: 14px Arial, sans-serif;" > @datos.H2</label> 
@@ -219,9 +211,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_2"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_2"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -239,7 +229,7 @@
                     }
                     else
                     {
-                        @datos.H3
+                        <div> <label class="circulo">@datos.H3</label></div> 
                     }
                     
                 </Template>
@@ -252,9 +242,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_3"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_3"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -271,7 +259,7 @@
                     }
                     else
                     {
-                        @datos.H4
+                        <label class="circulo">@datos.H4</label>
                     }
                     
                 </Template>
@@ -284,9 +272,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_4"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_4"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -316,9 +302,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_5"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_5"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -348,9 +332,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_6"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_6"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -380,9 +362,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_7"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_7"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -412,9 +392,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_8"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_8"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -444,9 +422,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_9"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_9"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -483,9 +459,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_10"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_10"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -515,9 +489,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_11"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_11"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -547,9 +519,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_12"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_12"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -579,9 +549,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_13"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_13"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -611,9 +579,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_14"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_14"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -643,9 +609,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_15"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_15"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -675,9 +639,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_16"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_16"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -707,9 +669,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_17"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_17"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -739,9 +699,7 @@
                         <tr>
                             <th style="text-align:center">@DatosDic["HoyoH_18"]</th>
                         </tr>
-                        <tr>
-                            <th style="text-align:center">@DatosDic["HoyoW_18"]</th>
-                        </tr>
+                        
                     </table>
                     }
                 </FooterTemplate>
@@ -757,14 +715,36 @@
                   <b>@datos.Total</b>
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="TarjetaMolde" Property="TotalHcp" Title="Neto F-B-T" FormatString="{0:d}" Width="100px" Filterable=false>
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="TotalHcp" Title="Neto F-B-T" FormatString="{0:d}" 
+                                    Width="100px" Filterable=false>
                 <Template Context="datos"> 
                    @($"{@datos.F9Hcp} {@datos.B9Hcp} {@datos.TotalHcp}")
                 </Template>
             </RadzenDataGridColumn>
         </Columns>
     </RadzenDataGrid>
+    <div> Birdie, Par, Bogie</div>
+    <RadzenCard>
+        <RadzenFieldset AllowCollapse="true" Text="Agrega Extras a la tarjeta">
+            <HeaderTemplate>
+            <span class="d-inline-flex align-items-center align-middle">
+                <RadzenIcon Icon="account_box" Class="mr-1" /><b>Extras</b>
+            </span>
+        </HeaderTemplate>
+        <ChildContent>
+                <MisExtras DatosDic=@DatosDic LosJugadores=@LosJugadores LosExtras=@LosExtrasP 
+                                            TarjetaId=@TarjetaId OnInsertExtra=@LeerExtras
+                                            LaTarjeta=@LaTarjeta />  
+        </ChildContent>
+            <SummaryTemplate>
+                <RadzenCard class="mt-3">
+                    <b>Hay @LosExtrasP.Count() extras!! </b>
+                </RadzenCard>
+            </SummaryTemplate>
+        </RadzenFieldset>
+    </RadzenCard>  
    
+
 } 
 
 else

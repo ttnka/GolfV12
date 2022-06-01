@@ -19,37 +19,14 @@ namespace GolfV12.Client.Servicios.Serv
                 await newExtraT.Content.ReadFromJsonAsync<G250ExtrasTipo>() :
                 null;
         }
-        /*
-        public async Task<IEnumerable<G250ExtrasTipo>> Buscar(string? titulo, string? creador, 
-            string? grupo, bool publico)
-        {
-            var resultado = "";
-            if (!string.IsNullOrEmpty(titulo)) { resultado = resultado + "titulo=" + titulo + "&"; }
-            if (!string.IsNullOrEmpty(creador)) { resultado = resultado + "creador=" + creador + "&"; }
-            if (!string.IsNullOrEmpty(grupo)) { resultado = resultado + "grupo=" + grupo + "&"; }
-            if (publico == true) { resultado = resultado + "publico=true"; }
-            if (resultado != "") { resultado = "/api/G250ExtrasTipo/filtro?" + resultado; }
-            return await _httpClient.GetFromJsonAsync<IEnumerable<G250ExtrasTipo>>(resultado);
-        }
-
-        public async Task<G250ExtrasTipo> GetExtrasTipo(int extrasTipoId)
-        {
-            return await _httpClient.GetFromJsonAsync<G250ExtrasTipo>($"/api/G250ExtrasTipo/{extrasTipoId}");
-        }
-
-        public async Task<IEnumerable<G250ExtrasTipo>> GetExtrasTipos()
-        {
-            return await _httpClient.GetFromJsonAsync<IEnumerable<G250ExtrasTipo>>("/api/G250ExtrasTipo/");
-        }
-
-        */
+        
         public async Task<IEnumerable<G250ExtrasTipo>> Filtro(string? clave)
         {
             // clave = exttipo1tipo
             // ejeplo = G242extratipo/filtro?clave=exttipo1tipo_-_userId=abc12_-_campo=1
             var resultado = "/api/G250ExtrasTipo/filtro?clave=";
             Dictionary<string, string> ParaDic = new Dictionary<string, string>();
-            if (!string.IsNullOrEmpty(clave) && clave.Count() > 13)
+            if (!string.IsNullOrEmpty(clave) && clave.Count() > 2)
             {
                 var parametros = clave.Split("_-_");
 
@@ -79,12 +56,16 @@ namespace GolfV12.Client.Servicios.Serv
                     case "exttipo3creador":
                         resultado += "exttipo3creador_-_creador_-_" + ParaDic["creador"] + "_-_estado_-_" + ParaDic["estado"];
                         break;
+                    case "exttipo4creador":
+                        resultado += "exttipo4creador_-_creador_-_" + ParaDic["creador"];
+                        break;
                     case "exttipo1publico":
                         resultado += "exttipo1publico_-_publico_-_" + ParaDic["publico"];
                         break;
                     case "exttipo2publico":
                         resultado += "exttipo2publico_-_publico_-_" + ParaDic["publico"] + "_-_status_-_" + ParaDic["status"];
                         break;
+                    
                     case "all":
                         resultado += "all";
                         break;
