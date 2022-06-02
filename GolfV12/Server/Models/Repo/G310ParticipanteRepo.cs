@@ -13,7 +13,7 @@ namespace GolfV12.Server.Models.Repo
         {
             this._appDbContext = applicationDbContext;
         }
-        public async Task<G310Participantes> AddAzar(G310Participantes participante)
+        public async Task<G310Participantes> AddParticipante(G310Participantes participante)
         {
             var res = await _appDbContext.Participantes.AddAsync(participante);
             await _appDbContext.SaveChangesAsync();
@@ -53,19 +53,19 @@ namespace GolfV12.Server.Models.Repo
                     break;
 
                 case "part1azar":
-                    querry = querry.Where(e => e.azar == ParaDic["azar"]);
+                    querry = querry.Where(e => e.Azar == ParaDic["azar"]);
                     break;
 
                 case "part2azar":
-                    querry = querry.Where(e => e.Creador == ParaDic["creador"] && e.Status == true);
+                    querry = querry.Where(e => e.Azar == ParaDic["azar"] && e.Status == true);
                     break;
 
                 case "part3azar":
-                    querry = querry.Where(e => e.Creador == ParaDic["creador"] && e.Estado == int.Parse(ParaDic["estado"]) &&
+                    querry = querry.Where(e => e.Azar == ParaDic["azar"] && e.Estado == int.Parse(ParaDic["estado"]) &&
                             e.Status == true);
                     break;
                 case "part1tarjeta":
-                    querry = querry.Where(e => e.Tarjeta == ParaDic["tarjeta"]));
+                    querry = querry.Where(e => e.Tarjeta == ParaDic["tarjeta"]);
                     break;
 
                 case "part2tarjeta":
@@ -73,19 +73,39 @@ namespace GolfV12.Server.Models.Repo
                                 e.Status == Convert.ToBoolean(ParaDic["status"]));
                     break;
                 case "part3tarjeta":
-                    querry = querry.Where(e => e.Tarjeta == ParaDic["tarjeta"] && e.Creador == ParaDic["creador"] &&
+                    querry = querry.Where(e => e.Tarjeta == ParaDic["tarjeta"] && e.Azar == ParaDic["azar"] &&
                                 e.Status == Convert.ToBoolean(ParaDic["status"]));
                     break;
-                    /*
-                    case "azar3publico":
-                        querry = querry.Where(e => e.Status == Convert.ToBoolean(ParaDic["status"]));
+                   
+                case "part1j1":
+                    querry = querry.Where(e => e.J1 == ParaDic["j1"] && e.Tarjeta == ParaDic["tarjeta"] && 
+                                e.Status == true );
                         break;
-                    */
+                case "part2j1":
+                    querry = querry.Where(e => e.J1 == ParaDic["j1"] && e.Tarjeta == ParaDic["tarjeta"] && 
+                                e.Azar == ParaDic["azar"] &&  e.Status == true);
+                    break;
+                case "part3j1":
+                    querry = querry.Where(e => (e.J1 == ParaDic["j"] || e.J2 == ParaDic["j"] ) && 
+                                e.Tarjeta == ParaDic["tarjeta"] && e.Status == true);
+                    break;
+                case "part4j1":
+                    querry = querry.Where(e => (e.J1 == ParaDic["j"] || e.J2 == ParaDic["j"]) && 
+                            e.Tarjeta == ParaDic["tarjeta"] && e.Azar == ParaDic["azar"] && e.Status == true);
+                    break;
+                case "part1j2":
+                    querry = querry.Where(e => e.J2 == ParaDic["j2"] && e.Tarjeta == ParaDic["tarjeta"] && 
+                                e.Status == true);
+                    break;
+                case "part2j2":
+                    querry = querry.Where(e => e.J2 == ParaDic["j2"] && e.Tarjeta == ParaDic["tarjeta"] && 
+                                e.Azar == ParaDic["azar"] && e.Status == true);
+                    break;
             }
 
             return await querry.ToListAsync();
         }
-        public async Task<G310Participantes> UpdateAzar(G310Participantes participante)
+        public async Task<G310Participantes> UpdateParticipante(G310Participantes participante)
         {
             var res = await _appDbContext.Participantes.FirstOrDefaultAsync(e => e.Id == participante.Id);
             if (res != null)

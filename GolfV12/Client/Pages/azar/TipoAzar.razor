@@ -1,6 +1,6 @@
 ﻿@page "/azar/tipoazar/"
 @using GolfV12.Shared
-@inherits ExtrasTipoBase 
+@inherits TipoAzarBase 
 
 <h3>Lista de tipos retos</h3>
 
@@ -9,7 +9,7 @@
             <div class="nav-item px-3">
                 <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" 
                 Text="Agregar ExtrasTipo" 
-                Click="@InsertRow" Disabled=@(ExtrasTipoToInsert != null) />
+                Click="@InsertRow" Disabled=@(TiposAzarToInsert != null) />
             </div>
         </div>
         
@@ -23,7 +23,7 @@
     </div>
 @if(LosTiposAzar != null)
 {
-    <RadzenDataGrid @ref=@ExtrasTipoGrid AllowFiltering="true" AllowPaging="true" PageSize="50" 
+    <RadzenDataGrid @ref=@TiposAzarGrid AllowFiltering="true" AllowPaging="true" PageSize="50" 
                 AllowSorting="true" EditMode="DataGridEditMode.Single"
                 Data=@LosTiposAzar TItem="G390TiposAzar" RowUpdate="@OnUpdateRow" 
                 RowCreate="@OnCreateRow" >
@@ -123,41 +123,41 @@ else
 
     async Task EditRow(G390TiposAzar azarT)
     {
-        await ExtrasTipoGrid.EditRow(azarT);
+        await TiposAzarGrid.EditRow(azarT);
     }
     async void OnUpdateRow(G390TiposAzar azarT)
     {
-        if (azarT == ExtrasTipoToInsert) ExtrasTipoToInsert = null;
+        if (azarT == TiposAzarToInsert) TiposAzarToInsert = null;
 
-        await ExtTipoIServ.UpdateExtrasTipo(azarT);
+        await TiposAzarIServ.UpdateTiposAzar(azarT);
     }
     async Task SaveRow(G390TiposAzar azarT)
     {
         //ext.Tarjeta = TarjetaId;
 
-        await ExtrasTipoGrid.UpdateRow(azarT);
+        await TiposAzarGrid.UpdateRow(azarT);
     }
     void CancelEdit(G390TiposAzar azarT)
     {
-        if (azarT == ExtrasTipoToInsert) ExtrasTipoToInsert = null;
-        ExtrasTipoGrid.CancelEditRow(azarT);
+        if (azarT == TiposAzarToInsert) TiposAzarToInsert = null;
+        TiposAzarGrid.CancelEditRow(azarT);
     }
     async Task InsertRow()
     {
-        ExtrasTipoToInsert = new G390TiposAzar();
-        ExtrasTipoToInsert.Creador = UserIdLog;
-        ExtrasTipoToInsert.Grupo = "General";
-        ExtrasTipoToInsert.Estado = 1;
-        ExtrasTipoToInsert.Status = true;
+        TiposAzarToInsert = new G390TiposAzar();
+        TiposAzarToInsert.Creador = UserIdLog;
+        TiposAzarToInsert.Publico = false;
+        TiposAzarToInsert.Estado = 1;
+        TiposAzarToInsert.Status = true;
         
-        await ExtrasTipoGrid.InsertRow(ExtrasTipoToInsert);
+        await TiposAzarGrid.InsertRow(TiposAzarToInsert);
     }
     async void OnCreateRow(G390TiposAzar azarT)
     {
-        if (azarT == ExtrasTipoToInsert) ExtrasTipoToInsert = null;
+        if (azarT == TiposAzarToInsert) TiposAzarToInsert = null;
         
         G390TiposAzar resultado = new G390TiposAzar();
-        resultado = await ExtTipoIServ.AddExtrasTipo(azarT);
+        resultado = await TiposAzarIServ.AddTiposAzar(azarT);
         await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false,
             $"El usuario agrego un nuevo Extra {azarT.Titulo}");
             

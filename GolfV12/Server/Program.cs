@@ -47,8 +47,11 @@ builder.Services.AddScoped<IG242Extras,         G242ExtrasRepo>();
 builder.Services.AddScoped<IG249TiroEst,        G249TiroEstRepo>();
 builder.Services.AddScoped<IG250ExtrasTipo,     G250ExtrasTipoRepo>();
 builder.Services.AddScoped<IG280FormatoT,       G280FormatoTRepo>();
-
-
+builder.Services.AddScoped<IG300Azar,           G300AzarRepo>();
+builder.Services.AddScoped<IG310Participante,   G310ParticipanteRepo>();
+builder.Services.AddScoped<IG320Bolitas,        G320BolitasRepo>();
+builder.Services.AddScoped<IG324Parejas,        G324ParejasRepo>();
+builder.Services.AddScoped<IG390TiposAzar,      G390TiposAzarRepo>();
 
 builder.Services.AddScoped<IG500Tarjeta, G500TarjetaRepo>();
 builder.Services.AddScoped<IG502Tarjetas, G502TarjetasRepo>();

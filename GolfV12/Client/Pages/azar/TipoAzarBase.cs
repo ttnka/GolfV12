@@ -9,7 +9,9 @@ namespace GolfV12.Client.Pages.azar
 {
     public class TipoAzarBase : ComponentBase 
     {
-        public IEnumerable<G390TiposAzar> TipoAzar { get; set; } = new List<G390TiposAzar>();
+        [Inject]
+        public IG390TiposAzarServ TiposAzarIServ { get; set; }
+        public IEnumerable<G390TiposAzar> LosTiposAzar { get; set; } = new List<G390TiposAzar>();
         public Dictionary<string, string> DatosDic { get; set; } = new Dictionary<string, string>();
         public RadzenDataGrid<G390TiposAzar> TiposAzarGrid { get; set; } = new();
         [Inject]
@@ -21,12 +23,13 @@ namespace GolfV12.Client.Pages.azar
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
-            await LeerDatos();
-            await LeerNombres();
+            //await LeerDatos();
+            //await LeerNombres();
 
             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
                 "El Usuario Consulto sus datos");
         }
+        protected async Task LeerDatos() { }
         public NotificationMessage elMesage { get; set; } = new NotificationMessage()
         {
             Severity = NotificationSeverity.Success,

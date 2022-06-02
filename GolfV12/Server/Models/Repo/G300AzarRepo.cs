@@ -48,7 +48,7 @@ namespace GolfV12.Server.Models.Repo
                     break;
 
                 case "azar3id":
-                    querry = querry.Where(e => e.Id == ParaDic["id"] && e.Estado == int.Parse(ParaDic["nivel"]) &&
+                    querry = querry.Where(e => e.Id == ParaDic["id"] && e.Estado == int.Parse(ParaDic["estado"]) &&
                                             e.Status == true);
                     break;
 
@@ -65,7 +65,7 @@ namespace GolfV12.Server.Models.Repo
                             e.Status == true);
                     break;
                 case "azar1tarjeta":
-                    querry = querry.Where(e => e.Tarjeta == ParaDic["tarjeta"]));
+                    querry = querry.Where(e => e.Tarjeta == ParaDic["tarjeta"]);
                     break;
 
                 case "azar2tarjeta":

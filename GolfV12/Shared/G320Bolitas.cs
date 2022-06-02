@@ -9,7 +9,7 @@ namespace GolfV12.Shared
     public class G320Bolitas
     {
         public string Id { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
+        public string Tarjeta { get; set; } = string.Empty;
         public string Azar { get; set; } = string.Empty;
         public string J1 { get; set; } = string.Empty;
         public string J2 { get; set; } = string.Empty;
