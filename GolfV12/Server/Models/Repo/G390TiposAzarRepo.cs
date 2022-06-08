@@ -59,28 +59,18 @@ namespace GolfV12.Server.Models.Repo
                     querry = querry.Where(e => e.Creador == ParaDic["creador"] && e.Publico == Convert.ToBoolean(ParaDic["publico"]) &&
                             e.Status == true);
                     break;
-        
+                case "azart4creador":
+                    querry = querry.Where(e => (e.Creador == ParaDic["creador"] || e.Publico == true) &&
+                            e.Status == true);
+                    break;
+
                 case "azart1publico":
                     querry = querry.Where(e => e.Publico == Convert.ToBoolean(ParaDic["publico"]));
                     break;
                 case "azart2publico":
                     querry = querry.Where(e => e.Publico == Convert.ToBoolean(ParaDic["publico"]) && e.Status == true);
                     break;
-                
-                    /*
-                        case "azart2tarjeta":
-                            querry = querry.Where(e => e.Tarjeta == ParaDic["tarjeta"] &&
-                                        e.Status == Convert.ToBoolean(ParaDic["status"]));
-                            break;
-                        case "azart3tarjeta":
-                            querry = querry.Where(e => e.Tarjeta == ParaDic["tarjeta"] && e.Creador == ParaDic["creador"] &&
-                                        e.Status == Convert.ToBoolean(ParaDic["status"]));
-                            break;
 
-                            case "azar3publico":
-                                querry = querry.Where(e => e.Status == Convert.ToBoolean(ParaDic["status"]));
-                                break;
-                            */
             }
 
             return await querry.ToListAsync();

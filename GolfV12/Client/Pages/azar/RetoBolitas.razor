@@ -1,0 +1,315 @@
+﻿@page "/azar/retos"
+@using GolfV12.Shared
+@inherits RetoBolitasBase 
+
+<h3>Lista de retos</h3>
+
+<div class="form-grup row">        
+        <div class="col-sm-9">
+            <div class="nav-item px-3">
+                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" 
+                Text="Agregar reto" 
+                Click="@InsertRow" Disabled=@(BolitasToInsert != null) />
+            </div>
+        </div>
+        
+        <div class="col-sm-3">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href=@($"/players/misdatos/")>
+                <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a listado de tarjetas
+                </NavLink>
+            </div>
+        </div>
+    </div>
+@if(LasBolitas != null)
+{
+    <RadzenDataGrid @ref=@BolitasGrid AllowFiltering="true" AllowPaging="true" PageSize="50" 
+                AllowSorting="true" EditMode="DataGridEditMode.Single"
+                Data=@LasBolitas TItem="G320Bolitas" RowUpdate="@OnUpdateRow" 
+                
+                RowCreate="@OnCreateRow" >
+        <Template Context="datoshijo">
+
+        </Template>
+        <Columns>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Property="Id" Title="Id" Width="60px" 
+            Filterable="false" Sortable="false" Frozen="true">
+                <Template Context="datos">
+                    @if (@DatosDic.ContainsKey($"Renglon_{datos.Id}"))
+                    {
+                        @DatosDic[$"Renglon_{datos.Id}"];
+                    } 
+                    else
+                    {
+                        <label>0</label>
+                    }
+
+                    <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" 
+                        Click="@(args => EditRow(datos))" @onclick:stopPropagation="true">
+                    </RadzenButton>
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="Tarjeta" Property="Tarjeta" 
+                Width="100px" Filterable="true" Frozen="true">
+                <Template Context="datos">
+                @datos.Tarjeta
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="Reto" Property="Reto" 
+                Width="100px" Filterable="true" Frozen="true">
+                <Template Context="datos">
+                @datos.Azar
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="Jugador 1" Property="J1" 
+                Width="150px" Filterable="false" Frozen="true">
+                <Template Context="datos">
+                    @if (@DatosDic.ContainsKey($"Nombre_{datos.J1}"))
+                    {
+                        @DatosDic[$"Nombre_{@datos.J1}"]
+                    } else
+                    {
+                        <label>No hay nombre</label>
+                    }
+                
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenDropDown Name="Player" AllowClear="false" 
+                        AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.Default" 
+                        FilterOperator="StringFilterOperator.Contains"  
+                        Data="@LosNombres"  @bind-Value=datos.J1 ValueProperty="Key" TextProperty="Value" 
+                        Style="width:100%; display: block;">
+                    </RadzenDropDown> 
+                </EditTemplate>
+                
+            </RadzenDataGridColumn>
+
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="Jugador 2" Property="J2" 
+            Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @if (@DatosDic.ContainsKey($"Nombre_{datos.J2}"))
+                    {
+                        @DatosDic[$"Nombre_{@datos.J2}"]
+                    }
+                    else
+                    {
+                        <b>No hay datos</b>
+                    }
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenDropDown Name="Player" AllowClear="false" 
+                        AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.Default" 
+                        FilterOperator="StringFilterOperator.Contains"  
+                        Data="@LosNombres"  @bind-Value=datos.J2 ValueProperty="Key" TextProperty="Value" 
+                        Style="width:100%; display: block;">
+                    </RadzenDropDown> 
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="Precio" Property="Precio" 
+            Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @datos.Precio
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="Precio" @bind-Value=datos.Precio ShowUpDown=false />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H1" Property="H1" 
+            Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @datos.H1V 
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="H1" @bind-Value=datos.H1V />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H2" Property="H2" 
+            Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @datos.H2V 
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="H2" @bind-Value=datos.H2V ShowUpDown=false/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H3" Property="H3" 
+            Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @datos.H3V 
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="H3" @bind-Value=datos.H3V ShowUpDown=false />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H4" Property="H4" 
+            Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @datos.H4V 
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="H4" @bind-Value=datos.H4V ShowUpDown=false/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H5" Property="H5" 
+            Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @datos.H5V 
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="H5" @bind-Value=datos.H5V ShowUpDown=false/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H6" Property="H6" 
+            Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @datos.H6V 
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="H6" @bind-Value=datos.H6V ShowUpDown=false />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H7" Property="H7" 
+            Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @datos.H7V 
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="H7" @bind-Value=datos.H7V ShowUpDown=false/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H8" Property="H8" 
+            Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @datos.H8V 
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="H8" @bind-Value=datos.H8V ShowUpDown=false/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H9" Property="H9" 
+            Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @datos.H9V 
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="H9" @bind-Value=datos.H9V ShowUpDown=false/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H10" Property="H10" 
+            Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @datos.H10V 
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenNumeric Name="H10" @bind-Value=datos.H10V ShowUpDown=false/>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Context="sampleBlazorModelsSampleOrder" 
+                    Filterable="false" Sortable="false" TextAlign="TextAlign.Center" 
+                    Width="120px" Title="Estado">
+                <Template Context="datos">
+                    @if(datos.Status == true)
+                    {
+                        <b>Activo</b>
+                    }
+                    else
+                    {
+                        <b>Suspendido</b>
+                    }
+                </Template>
+
+                <EditTemplate Context="datos">
+                    <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Primary" Class="m-1" Click="@((args) => SaveRow(datos))">
+                    </RadzenButton>
+                    <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@((args) => CancelEdit(datos))">
+                    </RadzenButton>
+                </EditTemplate>
+
+            </RadzenDataGridColumn>
+
+        </Columns>
+   </RadzenDataGrid>  
+}
+else
+{
+    <div class="spinner"></div>
+}
+--Tatanka--
+
+
+
+@code {
+    G320Bolitas BolitasToInsert;
+
+
+    async Task EditRow(G320Bolitas Bolitas)
+    {
+        await BolitasGrid.EditRow(Bolitas);
+    }
+    async void OnUpdateRow(G320Bolitas Bolitas)
+    {
+        if (Bolitas == BolitasToInsert) BolitasToInsert = null;
+
+        await BolitasIServ.UpdateBolitas(Bolitas);
+    }
+    async Task SaveRow(G320Bolitas Bolitas)
+    {
+        //ext.Tarjeta = TarjetaId;
+
+        await BolitasGrid.UpdateRow(Bolitas);
+    }
+    void CancelEdit(G320Bolitas Bolitas)
+    {
+        if (Bolitas == BolitasToInsert) BolitasToInsert = null;
+        BolitasGrid.CancelEditRow(Bolitas);
+    }
+    async Task InsertRow()
+    {
+
+        BolitasToInsert = new G320Bolitas();
+        BolitasToInsert.Id = Guid.NewGuid().ToString();
+        BolitasToInsert.Tarjeta = TarjetaId;
+        BolitasToInsert.Azar = AzarId;
+        //BolitasToInsert.J1 = UserIdLog;
+        //BolitasToInsert.Publico = false;
+        BolitasToInsert.Estado = 1;
+        BolitasToInsert.Status = true;
+        
+        await BolitasGrid.InsertRow(BolitasToInsert);
+        
+    }
+    async void OnCreateRow(G320Bolitas Bolitas)
+    {
+        if (Bolitas == BolitasToInsert) BolitasToInsert = null;
+        
+        G320Bolitas resultado = new G320Bolitas();
+        resultado = await BolitasIServ.AddBolitas(Bolitas);
+        await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false,
+            $"El usuario agrego un nuevo Extra {Bolitas.Id}");
+            
+    }
+
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+}

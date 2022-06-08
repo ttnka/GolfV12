@@ -5,15 +5,29 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Radzen;
 using Radzen.Blazor;
 
-namespace GolfV12.Client.Pages.azar
+namespace GolfV12.Client.Pages.players.retos
 {
-    public class TipoAzarBase : ComponentBase 
+    public class LasBolitasBase : ComponentBase 
     {
         [Inject]
-        public IG390TiposAzarServ TiposAzarIServ { get; set; }
-        public IEnumerable<G390TiposAzar> LosTiposAzar { get; set; } = new List<G390TiposAzar>();
+        public IG320BolitasServ BolitasIServ { get; set; }
+        [Parameter]
+        public string TarjetaId { get; set; } = string.Empty;
+        [Parameter]
+        public string AzarId { get; set; } = string.Empty;
+        [Parameter]
+        public Dictionary<string, G120Player> JugadoresDic { get; set; } = new Dictionary<string, G120Player>();
+        public IEnumerable<G320Bolitas> LasBolitas { get; set; } = new List<G320Bolitas>();
+        public IEnumerable<KeyValuePair<string, string>> TiposAzar { get; set; } =
+            new List<KeyValuePair<string, string>>();
+        [Inject]
+        public IG120PlayerServ PlayerIServ { get; set; }
+        public IEnumerable<KeyValuePair<string, string>> LosNombres { get; set; } =
+            new List<KeyValuePair<string, string>>();
+        [Inject]
+        public IG300AzarServ AzarIServ { get; set; }
         public Dictionary<string, string> DatosDic { get; set; } = new Dictionary<string, string>();
-        public RadzenDataGrid<G390TiposAzar> TiposAzarGrid { get; set; } = new();
+        public RadzenDataGrid<G320Bolitas> BolitasGrid { get; set; } = new();
         [Inject]
         public NavigationManager NM { get; set; }
 
@@ -27,25 +41,32 @@ namespace GolfV12.Client.Pages.azar
             //await LeerNombres();
 
             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
-                "El Usuario Consulto los tipos de retos");
+                "El Usuario Consulto los retos");
         }
-        protected async Task LeerDatos() {
-            LosTiposAzar = await TiposAzarIServ.Filtro($"azart4creador_-_creador_-_{UserIdLog}");
-            if (LosTiposAzar != null)
-            {   
+        protected async Task LeerDatos()
+        {
+            List<KeyValuePair<string, string>> keyValuePairs = new List<KeyValuePair<string, string>>();
+            
+            foreach (var item in JugadoresDic)
+            {
+                keyValuePairs.Add(new KeyValuePair<string, string>(item.Key, $"{item.Value.Nombre} {item.Value.Apodo} {item.Value.Paterno}"));
+            }
+            LosNombres = keyValuePairs.AsEnumerable();
+            LasBolitas = await BolitasIServ.Filtro($"bol2tarjeta_-_tarjeta_-_{TarjetaId}");
+            if (LasBolitas != null)
+            {
                 int renglon = 1;
-                foreach (var tipo in LosTiposAzar)
+                foreach (var tipo in LasBolitas)
                 {
-                    
                     if (!DatosDic.ContainsKey($"Renglon_{tipo.Id}"))
                     {
                         DatosDic.Add($"Renglon_{tipo.Id}", (renglon).ToString());
                         renglon++;
                     }
                 }
-            } 
+            }
         }
-        public NotificationMessage elMesage { get; set; } = new NotificationMessage()
+        public NotificationMessage elMessage { get; set; } = new NotificationMessage()
         {
             Severity = NotificationSeverity.Success,
             Summary = "Cuerpo",
@@ -72,6 +93,5 @@ namespace GolfV12.Client.Pages.azar
             WriteBitacora.Desc = desc;
             await BitacoraServ.AddBitacora(WriteBitacora);
         }
-
     }
 }

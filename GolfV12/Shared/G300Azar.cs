@@ -8,7 +8,7 @@ namespace GolfV12.Shared
 {
     public class G300Azar
     {
-        public string Id { get; set; } = string.Empty;
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Tarjeta { get; set; } = string.Empty ;
         public string Creador { get; set; } = string.Empty;
         public string TipoAzar { get; set; } = string.Empty;

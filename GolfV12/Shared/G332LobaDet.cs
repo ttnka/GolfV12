@@ -8,7 +8,7 @@ namespace GolfV12.Shared
 {
     public class G332LobaDet
     {
-        public string Id { get; set; } = string.Empty;
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Loba { get; set; } = string.Empty;
         public int Hoyo { get; set; } = 0;
         public string J1 { get; set; } = string.Empty;

@@ -8,7 +8,7 @@ namespace GolfV12.Shared
 {
     public class G324Parejas
     {
-        public string Id { get; set; } = string.Empty;
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Tarjeta { get; set; } = string.Empty;
         public string Azar { get; set; } = string.Empty;
         public string J1 { get; set; } = string.Empty;

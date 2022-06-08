@@ -5,15 +5,22 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Radzen;
 using Radzen.Blazor;
 
-namespace GolfV12.Client.Pages.azar
+namespace GolfV12.Client.Pages.players
 {
-    public class TipoAzarBase : ComponentBase 
+    public class MisRetosBase : ComponentBase 
     {
+        [Parameter]
+        public string TarjetaId { get; set; } = string.Empty;
+        [Inject]
+        public IG300AzarServ AzarIServ { get; set; }
         [Inject]
         public IG390TiposAzarServ TiposAzarIServ { get; set; }
-        public IEnumerable<G390TiposAzar> LosTiposAzar { get; set; } = new List<G390TiposAzar>();
+
+        public IEnumerable<G300Azar> LosAzar { get; set; } = new List<G300Azar>();
+        public IEnumerable<KeyValuePair<string, string>> TiposAzar { get; set; } =
+            new List<KeyValuePair<string, string>>();
         public Dictionary<string, string> DatosDic { get; set; } = new Dictionary<string, string>();
-        public RadzenDataGrid<G390TiposAzar> TiposAzarGrid { get; set; } = new();
+        public RadzenDataGrid<G300Azar> AzarGrid { get; set; } = new();
         [Inject]
         public NavigationManager NM { get; set; }
 
@@ -27,23 +34,38 @@ namespace GolfV12.Client.Pages.azar
             //await LeerNombres();
 
             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
-                "El Usuario Consulto los tipos de retos");
+                "El Usuario Consulto los retos");
         }
-        protected async Task LeerDatos() {
-            LosTiposAzar = await TiposAzarIServ.Filtro($"azart4creador_-_creador_-_{UserIdLog}");
-            if (LosTiposAzar != null)
-            {   
+        protected async Task LeerDatos()
+        {
+            LosAzar = await AzarIServ.Filtro($"azart4creador_-_creador_-_{UserIdLog}");
+            if (LosAzar != null)
+            {
                 int renglon = 1;
-                foreach (var tipo in LosTiposAzar)
+                foreach (var tipo in LosAzar)
                 {
-                    
                     if (!DatosDic.ContainsKey($"Renglon_{tipo.Id}"))
                     {
                         DatosDic.Add($"Renglon_{tipo.Id}", (renglon).ToString());
                         renglon++;
                     }
                 }
-            } 
+            }
+
+            List<KeyValuePair<string, string>> ListTiposATemp = new List<KeyValuePair<string, string>>();
+            var ListTA = await TiposAzarIServ.Filtro("All");
+            if (ListTA != null)
+            {
+                foreach (var item in ListTA)
+                {
+                    if (!DatosDic.ContainsKey($"TipoAzar_{item.Id}"))
+                    {
+                        DatosDic.Add($"TipoAzar_{item.Id}", item.Titulo);
+                        ListTiposATemp.Add(new KeyValuePair<string, string>(item.Id, item.Titulo));
+                    }
+                }
+            }
+            TiposAzar = ListTiposATemp;
         }
         public NotificationMessage elMesage { get; set; } = new NotificationMessage()
         {
@@ -72,6 +94,5 @@ namespace GolfV12.Client.Pages.azar
             WriteBitacora.Desc = desc;
             await BitacoraServ.AddBitacora(WriteBitacora);
         }
-
     }
 }

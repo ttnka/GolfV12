@@ -79,12 +79,7 @@ namespace GolfV12.Client.Servicios.Serv
                         resultado += "bol3jugador_-_j_-_" + ParaDic["j"] + "_-_azar_-_" +
                                 ParaDic["azar"] + "_-_status_-_true" ;
                         break;
-                        /*
-                                            case "azar4creador":
-                                                resultado += "azar4creador_-_creador_-_" + ParaDic["creador"] + "_-_estado_-_" +
-                                                        ParaDic["estado"] + "_-_status_-_true";
-                                                break;
-                        */
+                        
                 }
 
             }

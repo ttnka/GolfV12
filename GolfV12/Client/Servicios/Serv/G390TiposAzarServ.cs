@@ -57,23 +57,10 @@ namespace GolfV12.Client.Servicios.Serv
                         resultado += "azart3creador_-_creador_-_" + ParaDic["creador"] + "_-_publico_-_" +
                                 ParaDic["publico"] + "_-_status_-_true";
                         break;
-/*
-                    case "azart1tarjeta":
-                        resultado += "azart1tarjeta_-_tarjeta_-_" + ParaDic["tarjeta"];
-                        break;
-                    case "azart2tarjeta":
-                        resultado += "azart2tarjeta_-_tarjeta_-_" + ParaDic["tarjeta"] + "_-_status_-_true";
-                        break;
-                    case "azart3tarjeta":
-                        resultado += "azart3tarjeta_-_tarjeta_-_" + ParaDic["tarjeta"] + "_-_creador_-_" +
-                                ParaDic["creador"] + "_-_status_-_true";
+                    case "azart4creador":
+                        resultado += "azart4creador_-_creador_-_" + ParaDic["creador"];
                         break;
                         
-                    case "azar4creador":
-                        resultado += "azar4creador_-_creador_-_" + ParaDic["creador"] + "_-_estado_-_" +
-                                ParaDic["estado"] + "_-_status_-_true";
-                        break;
-                        */
                 }
 
             }

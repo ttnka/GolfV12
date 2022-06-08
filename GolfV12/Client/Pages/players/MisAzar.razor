@@ -1,6 +1,6 @@
-﻿@page "/azar/tiposazar/"
+﻿
 @using GolfV12.Shared
-@inherits TipoAzarBase 
+@inherits MisAzarBase 
 
 <h3>Lista de tipos retos</h3>
 
@@ -40,10 +40,13 @@
                     {
                         <label>0</label>
                     }
-
-                    <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" 
+                    @if(!datos.Publico)
+                    {
+                        <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" 
                         Click="@(args => EditRow(datos))" @onclick:stopPropagation="true">
                     </RadzenButton>
+                    }
+                    
                 </Template>
             </RadzenDataGridColumn>
 
@@ -193,13 +196,6 @@ else
     {
         NS.Notify(message);
     }
-    /*
-                <RadzenDropDown Name="Player" AllowClear="false" 
-            AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.Default" 
-            FilterOperator="StringFilterOperator.Contains"  
-            Data="@LosNombres"  @bind-Value=datos.Player ValueProperty="Key" TextProperty="Value" 
-            Style="width:100%; display: block;">
-        </RadzenDropDown>
-    */
+    
         
  }

@@ -8,7 +8,7 @@ namespace GolfV12.Shared
 {
     public class G390TiposAzar
     {
-        public string Id { get; set; } = string.Empty;
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Creador { get; set; } = string.Empty;
         public string Titulo { get; set; } = string.Empty;
         public string Desc { get; set; } = string.Empty;

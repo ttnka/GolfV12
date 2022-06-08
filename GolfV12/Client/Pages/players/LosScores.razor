@@ -1,4 +1,5 @@
 ﻿@page "/players/scores/{tarjetaId}"
+
 @using GolfV12.Shared;
 
 @inherits LosScoresBase
@@ -44,7 +45,8 @@
                         <ElSort DatosDic=@DatosDic LosScores=@LosScores TarjetaId=@TarjetaId />
                     </RadzenAccordionItem>
                     <RadzenAccordionItem Text="Bolitas" Icon="accessibility">
-                        
+                    
+                        <GolfV12.Client.Pages.players.retos.LasBolitas TarjetaId=@TarjetaId JugadoresDic=@JugadoresDic  />
                     </RadzenAccordionItem>
                 </Items>
             </RadzenAccordion>
@@ -57,6 +59,7 @@
                 Data="@LosScores" TItem="TarjetaMolde">
                 
         <Template Context="datos1">
+ <!--
             <RadzenCard Style="margin-bottom:20px">
                 Jugador:
                 @if (@DatosDic.ContainsKey(@datos1.UserId))
@@ -64,6 +67,7 @@
                 else 
                     {  <label>No hay nombre del jugador!</label>  };
             </RadzenCard>
+ -->
             <RadzenTabs>
                 <Tabs>
                     <RadzenTabsItem Text="Detalle de Apuesta ">
@@ -135,7 +139,8 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H1" Title="H1" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H1" Title="H1" FormatString="{0:d}" 
+            Width="60px" Filterable=false Sortable=false >
                 
                 <Template Context="datos"> 
                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
@@ -175,7 +180,8 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H2" Title="H2" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false>
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H2" Title="H2" FormatString="{0:d}" Width="60px" 
+            Filterable=false Sortable=false>
                 
                 <Template Context="datos"> 
 

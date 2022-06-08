@@ -34,6 +34,7 @@ namespace GolfV12.Client.Pages.players
 
         public IEnumerable<int> LosHoyos { get; set; } = new List<int>();
         public Dictionary<string, string> DatosDic { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, G120Player> JugadoresDic { get; set; } = new Dictionary<string, G120Player>();
         public RadzenDataGrid<TarjetaMolde> ScoreGrid { get; set; } = new();
         [Inject]
         public NavigationManager NM { get; set; }
@@ -100,12 +101,6 @@ namespace GolfV12.Client.Pages.players
                                 involucrados.Any(UserIdLog.Contains)))
                                             DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] = "1";
 
-                    /* Esta caso es solo cada jugador sin creador 
-                        if ((LaTarjeta.Captura == Torneo2Edit.Creador &&
-                                    LaTarjeta.Creador == UserIdLog))
-                                                DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] = "2";
-                    */
-
                     if (LaTarjeta.Creador == UserIdLog)
                         DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] = "2";
                 }
@@ -138,12 +133,15 @@ namespace GolfV12.Client.Pages.players
                     if (!DatosDic.ContainsKey($"Nombre_{nomb.Player}"))
                     {
                         var PlayerName = (await NombresIServ.Filtro($"play1id_-_userid_-_{nomb.Player}")).FirstOrDefault();
-                        if (PlayerName != null) 
-                            DatosDic.Add($"Nombre_{PlayerName.UserId}", 
+                        if (PlayerName != null)
+                        {
+                            DatosDic.Add($"Nombre_{PlayerName.UserId}",
                                 $"{PlayerName.Nombre} {PlayerName.Apodo} {PlayerName.Paterno}");
+                            JugadoresDic.Add(nomb.Player, PlayerName);
+                        }
                     }
                     ListaInvolucrados(nomb.Player);
-                    //TotalesCal(nomb.Player, 0, 0, "");
+                   
                 }
             }   
         }
@@ -334,7 +332,6 @@ namespace GolfV12.Client.Pages.players
                 DatosDic[$"Jugador_{jugador}_Hoyo_{hoyo}"] = newScore.ToString();
             }
         }
-
 
         [Inject]
         public NotificationService NS { get; set; } = new();

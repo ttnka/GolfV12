@@ -65,8 +65,11 @@ namespace GolfV12.Server.Controllers
             try
             {
                 if (bitacora == null) return BadRequest();
+                return await _bitacoraIFace.AddBitacora(bitacora);
+                /*
                 var newBitacora = await _bitacoraIFace.AddBitacora(bitacora);
                 return CreatedAtAction(nameof(GetBitacora), new { bitacoraId = bitacora.Id }, newBitacora);
+                */
             }
             catch (Exception)
             {

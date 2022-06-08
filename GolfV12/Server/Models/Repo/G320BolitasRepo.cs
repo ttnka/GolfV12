@@ -70,19 +70,19 @@ namespace GolfV12.Server.Models.Repo
 
                 case "bol2tarjeta":
                     querry = querry.Where(e => e.Tarjeta == ParaDic["tarjeta"] &&
-                                e.Status == Convert.ToBoolean(ParaDic["status"]));
+                                e.Status == true);
                     break;
                 case "bol1Jugador":
                     querry = querry.Where(e => e.Azar == ParaDic["azar"] && e.J1 == ParaDic["j1"] &&
-                                e.Status == Convert.ToBoolean(ParaDic["status"]));
+                                e.Status == true);
                     break;
                 case "bol2Jugador":
                     querry = querry.Where(e => e.Azar == ParaDic["azar"] && e.J2 == ParaDic["j2"] &&
-                                e.Status == Convert.ToBoolean(ParaDic["status"]));
+                                e.Status == true);
                     break;
                 case "bol3Jugador":
                     querry = querry.Where(e => (e.J1 == ParaDic["j"] || e.J2 == ParaDic["j2"]) && 
-                                e.Azar == ParaDic["azar"] && e.Status == Convert.ToBoolean(ParaDic["status"]));
+                                e.Azar == ParaDic["azar"] && e.Status == true);
                     break;
                     
             }

@@ -1,15 +1,15 @@
-﻿@page "/azar/tiposazar/"
+﻿@page "/azar/azar"
 @using GolfV12.Shared
-@inherits TipoAzarBase 
+@inherits AzarBase 
 
-<h3>Lista de tipos retos</h3>
+<h3>Lista de retos</h3>
 
 <div class="form-grup row">        
         <div class="col-sm-9">
             <div class="nav-item px-3">
                 <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" 
-                Text="Agregar ExtrasTipo" 
-                Click="@InsertRow" Disabled=@(TiposAzarToInsert != null) />
+                Text="Agregar reto" 
+                Click="@InsertRow" Disabled=@(AzarToInsert != null) />
             </div>
         </div>
         
@@ -21,15 +21,19 @@
             </div>
         </div>
     </div>
-@if(LosTiposAzar != null)
+@if(LosAzar != null)
 {
-    <RadzenDataGrid @ref=@TiposAzarGrid AllowFiltering="true" AllowPaging="true" PageSize="50" 
+    <RadzenDataGrid @ref=@AzarGrid AllowFiltering="true" AllowPaging="true" PageSize="50" 
                 AllowSorting="true" EditMode="DataGridEditMode.Single"
-                Data=@LosTiposAzar TItem="G390TiposAzar" RowUpdate="@OnUpdateRow" 
+                Data=@LosAzar TItem="G300Azar" RowUpdate="@OnUpdateRow" 
+                ExpandMode="DataGridExpandMode.Single" AllowGrouping="false"
                 RowCreate="@OnCreateRow" >
+        <Template Context="datoshijo">
+
+        </Template>
         <Columns>
 
-            <RadzenDataGridColumn TItem="G390TiposAzar" Property="Id" Title="Id" Width="60px" 
+            <RadzenDataGridColumn TItem="G300Azar" Property="Id" Title="Id" Width="60px" 
             Filterable="false" Sortable="false" Frozen="true">
                 <Template Context="datos">
                     @if (@DatosDic.ContainsKey($"Renglon_{datos.Id}"))
@@ -47,68 +51,56 @@
                 </Template>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G390TiposAzar" Title="Titulo" Property="Titulo" 
+            <RadzenDataGridColumn TItem="G300Azar" Title="Tarjeta" Property="Tarjeta" 
                 Width="200px" Filterable="true" Frozen="true">
                 <Template Context="datos">
-                @datos.Titulo
+                @datos.Tarjeta
                 </Template>
-
-                <EditTemplate Context="datos">
-                    <RadzenTextBox Name="Titulo" @bind-Value=datos.Titulo ></RadzenTextBox> 
-                </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G390TiposAzar" Title="Descripcion" Property="Desc" 
+            <RadzenDataGridColumn TItem="G300Azar" Title="Creador" Property="Creador" 
                 Width="200px" Filterable="false" Frozen="true">
                 <Template Context="datos">
-                @datos.Desc
+                    @if (@DatosDic.ContainsKey(@datos.Creador))
+                    {
+                        @DatosDic[@datos.Creador]
+                    } else
+                    {
+                        <label>No hay nombre</label>
+                    }
+                
                 </Template>
 
-                <EditTemplate Context="datos">
-                    <RadzenTextArea Name="Desc" @bind-Value=datos.Desc ></RadzenTextArea>
-                </EditTemplate>
+                
 
             </RadzenDataGridColumn>
 
 
-            <RadzenDataGridColumn TItem="G390TiposAzar" Property="Individual" Title="Individual" 
+            <RadzenDataGridColumn TItem="G300Azar" Property="TiposAzar" Title="Retos" 
             Filterable="false"  Width="100px">
                 <Template Context="datos">
-                    @if(datos.Indivual)
+                    @if(@DatosDic.ContainsKey(@datos.TipoAzar))
                     {
-                        <b>Si</b>
+                        @DatosDic.ContainsKey(@datos.TipoAzar)
                     }
                     else
                     {
-                        <b>Equipo</b>
+                        <b>No hay datos</b>
                     }
                 </Template>
                 <EditTemplate Context="datos">
-                    Equipo <RadzenSwitch Name="Individual" @bind-Value="datos.Indivual"  /> Individual
-                    
-                </EditTemplate>
-            </RadzenDataGridColumn>
-
-            <RadzenDataGridColumn TItem="G390TiposAzar" Property="Publico" Title="Publico" 
-            Filterable="false"  Width="100px">
-                <Template Context="datos">
-                    @if(datos.Publico)
-                    {
-                        <b>Si!</b>
-                    }
-                    else
-                    {
-                        <b>Solo tuyo!</b>
-                    }
-                </Template>
-                <EditTemplate Context="datos">
-                    Privado <RadzenSwitch Name="Individual" @bind-Value="datos.Publico"  /> Publico
-                    
+                    <RadzenDropDown Name="Player" AllowClear="false" 
+                        AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.Default" 
+                        FilterOperator="StringFilterOperator.Contains"  
+                        Data="@TiposAzar"  @bind-Value=datos.TipoAzar ValueProperty="Key" TextProperty="Value" 
+                        Style="width:100%; display: block;">
+                    </RadzenDropDown> 
                 </EditTemplate>
             </RadzenDataGridColumn>
 
             
-            <RadzenDataGridColumn TItem="G390TiposAzar" Context="sampleBlazorModelsSampleOrder" 
+            
+            <RadzenDataGridColumn TItem="G300Azar" Context="sampleBlazorModelsSampleOrder" 
                     Filterable="false" Sortable="false" TextAlign="TextAlign.Center" 
                     Width="120px" Title="Estado">
                 <Template Context="datos">
@@ -143,49 +135,52 @@ else
 
 
 @code {
-    G390TiposAzar TiposAzarToInsert;
+    G300Azar AzarToInsert;
 
 
-    async Task EditRow(G390TiposAzar azarT)
+    async Task EditRow(G300Azar Azar)
     {
-        await TiposAzarGrid.EditRow(azarT);
+        await AzarGrid.EditRow(Azar);
     }
-    async void OnUpdateRow(G390TiposAzar azarT)
+    async void OnUpdateRow(G300Azar Azar)
     {
-        if (azarT == TiposAzarToInsert) TiposAzarToInsert = null;
+        if (Azar == AzarToInsert) AzarToInsert = null;
 
-        await TiposAzarIServ.UpdateTiposAzar(azarT);
+        await AzarIServ.UpdateAzar(Azar);
     }
-    async Task SaveRow(G390TiposAzar azarT)
+    async Task SaveRow(G300Azar Azar)
     {
         //ext.Tarjeta = TarjetaId;
 
-        await TiposAzarGrid.UpdateRow(azarT);
+        await AzarGrid.UpdateRow(Azar);
     }
-    void CancelEdit(G390TiposAzar azarT)
+    void CancelEdit(G300Azar Azar)
     {
-        if (azarT == TiposAzarToInsert) TiposAzarToInsert = null;
-        TiposAzarGrid.CancelEditRow(azarT);
+        if (Azar == AzarToInsert) AzarToInsert = null;
+        AzarGrid.CancelEditRow(Azar);
     }
     async Task InsertRow()
     {
-        TiposAzarToInsert = new G390TiposAzar();
-        TiposAzarToInsert.Id = Guid.NewGuid().ToString();
-        TiposAzarToInsert.Creador = UserIdLog;
+        /*
+        AzarToInsert = new G300Azar();
+        AzarToInsert.Id = Guid.NewGuid().ToString();
+        AzarToInsert.Tarjeta = tar
+        AzarToInsert.Creador = UserIdLog;
         //TiposAzarToInsert.Publico = false;
-        TiposAzarToInsert.Estado = 1;
-        TiposAzarToInsert.Status = true;
+        AzarToInsert.Estado = 1;
+        AzarToInsert.Status = true;
         
         await TiposAzarGrid.InsertRow(TiposAzarToInsert);
+        */
     }
-    async void OnCreateRow(G390TiposAzar azarT)
+    async void OnCreateRow(G300Azar azar)
     {
-        if (azarT == TiposAzarToInsert) TiposAzarToInsert = null;
+        if (azar == AzarToInsert) AzarToInsert = null;
         
-        G390TiposAzar resultado = new G390TiposAzar();
-        resultado = await TiposAzarIServ.AddTiposAzar(azarT);
+        G300Azar resultado = new G300Azar();
+        resultado = await AzarIServ.AddAzar(azar);
         await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false,
-            $"El usuario agrego un nuevo Extra {azarT.Titulo}");
+            $"El usuario agrego un nuevo Extra {azar.Id}");
             
     }
 
@@ -193,13 +188,4 @@ else
     {
         NS.Notify(message);
     }
-    /*
-                <RadzenDropDown Name="Player" AllowClear="false" 
-            AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.Default" 
-            FilterOperator="StringFilterOperator.Contains"  
-            Data="@LosNombres"  @bind-Value=datos.Player ValueProperty="Key" TextProperty="Value" 
-            Style="width:100%; display: block;">
-        </RadzenDropDown>
-    */
-        
- }
+}

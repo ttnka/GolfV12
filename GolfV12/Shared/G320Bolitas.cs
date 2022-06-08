@@ -8,7 +8,7 @@ namespace GolfV12.Shared
 {
     public class G320Bolitas
     {
-        public string Id { get; set; } = string.Empty;
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Tarjeta { get; set; } = string.Empty;
         public string Azar { get; set; } = string.Empty;
         public string J1 { get; set; } = string.Empty;
@@ -32,6 +32,9 @@ namespace GolfV12.Shared
         public int H16V { get; set; } = 0;
         public int H17V { get; set; } = 0;
         public int H18V { get; set; } = 0;
+        public int F9V { get; set; } = 0;
+        public int B9V { get; set; } = 0;
+        public int TotalV { get; set; } = 0;
         public int Estado { get; set; } = 1;
         public bool Status { get; set; } = true;
 

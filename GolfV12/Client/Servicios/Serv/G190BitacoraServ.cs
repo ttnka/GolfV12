@@ -15,9 +15,19 @@ namespace GolfV12.Client.Servicios.Serv
         public async Task<G190Bitacora> AddBitacora(G190Bitacora bitacora)
         {
             var newBitacora = await _httpClient.PostAsJsonAsync<G190Bitacora>("/api/G190Bitacora", bitacora);
+            if (newBitacora.IsSuccessStatusCode)
+            {
+                return await newBitacora.Content.ReadFromJsonAsync<G190Bitacora>();
+            }
+            else 
+            { 
+                return null; 
+            }
+           /*
             return newBitacora.IsSuccessStatusCode ?
                 await newBitacora.Content.ReadFromJsonAsync<G190Bitacora>() :
                 null;
+           */
         }
 
 

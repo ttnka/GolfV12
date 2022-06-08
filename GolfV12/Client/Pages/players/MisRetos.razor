@@ -1,0 +1,176 @@
+﻿
+@using GolfV12.Shared
+@inherits MisRetosBase 
+
+<h3>Lista de retos</h3>
+
+<div class="form-grup row">        
+        <div class="col-sm-9">
+            <div class="nav-item px-3">
+                <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" 
+                Text="Agregar reto" 
+                Click="@InsertRow" Disabled=@(AzarToInsert != null) />
+            </div>
+        </div>
+        
+        <div class="col-sm-3">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href=@($"/players/misdatos/")>
+                <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a listado de tarjetas
+                </NavLink>
+            </div>
+        </div>
+    </div>
+@if(LosAzar != null)
+{
+  <RadzenDataGrid @ref=@AzarGrid AllowFiltering="true" AllowPaging="true" PageSize="50" 
+                AllowSorting="true" EditMode="DataGridEditMode.Single"
+                Data=@LosAzar TItem="G300Azar" RowUpdate="@OnUpdateRow" 
+                ExpandMode="DataGridExpandMode.Single"
+                RowCreate="@OnCreateRow" >
+                <Template Context="datos1">
+ 
+            <RadzenCard>
+
+                @datos1.TipoAzar
+                <GolfV12.Client.Pages.players.retos.LasBolitas AzarId=@datos1.Id/>
+                
+            </RadzenCard>
+ </Template>
+        <Columns>
+
+            <RadzenDataGridColumn TItem="G300Azar" Property="Id" Title="Id" Width="60px" 
+            Filterable="false" Sortable="false" Frozen="true">
+                <Template Context="datos">
+                    @if (@DatosDic.ContainsKey($"Renglon_{datos.Id}"))
+                    {
+                        @DatosDic[$"Renglon_{datos.Id}"];
+                    } 
+                    else
+                    {
+                        <label>0</label>
+                    }
+
+                    <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" 
+                        Click="@(args => EditRow(datos))" @onclick:stopPropagation="true">
+                    </RadzenButton>
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G300Azar" Property="TiposAzar" Title="Retos" 
+            Filterable="false"  Width="100px">
+                <Template Context="datos">
+                    @if(@DatosDic.ContainsKey($"TipoAzar_{@datos.TipoAzar}"))
+                    {
+                        @DatosDic[$"TipoAzar_{@datos.TipoAzar}"]
+                    }
+                    else
+                    {
+                        <b>No hay datos</b>
+                    }
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenDropDown Name="Player" AllowClear="false" 
+                        AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.Default" 
+                        FilterOperator="StringFilterOperator.Contains"  
+                        Data="@TiposAzar"  @bind-Value=datos.TipoAzar ValueProperty="Key" TextProperty="Value" 
+                        Style="width:100%; display: block;">
+                    </RadzenDropDown> 
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G300Azar" Context="sampleBlazorModelsSampleOrder" 
+                    Filterable="false" Sortable="false" TextAlign="TextAlign.Center" 
+                    Width="120px" Title="Estado">
+                <Template Context="datos">
+                    @if(datos.Status == true)
+                    {
+                        <b>Activo</b>
+                    }
+                    else
+                    {
+                        <b>Suspendido</b>
+                    }
+                </Template>
+
+                <EditTemplate Context="datos">
+                    <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Primary" Class="m-1" Click="@((args) => SaveRow(datos))">
+                    </RadzenButton>
+                    <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@((args) => CancelEdit(datos))">
+                    </RadzenButton>
+                </EditTemplate>
+
+            </RadzenDataGridColumn>
+
+        </Columns>
+   </RadzenDataGrid> 
+     
+}
+else
+{
+    <div class="spinner"></div>
+}
+--Tatanka--
+
+
+
+@code {
+    int selectedIndexStep;
+    G300Azar AzarToInsert;
+
+    void onChange(int valor)
+    {
+        
+    }
+
+    async Task EditRow(G300Azar Azar)
+    {
+        await AzarGrid.EditRow(Azar);
+    }
+    async void OnUpdateRow(G300Azar Azar)
+    {
+        if (Azar == AzarToInsert) AzarToInsert = null;
+
+        await AzarIServ.UpdateAzar(Azar);
+    }
+    async Task SaveRow(G300Azar Azar)
+    {
+        //ext.Tarjeta = TarjetaId;
+
+        await AzarGrid.UpdateRow(Azar);
+    }
+    void CancelEdit(G300Azar Azar)
+    {
+        if (Azar == AzarToInsert) AzarToInsert = null;
+        AzarGrid.CancelEditRow(Azar);
+    }
+    async Task InsertRow()
+    {
+
+        AzarToInsert = new G300Azar();
+        AzarToInsert.Id = Guid.NewGuid().ToString();
+        AzarToInsert.Tarjeta = TarjetaId;
+        AzarToInsert.Creador = UserIdLog;
+        
+        AzarToInsert.Estado = 1;
+        AzarToInsert.Status = true;
+        
+        await AzarGrid.InsertRow(AzarToInsert);
+        
+    }
+    async void OnCreateRow(G300Azar azar)
+    {
+        if (azar == AzarToInsert) AzarToInsert = null;
+        
+        G300Azar resultado = new G300Azar();
+        resultado = await AzarIServ.AddAzar(azar);
+        await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false,
+            $"El usuario agrego un nuevo reto {azar.Id}");
+            
+    }
+
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+}
