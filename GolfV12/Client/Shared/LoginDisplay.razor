@@ -7,18 +7,19 @@
 <AuthorizeView>
     <Authorized>
         <a href="players/misdatos">  Mis Datos  </a>
+        
+        <a href="authentication/profile">Hola crayola, @context.User.Identity?.Name!</a>
         <RadzenMenu>
                         <RadzenMenuItem Text="Administracion" Icon="home" >
-                            <RadzenMenuItem Text="Organizaciones" Icon="oi-plus" Path="/admin/organizacion"/>
-                            <RadzenMenuItem Text="Jugadores" Icon="oi-plus" Path="/admin/player"/>
-                            <RadzenMenuItem Text="Campos" Icon="oi-plus" Path="/admin/campo"/>
-                            <RadzenMenuItem Text="ExtrasTipo" Icon="oi-plus" Path="/admin/extrastipo"/>
-                            <RadzenMenuItem Text="Extras" Icon="oi-plus" Path="/admin/extras"/>
-                            <RadzenMenuItem Text="Retos" Icon="oi-plus" Path="/azar/azar"/>
-                            <RadzenMenuItem Text="Tipos Retos" Icon="oi-plus" Path="/azar/tiposazar"/>
+                            <RadzenMenuItem Style="color:black" Text="Organizaciones" Icon="oi-plus" Path="/admin/organizacion"></RadzenMenuItem>
+                            <RadzenMenuItem Style="color:black" Text="Jugadores" Icon="oi-plus" Path="/admin/player">Jugadores</RadzenMenuItem>
+                            <RadzenMenuItem Style="color:black" Text="Campos" Icon="oi-plus" Path="/admin/campo"></RadzenMenuItem>
+                            <RadzenMenuItem Style="color:black" Text="ExtrasTipo" Icon="oi-plus" Path="/admin/extrastipo"></RadzenMenuItem>
+                            <RadzenMenuItem Style="color:darkred" Text="Extras" Icon="oi-plus" Path="/admin/extras"></RadzenMenuItem>
+                            <RadzenMenuItem Style="color:navy" Text="Retos" Icon="oi-plus" Path="/azar/azar">Retos</RadzenMenuItem>
+                            <RadzenMenuItem Style="color:navy" Text="Tipos Retos" Icon="oi-plus" Path="/azar/tiposazar"></RadzenMenuItem>
                         </RadzenMenuItem> 
         </RadzenMenu>
-        <a href="authentication/profile">Hola crayola, @context.User.Identity?.Name!</a>
         <button class="nav-link btn btn-link" @onclick="BeginSignOut">Salir</button>
 
     </Authorized>
