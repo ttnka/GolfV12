@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Radzen;
 using Radzen.Blazor;
+using GolfV12.Client.Shared;
 
 namespace GolfV12.Client.Pages.players
 {
@@ -34,14 +35,17 @@ namespace GolfV12.Client.Pages.players
 
         public IEnumerable<int> LosHoyos { get; set; } = new List<int>();
         public Dictionary<string, string> DatosDic { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, string> RegistrosIdDic { get; set; } = new Dictionary<string, string>();
         public Dictionary<string, G120Player> JugadoresDic { get; set; } = new Dictionary<string, G120Player>();
+        [Parameter]
+        public Dictionary<string, G320Bolitas> LasBolitasDic { get; set; } = new Dictionary<string, G320Bolitas>();
         public RadzenDataGrid<TarjetaMolde> ScoreGrid { get; set; } = new();
         [Inject]
         public NavigationManager NM { get; set; }
         public bool Calculando { get; set; } = false;
         public List<G510Jugador> ListaHcp { get; set; } = new List<G510Jugador>();
         public List<G520Score> ListaScores { get; set; } = new List<G520Score>();
-
+        public CalcularBolitas ElCalculo { get; set; } = new CalcularBolitas();
         protected override async Task OnInitializedAsync()
         {
             if (string.IsNullOrEmpty(TarjetaId))
@@ -156,6 +160,7 @@ namespace GolfV12.Client.Pages.players
                 foreach (var jugTemp in LosDatosTemp)
                 {
                     TotalesCal(jugTemp.Player, jugTemp.Hoyo, jugTemp.Score, jugTemp.Id);
+
                 }
             }
             
@@ -249,14 +254,67 @@ namespace GolfV12.Client.Pages.players
                         tarjetaMolde.H18Id = DatosDic.ContainsKey($"Jugador_{TM.Player}_HoyoId_{18}") ?
                                 (DatosDic[$"Jugador_{TM.Player}_HoyoId_{18}"]) : " ";
                     }
-
                     ListaTM.Add(tarjetaMolde);
+                    
                 }
             }          
             LosScores = ListaTM.AsEnumerable();
             
+            CalcularLasBolitas();
+            
         }
-    protected async Task LeerExtras()
+        protected void CalcularLasBolitas()
+        {
+            if (LosScores != null)
+            {
+                int[] Dif = new int[18];
+                for (int i = 0; i < Dif.Length; i++)
+                {
+                    Dif[i] = DatosDic.ContainsKey($"HoyoH_{i + 1}") ? int.Parse(DatosDic[$"HoyoH_{i + 1}"]) : 0;
+                }
+                foreach (var item in LosScores)
+                {
+                    IEnumerable<TarjetaMolde> LasBolitas = ElCalculo.CalculoGeneral(LosScores, TarjetaId, item.UserId,  Dif);
+                    CalcularLosImportes(LasBolitas);
+                }
+            }
+        }
+        protected void CalcularLosImportes(IEnumerable<TarjetaMolde> LasBolitas)
+        {
+            if (LasBolitas != null)
+            {
+                foreach (var ElPadre in LasBolitas)
+                    if (!LasBolitasDic.ContainsKey(ElPadre.UserId))
+                    {
+                        G320Bolitas g32b = new G320Bolitas();
+                        g32b.Tarjeta = ElPadre.Tarjeta;
+                        g32b.Azar = "Bolitas";
+                        g32b.J1 = ElPadre.UserId;
+                        g32b.J2 = ElPadre.Hijo;
+                        g32b.H1V = ElPadre.H1;
+                        g32b.H2V = ElPadre.H2;
+                        g32b.H3V = ElPadre.H3;
+                        g32b.H4V = ElPadre.H4;
+                        g32b.H5V = ElPadre.H5;
+                        g32b.H6V = ElPadre.H6;
+                        g32b.H7V = ElPadre.H7;
+                        g32b.H8V = ElPadre.H8;
+                        g32b.H9V = ElPadre.H9;
+                        g32b.H10V = ElPadre.H10;
+                        g32b.H11V = ElPadre.H11;
+                        g32b.H12V = ElPadre.H12;
+                        g32b.H13V = ElPadre.H13;
+                        g32b.H14V = ElPadre.H14;
+                        g32b.H15V = ElPadre.H15;
+                        g32b.H16V = ElPadre.H16;
+                        g32b.H17V = ElPadre.H17;
+                        g32b.H18V = ElPadre.H18;
+
+                        LasBolitasDic.Add(ElPadre.UserId, g32b);
+                    }
+            }
+        }
+        protected async Task LeerExtras()
         {
             LosExtrasP = await ExtrasIServ.Filtro($"ext2tarjeta_-_tarjeta_-_{TarjetaId}");
         }
@@ -264,19 +322,19 @@ namespace GolfV12.Client.Pages.players
     {
         if (tipo != "Hcp")
             {
-                if ( ListaScores .Count > 0 )
+                if ( ListaScores.Count > 0 )
                 {
                     foreach (var item in ListaScores)
                     {
-                        var res = item.Estado == 1 ?
-                           await ScoreIServ.AddScore(item) :
-                           await ScoreIServ.UpdateScore(item);
+                        var res = DatosDic.ContainsValue(item.Id) ?
+                            await ScoreIServ.UpdateScore(item):
+                            await ScoreIServ.AddScore(item);
 
                         if (res.Id != item.Id)
                             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, true,
                         $"El usuario intento agragar un score a la tarjeta {item.Id}");
 
-                        //ListaScores.Remove(x => x.Id == item.Id);
+                        
                     }
                 }
                 ListaScores.RemoveAll(x => x.Id != "");
@@ -326,11 +384,13 @@ namespace GolfV12.Client.Pages.players
             {
                 DatosDic.Add($"Jugador_{jugador}_Hoyo_{hoyo}", newScore.ToString());
                 DatosDic.Add($"Jugador_{jugador}_HoyoId_{hoyo}", scoreId);
+                
             }
             else
             {
                 DatosDic[$"Jugador_{jugador}_Hoyo_{hoyo}"] = newScore.ToString();
             }
+
         }
 
         [Inject]

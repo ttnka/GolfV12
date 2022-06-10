@@ -87,6 +87,8 @@ namespace GolfV12.Client.Pages.players
             {
                 foreach (var Tarj in TarjAll)
                 {
+                    if (Tarj.Fecha.Date < DateTime.Now.Date.AddDays(-2)) await UpDateTarjeta(Tarj);
+
                     var registrala = 0;
                     if (ElEstado == 3)
                     {
@@ -191,13 +193,13 @@ namespace GolfV12.Client.Pages.players
             }
         }
 
-        public async Task SaveTarjeta()
+        public async Task UpDateTarjeta(G500Tarjeta LaTj)
         {
             G500Tarjeta resultado = new G500Tarjeta();
-
-            resultado = await TarjetaIServ.AddTarjeta(LaTarjeta);
-            await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false,
-                $"El usuario agrego un nuevo tarjeta de juego {resultado.Id} {resultado.Titulo} ");
+            LaTj.Estado = 3;
+            resultado = await TarjetaIServ.UpdateTarjeta(LaTj);
+            await EscribirBitacoraUno(UserIdLog, BitaAcciones.Editar, false,
+                $"El sistema cerro la tarjeta por fecha {resultado.Id} {resultado.Titulo} ");
 
             //if (resultado != null) NM.NavigateTo($"/admin/hcp/{PlayerId}");
         }

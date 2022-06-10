@@ -34,9 +34,9 @@
 
     </RadzenCard>
    
-    <RadzenCard>
+    <RadzenCard Style="width: 1500px">
 
-        <RadzenAccordion>
+        <RadzenAccordion Style="width: 1500px">
                 <Items>
                     <RadzenAccordionItem Text="Captura" Icon="add_circle_outline">
 
@@ -44,15 +44,17 @@
                     <RadzenAccordionItem Text="Orden" Icon="account_box">
                         <ElSort DatosDic=@DatosDic LosScores=@LosScores TarjetaId=@TarjetaId />
                     </RadzenAccordionItem>
-                    <RadzenAccordionItem Text="Bolitas" Icon="accessibility">
+                    <RadzenAccordionItem Text="Bolitas" Icon="accessibility" Style="background:green">
                     
-                        <GolfV12.Client.Pages.players.retos.LasBolitas TarjetaId=@TarjetaId JugadoresDic=@JugadoresDic  />
+                        <GolfV12.Client.Pages.players.retos.LasBolitas DatosDic=@DatosDic TarjetaId=@TarjetaId JugadoresDic=@JugadoresDic 
+                                        LasBolitasDic=@LasBolitasDic />
                     </RadzenAccordionItem>
                 </Items>
             </RadzenAccordion>
         </RadzenCard>           
-        <RadzenButton Icon="save" style="margin-bottom: 10px" Text="Guardar los datos" 
-                        Click="@(arg => Guardar())" Disabled=@(!Calculando) />
+        <RadzenButton Icon="save" Style="width: 800px margin-bottom: 10px" Text="Guardar los datos" 
+                        Click="@(arg => Guardar())" Disabled=@(Calculando) />
+
     <RadzenDataGrid @ref="ScoreGrid" AllowFiltering="true" AllowPaging="true" PageSize="50" 
                 AllowSorting="true" AllowColumnResize="true" Style="width: 1500px"
                 RowRender="@RowRender" ExpandMode="DataGridExpandMode.Single" AllowGrouping="false"
@@ -71,7 +73,8 @@
             <RadzenTabs>
                 <Tabs>
                     <RadzenTabsItem Text="Detalle de Apuesta ">
-                        <MisBolitas DatosDic=@DatosDic TarjetaId=@TarjetaId ElPadreId=@datos1.UserId LosScores=@LosScores />
+                        <MisBolitas DatosDic=@DatosDic TarjetaId=@TarjetaId ElPadreId=@datos1.UserId 
+                                            LosScores=@LosScores LasBolitasDic=@LasBolitasDic />
                         
                     </RadzenTabsItem>
                     <RadzenTabsItem Text="Extras">
@@ -795,6 +798,7 @@ else
                 ElMesage.Detail = "Necesitas dar Guardar!!";
                 ElMesage.Duration = 1000;
                 ShowNotification(ElMesage);
+                Calculando = false;
             }
             else
             {

@@ -6,41 +6,36 @@
 @if (LasBolitas != null)
 {
     
-    <RadzenCard>
+    <RadzenCard Style="background:blue">
         <RadzenDataGrid @ref=BolitasGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" 
                 AllowSorting="true" PageSize="50" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" 
                 ShowPagingSummary="true" Data="@LasBolitas" TItem="TarjetaMolde" 
-                ColumnWidth="500px" LogicalFilterOperator="LogicalFilterOperator.Or">
+                ColumnWidth="500px" LogicalFilterOperator="LogicalFilterOperator.Or"  >
                 <Columns>
                      
-                    <RadzenDataGridColumn TItem="TarjetaMolde" Title="Jugador" Frozen="true" Sortable="false" Filterable="false" Width="200px" >
+                <RadzenDataGridColumn TItem="TarjetaMolde" Title="Jugador" Frozen="true" Sortable="false" Filterable="false" Width="200px" >
                         
-                        <Template Context="data">
-                                        @if(DatosDic.ContainsKey($"Nombre_{data.Hijo}"))
-                                        {
-                                             @data.Hijo.Substring(data.Hijo.Length-3, 3); @DatosDic[$"Nombre_{data.Hijo}"];
-                                        }
-                                        else
-                                        {
-                                            <b>No hay nombre del contrincante!</b>
-                                        }
-
-                                    </Template>
-                                    
+                    <Template Context="data">
+                        @if(DatosDic.ContainsKey($"Nombre_{data.Hijo}"))
+                        {
+                            @DatosDic[$"Nombre_{data.Hijo}"];
+                        }
+                        else
+                        {
+                            <b>No hay nombre del contrincante!</b>
+                        }
+                    </Template>
                         
-                                    <FooterTemplate>
-                    
-                    <table>
-                        <tr>
-                            <th style="text-align:center">Par</th>
-                        </tr>
-                        <tr>
-                            <th style="text-align:center">Caballeros</th>
-                        </tr>
-                        
-                    </table>
-                    
-                </FooterTemplate>
+                    <FooterTemplate>                   
+                        <table>
+                            <tr>
+                                <th style="text-align:center">Par</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align:center">Caballeros</th>
+                            </tr>
+                        </table>
+                    </FooterTemplate>
                     </RadzenDataGridColumn>         
                     <RadzenDataGridColumn TItem="TarjetaMolde" Property="H1" Filterable="false" Title="H1" Width="60px" TextAlign="TextAlign.Center" >
                         <FooterTemplate>

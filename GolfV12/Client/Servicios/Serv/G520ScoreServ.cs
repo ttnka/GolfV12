@@ -78,8 +78,15 @@ namespace GolfV12.Client.Servicios.Serv
         public async Task<G520Score> UpdateScore(G520Score score)
         {
             var newJugador = await _httpClient.PutAsJsonAsync<G520Score>("/api/G520Score/", score);
+            if (newJugador.IsSuccessStatusCode) 
+            { return await newJugador.Content.ReadFromJsonAsync<G520Score>(); }
+            else
+            { return null; } 
+            
+            /*
             return newJugador.IsSuccessStatusCode ?
                 await newJugador.Content.ReadFromJsonAsync<G520Score>() : null;
+            */
         }
     }
 }

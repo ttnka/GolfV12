@@ -16,23 +16,27 @@
         
         <div class="col-sm-3">
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href=@($"/players/misdatos/")>
-                <span class="oi oi-caret-left" aria-hidden="true"></span> Regresar a listado de tarjetas
-                </NavLink>
+               
             </div>
         </div>
     </div>
-@if(LasBolitas != null)
+@if(LasBolitasV != null)
 {
     <RadzenDataGrid @ref=@BolitasGrid AllowFiltering="true" AllowPaging="true" PageSize="50" 
                 AllowSorting="true" EditMode="DataGridEditMode.Single"
-                Data=@LasBolitas TItem="G320Bolitas" RowUpdate="@OnUpdateRow" 
-                
+                Data=@LasBolitasV TItem="G320Bolitas" RowUpdate="@OnUpdateRow" 
+                ExpandMode="DataGridExpandMode.Single"
                 RowCreate="@OnCreateRow" >
-        
+        <Template Context="datos1">
+            <LasBolitasRes DatosDic=@DatosDic JugadoresDic=@JugadoresDic AzarId=@datos1.Azar 
+            TarjetaId=@TarjetaId ElJugadorId=@datos1.J1 LasBolitasDic=@LasBolitasDic /> 
+
+            <LasBolitasRes DatosDic=@DatosDic JugadoresDic=@JugadoresDic AzarId=@datos1.Azar
+                TarjetaId=@TarjetaId ElJugadorId=@datos1.J2 LasBolitasDic=@LasBolitasDic /> 
+        </Template>
         <Columns>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Property="Id" Title="Id" Width="60px" 
+            <RadzenDataGridColumn TItem="G320Bolitas" Property="Id" Title="Id" Width="70px" 
             Filterable="false" Sortable="false" Frozen="true">
                 <Template Context="datos">
                     @if (@DatosDic.ContainsKey($"Renglon_{datos.Id}"))
@@ -51,7 +55,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="Jugador 1" Property="J1" 
-                Width="250px" Filterable="false" Frozen="true">
+                Width="230px" Filterable="false" Frozen="true">
                 <Template Context="datos">
                     @if (@DatosDic.ContainsKey($"Nombre_{datos.J1}"))
                     {
@@ -75,7 +79,7 @@
 
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="Jugador 2" Property="J2" 
-            Filterable="false"  Width="250px" Frozen="true">
+            Filterable="false"  Width="230px" Frozen="true">
                 <Template Context="datos">
                     @if (@DatosDic.ContainsKey($"Nombre_{datos.J2}"))
                     {
@@ -97,7 +101,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="Precio" Property="Precio" 
-            Filterable="false"  Width="70px" Sortable=false>
+            Filterable="false"  Width="90px" Sortable=false>
                 <Template Context="datos">
                     @datos.Precio
                 </Template>
@@ -107,7 +111,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H1" Property="H1" 
-            Filterable="false"  Width="40px" Sortable=false>
+            Filterable="false"  Width="65px" Sortable=false>
                 <Template Context="datos">
                     @datos.H1V 
                 </Template>
@@ -117,7 +121,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H2" Property="H2" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.H2V 
                 </Template>
@@ -127,7 +131,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H3" Property="H3" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.H3V 
                 </Template>
@@ -137,7 +141,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H4" Property="H4" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.H4V 
                 </Template>
@@ -147,7 +151,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H5" Property="H5" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.H5V 
                 </Template>
@@ -157,7 +161,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H6" Property="H6" 
-            Filterable="false"  Width="40px" Sortable=false  >
+            Filterable="false"  Width="65px" Sortable=false  >
                 <Template Context="datos">
                     @datos.H6V 
                 </Template>
@@ -167,7 +171,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H7" Property="H7" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.H7V 
                 </Template>
@@ -177,7 +181,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H8" Property="H8" 
-            Filterable="false" Width="40px" Sortable=false >
+            Filterable="false" Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.H8V 
                 </Template>
@@ -188,7 +192,7 @@
             
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H9" Property="H9" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.H9V 
                 </Template>
@@ -198,7 +202,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H10" Property="H10" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.H10V 
                 </Template>
@@ -208,7 +212,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H11" Property="H11" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.H11V 
                 </Template>
@@ -218,7 +222,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H12" Property="H12" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.H12V 
                 </Template>
@@ -228,7 +232,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H13" Property="H13" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.H13V 
                 </Template>
@@ -238,7 +242,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H14" Property="H14" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.H14V 
                 </Template>
@@ -248,7 +252,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H15" Property="H15" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.H15V 
                 </Template>
@@ -258,7 +262,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H16" Property="H16" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.H16V 
                 </Template>
@@ -268,7 +272,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H17" Property="H17" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.H17V 
                 </Template>
@@ -278,7 +282,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="H18" Property="H18" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.H18V 
                 </Template>
@@ -288,7 +292,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="Front9" Property="F9V" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.F9V
                 </Template>
@@ -298,7 +302,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="Back9" Property="B9V" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.B9V 
                 </Template>
@@ -308,7 +312,7 @@
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="G320Bolitas" Title="Total" Property="TotalV" 
-            Filterable="false"  Width="40px" Sortable=false >
+            Filterable="false"  Width="65px" Sortable=false >
                 <Template Context="datos">
                     @datos.TotalV 
                 </Template>
@@ -364,7 +368,7 @@ else
     {
         if (Bolitas == BolitasToInsert) BolitasToInsert = null;
 
-        await BolitasIServ.UpdateBolitas(Bolitas);
+        await BolitasVIServ.UpdateBolitas(Bolitas);
     }
     async Task SaveRow(G320Bolitas Bolitas)
     {
@@ -410,7 +414,7 @@ else
 
             var UnAzar = await AzarIServ.AddAzar(AzarNew);
             Bolitas.Azar = UnAzar.Id;
-            resultado = await BolitasIServ.AddBolitas(Bolitas);
+            resultado = await BolitasVIServ.AddBolitas(Bolitas);
             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false,
                 $"El usuario agrego un nuevo Extra {Bolitas.Id}");
         } else

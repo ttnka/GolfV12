@@ -124,6 +124,9 @@ namespace GolfV12.Server.Models.Repo
                     res.H16V = bolita.H16V;
                     res.H17V = bolita.H17V;
                     res.H18V = bolita.H18V;
+                    res.F9V = bolita.F9V;
+                    res.B9V = bolita.B9V;
+                    res.TotalV = bolita.TotalV;
 
                     res.Estado = bolita.Estado;
                     res.Status = true;

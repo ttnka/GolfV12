@@ -1,0 +1,269 @@
+﻿@using GolfV12.Shared
+
+@inherits LasBolitasResBase 
+
+
+<h3>Lista de retos</h3>
+
+
+@if(LasBolitasRes != null)
+{
+    <RadzenDataGrid @ref=@BolitasResGrid AllowFiltering="true" AllowPaging="true" PageSize="50" 
+                AllowSorting="true" 
+                Data=@LasBolitasRes TItem="G320Bolitas" >
+        
+        <Columns>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Property="Id" Title="Id" Width="70px" 
+            Filterable="false" Sortable="false" Frozen="true">
+                <Template Context="datos">
+                    @if (@DatosDic.ContainsKey($"Renglon_{datos.Id}"))
+                    {
+                        @DatosDic[$"Renglon_{datos.Id}"];
+                    } 
+                    else
+                    {
+                        <label>0</label>
+                    }
+
+                </Template>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="Jugador 1" Property="J1" 
+                Width="230px" Filterable="false" Frozen="true">
+                <Template Context="datos">
+                    @if (@DatosDic.ContainsKey($"Nombre_{datos.J1}"))
+                    {
+                        @DatosDic[$"Nombre_{@datos.J1}"]
+                    } else
+                    {
+                        <label>No hay nombre</label>
+                    }
+                
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="Jugador 2" Property="J2" 
+            Filterable="false"  Width="230px" Frozen="true">
+                <Template Context="datos">
+                    @if (@DatosDic.ContainsKey($"Nombre_{datos.J2}"))
+                    {
+                        @DatosDic[$"Nombre_{@datos.J2}"]
+                    }
+                    else
+                    {
+                        <b>No hay nombre</b>
+                    }
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="Precio" Property="Precio" 
+            Filterable="false"  Width="90px" Sortable=false>
+                <Template Context="datos">
+                    @datos.Precio
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H1" Property="H1" 
+            Filterable="false"  Width="65px" Sortable=false>
+                <Template Context="datos">
+                    @datos.H1V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H2" Property="H2" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.H2V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H3" Property="H3" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.H3V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H4" Property="H4" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.H4V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H5" Property="H5" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.H5V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H6" Property="H6" 
+            Filterable="false"  Width="65px" Sortable=false  >
+                <Template Context="datos">
+                    @datos.H6V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H7" Property="H7" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.H7V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H8" Property="H8" 
+            Filterable="false" Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.H8V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+            
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H9" Property="H9" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.H9V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H10" Property="H10" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.H10V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H11" Property="H11" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.H11V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H12" Property="H12" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.H12V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H13" Property="H13" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.H13V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H14" Property="H14" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.H14V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H15" Property="H15" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.H15V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H16" Property="H16" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.H16V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H17" Property="H17" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.H17V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="H18" Property="H18" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.H18V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="Front9" Property="F9V" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.F9V
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="Back9" Property="B9V" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.B9V 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Title="Total" Property="TotalV" 
+            Filterable="false"  Width="65px" Sortable=false >
+                <Template Context="datos">
+                    @datos.TotalV 
+                </Template>
+                
+            </RadzenDataGridColumn>
+
+
+            <RadzenDataGridColumn TItem="G320Bolitas" Context="sampleBlazorModelsSampleOrder" 
+                    Filterable="false" Sortable="false" TextAlign="TextAlign.Center" 
+                    Width="120px" Title="Estado">
+                <Template Context="datos">
+                    
+                </Template>
+
+                
+
+            </RadzenDataGridColumn>
+
+        </Columns>
+   </RadzenDataGrid>  
+}
+else
+{
+    <div class="spinner"></div>
+}
+--Tatanka--
+
+
+
+@code {
+    
+    public void ShowNotification(NotificationMessage message)
+    {
+        NS.Notify(message);
+    }
+}
