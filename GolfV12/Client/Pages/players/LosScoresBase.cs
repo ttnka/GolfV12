@@ -332,9 +332,7 @@ namespace GolfV12.Client.Pages.players
 
                         if (res.Id != item.Id)
                             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, true,
-                        $"El usuario intento agragar un score a la tarjeta {item.Id}");
-
-                        
+                        $"El usuario intento agragar un score a la tarjeta {item.Id}");                        
                     }
                 }
                 ListaScores.RemoveAll(x => x.Id != "");
