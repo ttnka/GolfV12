@@ -1,16 +1,16 @@
 ﻿@using GolfV12.Shared
 
-@inherits LasBolitasBase 
+@inherits LasParejasBase 
 
 
-<h3>Lista de retos</h3>
+<h3>Lista de retos Parejas</h3>
 
 <div class="form-grup row">        
         <div class="col-sm-9">
             <div class="nav-item px-3">
                 <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" 
-                Text="Agregar reto" 
-                Click="@InsertRow" Disabled=@(BolitasToInsert != null) />
+                Text="Agregar parejas" 
+                Click="@InsertRow" Disabled=@(ParejaToInsert != null) />
             </div>
         </div>
         
@@ -20,18 +20,19 @@
             </div>
         </div>
     </div>
-@if(LasBolitasV != null)
+@if(LasParejas != null)
 {
-    <RadzenDataGrid @ref=@BolitasGrid AllowFiltering="true" AllowPaging="true" PageSize="50" 
+    <RadzenDataGrid @ref=@ParejasGrid AllowFiltering="true" AllowPaging="true" PageSize="50" 
                 AllowSorting="true" EditMode="DataGridEditMode.Single"
-                Data=@LasBolitasV TItem="G320Bolitas" RowUpdate="@OnUpdateRow" 
+                Data=@LasParejas TItem=G324Parejas RowUpdate="@OnUpdateRow" 
                 ExpandMode="DataGridExpandMode.Single"
                 RowCreate="@OnCreateRow" Style="background:lightgreen">
         <Template Context="datos1">
+        <!--
             <LasBolitasRes DatosDic=@DatosDic JugadoresDic=@JugadoresDic AzarId=@datos1.Azar 
                     TarjetaId=@TarjetaId ElJugadorId=@datos1.J1 LasBolitasDic=@LasBolitasDic 
                     LosExtrasDic=@LosExtrasDic /> 
-        <!--
+        
             <LasBolitasRes DatosDic=@DatosDic JugadoresDic=@JugadoresDic AzarId=@datos1.Azar
                     TarjetaId=@TarjetaId ElJugadorId=@datos1.J2 LasBolitasDic=@LasBolitasDic
                     LosExtrasDic=@LosExtrasDic /> 
@@ -39,7 +40,7 @@
         </Template>
         <Columns>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Property="Id" Title="Id" Width="70px" 
+            <RadzenDataGridColumn TItem="G324Parejas" Property="Id" Title="Id" Width="70px" 
             Filterable="false" Sortable="false" Frozen="true">
                 <Template Context="datos">
                     <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" 
@@ -48,7 +49,7 @@
                 </Template>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="Jugador 1" Property="J1" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="Jugador 1" Property="J1" 
                 Width="150px" Filterable="false" Frozen="true">
                 <Template Context="datos">
                     @if (@DatosDic.ContainsKey($"Nombre_{datos.J1}"))
@@ -72,7 +73,7 @@
             </RadzenDataGridColumn>
 
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="Jugador 2" Property="J2" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="Jugador 2" Property="J2" 
             Filterable="false"  Width="150px" Frozen="true">
                 <Template Context="datos">
                     @if (@DatosDic.ContainsKey($"Nombre_{datos.J2}"))
@@ -94,7 +95,51 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="Unidad" Property="Precio" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="Jugador 3" Property="J3" 
+            Filterable="false"  Width="150px" Frozen="true">
+                <Template Context="datos">
+                    @if (@DatosDic.ContainsKey($"Nombre_{datos.J3}"))
+                    {
+                        @DatosDic[$"Nombre_{@datos.J3}"]
+                    }
+                    else
+                    {
+                        <b>No hay nombre</b>
+                    }
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenDropDown Name="Player" AllowClear="false" 
+                        AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.Default" 
+                        FilterOperator="StringFilterOperator.Contains"  
+                        Data="@LosNombres"  @bind-Value=datos.J3 ValueProperty="Key" TextProperty="Value" 
+                        Style="width:100%; display: block;">
+                    </RadzenDropDown> 
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G324Parejas" Title="Jugador 4" Property="J4" 
+            Filterable="false"  Width="150px" Frozen="true">
+                <Template Context="datos">
+                    @if (@DatosDic.ContainsKey($"Nombre_{datos.J4}"))
+                    {
+                        @DatosDic[$"Nombre_{@datos.J4}"]
+                    }
+                    else
+                    {
+                        <b>No hay nombre</b>
+                    }
+                </Template>
+                <EditTemplate Context="datos">
+                    <RadzenDropDown Name="Player" AllowClear="false" 
+                        AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.Default" 
+                        FilterOperator="StringFilterOperator.Contains"  
+                        Data="@LosNombres"  @bind-Value=datos.J4 ValueProperty="Key" TextProperty="Value" 
+                        Style="width:100%; display: block;">
+                    </RadzenDropDown> 
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="G324Parejas" Title="Unidad" Property="Precio" 
             Filterable="false"  Width="70px" Sortable=false>
                 <Template Context="datos">
                     <label style="@elStyle"><b>@datos.Precio</b></label>
@@ -104,7 +149,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H1" Property="H1" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H1" Property="H1" 
             Filterable="false"  Width="60px" Sortable=false>
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H1V </label>
@@ -114,7 +159,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H2" Property="H2" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H2" Property="H2" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H2V </label>
@@ -124,7 +169,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H3" Property="H3" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H3" Property="H3" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H3V </label>
@@ -134,7 +179,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H4" Property="H4" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H4" Property="H4" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H4V </label>
@@ -144,7 +189,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H5" Property="H5" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H5" Property="H5" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H5V </label>
@@ -154,7 +199,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H6" Property="H6" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H6" Property="H6" 
             Filterable="false"  Width="60px" Sortable=false  >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H6V </label>
@@ -164,7 +209,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H7" Property="H7" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H7" Property="H7" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H7V </label>
@@ -174,7 +219,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H8" Property="H8" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H8" Property="H8" 
             Filterable="false" Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H8V </label>
@@ -185,7 +230,7 @@
             </RadzenDataGridColumn>
             
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H9" Property="H9" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H9" Property="H9" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H9V </label>
@@ -195,7 +240,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H10" Property="H10" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H10" Property="H10" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H10V </label>
@@ -205,7 +250,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H11" Property="H11" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H11" Property="H11" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H11V </label>
@@ -215,7 +260,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H12" Property="H12" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H12" Property="H12" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle;">@datos.H12V </label>
@@ -225,7 +270,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H13" Property="H13" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H13" Property="H13" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H13V </label>
@@ -235,7 +280,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H14" Property="H14" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H14" Property="H14" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H14V </label>
@@ -245,7 +290,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H15" Property="H15" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H15" Property="H15" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H15V </label>
@@ -255,7 +300,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H16" Property="H16" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H16" Property="H16" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H16V </label>
@@ -265,7 +310,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H17" Property="H17" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H17" Property="H17" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H17V </label>
@@ -275,7 +320,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="H18" Property="H18" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="H18" Property="H18" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.H18V </label>
@@ -285,7 +330,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="Front9" Property="F9V" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="Front9" Property="F9V" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.F9V</label>
@@ -295,7 +340,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="Back9" Property="B9V" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="Back9" Property="B9V" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style="@elStyle">@datos.B9V </label>
@@ -305,7 +350,7 @@
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Title="Total" Property="TotalV" 
+            <RadzenDataGridColumn TItem="G324Parejas" Title="Total" Property="TotalV" 
             Filterable="false"  Width="60px" Sortable=false >
                 <Template Context="datos">
                     <label style=@elStyle>@datos.TotalV</label> 
@@ -316,7 +361,7 @@
             </RadzenDataGridColumn>
 
 
-            <RadzenDataGridColumn TItem="G320Bolitas" Context="sampleBlazorModelsSampleOrder" 
+            <RadzenDataGridColumn TItem="G324Parejas" Context="sampleBlazorModelsSampleOrder" 
                     Filterable="false" Sortable="false" TextAlign="TextAlign.Center" 
                     Width="120px" Title="Estado">
                 <Template Context="datos">
@@ -351,55 +396,57 @@ else
 
 
 @code {
-    G320Bolitas BolitasToInsert;
+    G324Parejas ParejaToInsert;
 
 
-    async Task EditRow(G320Bolitas Bolitas)
+    async Task EditRow(G324Parejas pareja)
     {
-        await BolitasGrid.EditRow(Bolitas);
+        await ParejasGrid.EditRow(pareja);
     }
-    async void OnUpdateRow(G320Bolitas Bolitas)
+    async void OnUpdateRow(G324Parejas pareja)
     {
-        if (Bolitas == BolitasToInsert) BolitasToInsert = null;
+        if (pareja == ParejaToInsert) ParejaToInsert = null;
 
-        await BolitasVIServ.UpdateBolitas(Bolitas);
+        await ParejasIServ.UpdatePareja(pareja);
     }
-    async Task SaveRow(G320Bolitas Bolitas)
+    async Task SaveRow(G324Parejas pareja)
     {
         //ext.Tarjeta = TarjetaId;
 
-        await BolitasGrid.UpdateRow(Bolitas);
+        await ParejasGrid.UpdateRow(pareja);
     }
-    void CancelEdit(G320Bolitas Bolitas)
+    void CancelEdit(G324Parejas pareja)
     {
-        if (Bolitas == BolitasToInsert) BolitasToInsert = null;
-        BolitasGrid.CancelEditRow(Bolitas);
+        if (pareja == ParejaToInsert) ParejaToInsert = null;
+        ParejasGrid.CancelEditRow(pareja);
     }
     async Task InsertRow()
     {
 
-        BolitasToInsert = new G320Bolitas();
-        BolitasToInsert.Id = Guid.NewGuid().ToString();
-        BolitasToInsert.Tarjeta = TarjetaId;
-        BolitasToInsert.Azar = "Vacio";
-        //BolitasToInsert.J1 = UserIdLog;
-        //BolitasToInsert.Publico = false;
-        BolitasToInsert.Estado = 1;
-        BolitasToInsert.Status = true;
+        ParejaToInsert = new G324Parejas();
+        ParejaToInsert.Id = Guid.NewGuid().ToString();
+        ParejaToInsert.Tarjeta = TarjetaId;
+        ParejaToInsert.Azar = "Vacio";
+        //ParejaToInsert.J1 = UserIdLog;
+        //ParejaToInsert.Publico = false;
+        ParejaToInsert.Estado = 1;
+        ParejaToInsert.Status = true;
 
-        await BolitasGrid.InsertRow(BolitasToInsert);
+        await ParejasGrid.InsertRow(ParejaToInsert);
 
     }
-    async void OnCreateRow(G320Bolitas Bolitas)
+    async void OnCreateRow(G324Parejas pareja)
     {
-        if(Bolitas.J1 != Bolitas.J2)
+        if(pareja.J1 != pareja.J2 && pareja.J1 != pareja.J3 && pareja.J1 != pareja.J4 && 
+            pareja.J2 != pareja.J3 && pareja.J2 != pareja.J4 && 
+            pareja.J3 != pareja.J4 ) 
         {
-            if (Bolitas == BolitasToInsert) BolitasToInsert = null;
+            if (pareja == ParejaToInsert) ParejaToInsert = null;
 
-            G320Bolitas resultado = new G320Bolitas();
+            G324Parejas resultado = new G324Parejas();
             G300Azar AzarNew = new G300Azar
                 {
-                    Tarjeta = Bolitas.Tarjeta,
+                    Tarjeta = pareja.Tarjeta,
                     Creador = UserIdLog,
                     TipoAzar = "Bolitas",
                     Estado = 1,
@@ -407,10 +454,12 @@ else
                 };
 
             var UnAzar = await AzarIServ.AddAzar(AzarNew);
-            Bolitas.Azar = UnAzar.Id;
+            pareja.Azar = UnAzar.Id;
+            /*
             resultado = await BolitasVIServ.AddBolitas(Bolitas);
             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, false,
                 $"El usuario agrego un nuevo Extra {Bolitas.Id}");
+            */
         } else
         {
             elMessage.Severity = NotificationSeverity.Error;

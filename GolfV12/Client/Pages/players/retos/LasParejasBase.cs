@@ -4,25 +4,20 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Radzen;
 using Radzen.Blazor;
-using GolfV12.Client.Shared;
 
 namespace GolfV12.Client.Pages.players.retos
 {
-    public class LasBolitasBase : ComponentBase 
+    public class LasParejasBase : ComponentBase
     {
-        [Inject]
-        public IG320BolitasServ BolitasVIServ { get; set; }
         [Parameter]
         public string TarjetaId { get; set; } = string.Empty;
         [Parameter]
         public string AzarId { get; set; } = string.Empty;
+        [Inject]
+        public IG324ParejasServ ParejasIServ { get; set; }
         [Parameter]
         public Dictionary<string, G120Player> JugadoresDic { get; set; } = new Dictionary<string, G120Player>();
-        
-        [Parameter]
-        public Dictionary<string, G320Bolitas> LasBolitasDic { get; set; } = new Dictionary<string, G320Bolitas>();
-        
-        public IEnumerable<G320Bolitas> LasBolitasV { get; set; } = new List<G320Bolitas>();
+        public IEnumerable<G324Parejas> LasParejas { get; set; } = new List<G324Parejas>();
         public IEnumerable<KeyValuePair<string, string>> TiposAzar { get; set; } =
             new List<KeyValuePair<string, string>>();
         [Inject]
@@ -31,12 +26,11 @@ namespace GolfV12.Client.Pages.players.retos
             new List<KeyValuePair<string, string>>();
         [Inject]
         public IG300AzarServ AzarIServ { get; set; }
-        public CalcularBolitas CalculoB { get; set; } = new CalcularBolitas();
         [Parameter]
         public Dictionary<string, string> DatosDic { get; set; } = new Dictionary<string, string>();
         [Parameter]
         public Dictionary<string, int> LosExtrasDic { get; set; } = new Dictionary<string, int>();
-        public RadzenDataGrid<G320Bolitas> BolitasGrid { get; set; } = new();
+        public RadzenDataGrid<G324Parejas> ParejasGrid { get; set; } = new();
         [Inject]
         public NavigationManager NM { get; set; }
 
@@ -55,27 +49,14 @@ namespace GolfV12.Client.Pages.players.retos
         protected async Task LeerDatos()
         {
             List<KeyValuePair<string, string>> keyValuePairs = new List<KeyValuePair<string, string>>();
-            
+
             foreach (var item in JugadoresDic)
             {
                 keyValuePairs.Add(new KeyValuePair<string, string>(item.Key, $"{item.Value.Nombre} {item.Value.Apodo} {item.Value.Paterno}"));
             }
             LosNombres = keyValuePairs.AsEnumerable();
-            LasBolitasV = await BolitasVIServ.Filtro($"bol2tarjeta_-_tarjeta_-_{TarjetaId}");
-            /*
-            if (LasBolitasV != null)
-            {
-                int renglon = 1;
-                foreach (var tipo in LasBolitasV)
-                {
-                    if (!DatosDic.ContainsKey($"Renglon_{tipo.Id}"))
-                    {
-                        DatosDic.Add($"Renglon_{tipo.Id}", (renglon).ToString());
-                        renglon++;
-                    }
-                }
-            }
-            */
+            LasParejas = await ParejasIServ.Filtro($"par3tarjeta_-_tarjeta_-_{TarjetaId}");
+            
         }
         public NotificationMessage elMessage { get; set; } = new NotificationMessage()
         {

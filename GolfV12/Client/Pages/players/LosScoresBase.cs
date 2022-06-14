@@ -39,10 +39,12 @@ namespace GolfV12.Client.Pages.players
         public Dictionary<string, G120Player> JugadoresDic { get; set; } = new Dictionary<string, G120Player>();
         [Parameter]
         public Dictionary<string, G320Bolitas> LasBolitasDic { get; set; } = new Dictionary<string, G320Bolitas>();
+        [Parameter]
+        public Dictionary<string, int> LosExtrasDic { get; set; } = new Dictionary<string, int>();
         public RadzenDataGrid<TarjetaMolde> ScoreGrid { get; set; } = new();
         [Inject]
         public NavigationManager NM { get; set; }
-        public bool Calculando { get; set; } = false;
+        public bool Calculando { get; set; } = true;
         public List<G510Jugador> ListaHcp { get; set; } = new List<G510Jugador>();
         public List<G520Score> ListaScores { get; set; } = new List<G520Score>();
         public CalcularBolitas ElCalculo { get; set; } = new CalcularBolitas();
@@ -54,11 +56,14 @@ namespace GolfV12.Client.Pages.players
             var user = autState.User;
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
+            LaTarjeta = (await TarjetasIServ.Filtro($"tar1id_-_id_-_{TarjetaId}")).FirstOrDefault();
+            await LeerExtras();
+            await LeerDificultad();
             await LeerJugadores();
             await LeerScores();
             LeerLosHoyos();
             await LeerPermisos();
-            await LeerExtras();
+            
 
             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Consultar, false,
                 $"El usuario consulto el listado de jugadores de la tarjeta {TarjetaId}");
@@ -77,8 +82,6 @@ namespace GolfV12.Client.Pages.players
         }
         protected async Task LeerPermisos()
         {
-            LaTarjeta = (await TarjetasIServ.Filtro($"tar1id_-_id_-_{TarjetaId}")).FirstOrDefault();
-            
             if (!DatosDic.ContainsKey($"PermisoLeer_{TarjetaId}_Usuario_{UserIdLog}"))
             {
                 DatosDic.Add($"PermisoLeer_{TarjetaId}_Usuario_{UserIdLog}", "0");
@@ -109,19 +112,22 @@ namespace GolfV12.Client.Pages.players
                         DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] = "2";
                 }
 
-                // Leer Par y Dificultad
+            }
+        }
+        protected async Task LeerDificultad()
+        {
+            // Leer Par y Dificultad
 
-                var ParTemp = await HoyoIServ.Filtro($"hoy1campo_-_campo_-_{LaTarjeta.Campo}");
-                if (ParTemp != null)
+            var ParTemp = await HoyoIServ.Filtro($"hoy1campo_-_campo_-_{LaTarjeta.Campo}");
+            if (ParTemp != null)
+            {
+                foreach (var item in ParTemp)
                 {
-                    foreach (var item in ParTemp)
+                    if (!DatosDic.ContainsKey($"HoyoPar_{item.Hoyo}"))
                     {
-                        if (!DatosDic.ContainsKey($"HoyoPar_{item.Hoyo}"))
-                        {
-                            DatosDic.Add($"HoyoPar_{item.Hoyo}", item.Par.ToString());
-                            DatosDic.Add($"HoyoH_{item.Hoyo}", item.HcpHombres.ToString());
-                            DatosDic.Add($"HoyoW_{item.Hoyo}", item.HcpMujeres.ToString());
-                        }
+                        DatosDic.Add($"HoyoPar_{item.Hoyo}", item.Par.ToString());
+                        DatosDic.Add($"HoyoH_{item.Hoyo}", item.HcpHombres.ToString());
+                        DatosDic.Add($"HoyoW_{item.Hoyo}", item.HcpMujeres.ToString());
                     }
                 }
             }
@@ -276,9 +282,11 @@ namespace GolfV12.Client.Pages.players
                 {
                     IEnumerable<TarjetaMolde> LasBolitas = ElCalculo.CalculoGeneral(LosScores, TarjetaId, item.UserId,  Dif);
                     CalcularLosImportes(LasBolitas);
+                    
                 }
             }
         }
+        
         protected void CalcularLosImportes(IEnumerable<TarjetaMolde> LasBolitas)
         {
             if (LasBolitas != null)
@@ -317,22 +325,46 @@ namespace GolfV12.Client.Pages.players
         protected async Task LeerExtras()
         {
             LosExtrasP = await ExtrasIServ.Filtro($"ext2tarjeta_-_tarjeta_-_{TarjetaId}");
+            if (LosExtrasP != null)
+            {
+                foreach(var le in LosExtrasP)
+                {
+                    if (!LosExtrasDic.ContainsKey($"Extras_{le.Player}_Hoyo_{le.Hoyo}"))
+                    {
+                        LosExtrasDic.Add($"Extras_{le.Player}_Hoyo_{le.Hoyo}", le.Valor);
+                    }
+                    else
+                    {
+                        LosExtrasDic[$"Extras_{le.Player}_Hoyo_{le.Hoyo}"] += le.Valor;
+                    }
+                }
+            }
         }
     protected async Task UpDateWrite(string tipo) 
     {
+        G520Score res = new G520Score();    
         if (tipo != "Hcp")
             {
                 if ( ListaScores.Count > 0 )
                 {
                     foreach (var item in ListaScores)
                     {
-                        var res = DatosDic.ContainsValue(item.Id) ?
-                            await ScoreIServ.UpdateScore(item):
-                            await ScoreIServ.AddScore(item);
+                        if (item.Estado > 0)
+                        {
+                           item.Estado = 2;
+                            res = new G520Score();
+                            res = await ScoreIServ.UpdateScore(item);
+                        }
+                        else
+                        {
+                            item.Estado = 1;
+                            res = new G520Score();
+                            res = await ScoreIServ.AddScore(item);
+                        }
 
-                        if (res.Id != item.Id)
+                        if (!string.IsNullOrEmpty(res.Id))
                             await EscribirBitacoraUno(UserIdLog, BitaAcciones.Agregar, true,
-                        $"El usuario intento agragar un score a la tarjeta {item.Id}");                        
+                            $"El usuario intento agragar un score a la tarjeta {res.Id}");                        
                     }
                 }
                 ListaScores.RemoveAll(x => x.Id != "");
@@ -351,10 +383,10 @@ namespace GolfV12.Client.Pages.players
                         ListaHcp.Remove(item);
                     }
                 }
-                ListaHcp.RemoveAll(x => x.Id != "");
+                if (ListaHcp != null) ListaHcp.RemoveAll(x => x.Id != "");
             }
         await LeerScores();
-            Calculando = false;
+            //Calculando = false;
     }
 
     protected void LeerLosHoyos()

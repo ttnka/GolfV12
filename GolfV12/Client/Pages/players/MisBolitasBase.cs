@@ -18,16 +18,12 @@ namespace GolfV12.Client.Pages.players
         public IEnumerable<TarjetaMolde> LosScores { get; set; } = new List<TarjetaMolde>();
         [Parameter]
         public IEnumerable<TarjetaMolde> LasBolitas { get; set; } = new List<TarjetaMolde>();
-        [Parameter]
-        public Dictionary<string, G320Bolitas> LasBolitasDic { get; set; } = new Dictionary<string, G320Bolitas>();
-
 
         [Parameter]
         public Dictionary<string, string> DatosDic { get; set; } = new Dictionary<string, string>();
-
+        [Parameter]
+        public Dictionary<string, int> LosExtrasDic { get; set; } = new Dictionary<string, int>();
         public RadzenDataGrid<TarjetaMolde> BolitasGrid { get; set; } = new(); 
-        
-        public bool isLoading { get; set; } = false;
         public CalcularBolitas ElCalculo { get; set; } = new CalcularBolitas();
         protected async override Task OnInitializedAsync()
         {
@@ -36,7 +32,7 @@ namespace GolfV12.Client.Pages.players
             if (user.Identity.IsAuthenticated) UserIdLog = user.FindFirst(c => c.Type == "sub")?.Value;
 
             CalcularLasBolitas();
-            if (LasBolitas != null) CalcularLosImportes();
+            //if (LasBolitas != null) CalcularLosImportes();
         }
         protected void CalcularLasBolitas()
         { 
@@ -49,38 +45,100 @@ namespace GolfV12.Client.Pages.players
                     
                 }
                 LasBolitas = ElCalculo.CalculoGeneral(LosScores, TarjetaId, ElPadreId, Dif);
-            }
-        }
-        protected void CalcularLosImportes()
-        {
-            if (LasBolitas != null)
-            {
-                foreach (var ElPadre in LasBolitas)
-                if (!LasBolitasDic.ContainsKey(ElPadre.UserId))
+                if (LasBolitas != null)
                 {
-                    G320Bolitas g32b = new G320Bolitas();
-                    g32b.Tarjeta = ElPadre.Tarjeta;
-                    g32b.Azar = "Bolitas";
-                    g32b.J1 = ElPadre.UserId;
-                    g32b.J2 = ElPadre.Hijo;
-                    g32b.H1V = ElPadre.H1;
-                    g32b.H2V = ElPadre.H1;
-                    g32b.H3V = ElPadre.H1;
-                    g32b.H1V = ElPadre.H1;
-                    g32b.H1V = ElPadre.H1;
-                    g32b.H1V = ElPadre.H1;
-                    g32b.H1V = ElPadre.H1;
-                    g32b.H1V = ElPadre.H1;
-                    g32b.H1V = ElPadre.H1;
-                    g32b.H1V = ElPadre.H1;
-                    g32b.H1V = ElPadre.H1;
-                    g32b.H1V = ElPadre.H1;
-                    g32b.H1V = ElPadre.H1;
-                    g32b.H1V = ElPadre.H1;
-                    g32b.H1V = ElPadre.H1;
-                    g32b.H1V = ElPadre.H1;
-
-                    LasBolitasDic.Add(ElPadre.UserId, g32b);
+                    foreach (var item in LasBolitas)
+                    {
+                        int ExtH1 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_1"))
+                            ExtH1 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_1"];
+                        item.H1 += ExtH1;
+                        
+                        int ExtH2 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_2"))
+                            ExtH2 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_2"];
+                        item.H2 += ExtH2;
+                        
+                        int ExtH3 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_3"))
+                            ExtH3 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_3"];
+                        item.H3 += ExtH3;
+                        
+                        int ExtH4 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_4"))
+                            ExtH4 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_4"];
+                        item.H4 += ExtH4;
+                        
+                        int ExtH5 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_5"))
+                            ExtH5 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_5"];
+                        item.H5 += ExtH5;
+                        
+                        int ExtH6 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_6"))
+                            ExtH6 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_6"];
+                        item.H6 += ExtH6;
+                        
+                        int ExtH7 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_7"))
+                            ExtH7 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_7"];
+                        item.H7 += ExtH7;
+                        
+                        int ExtH8 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_8"))
+                            ExtH8 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_8"];
+                        item.H8 += ExtH8;
+                        
+                        int ExtH9 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_9"))
+                            ExtH9 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_9"];
+                        item.H9 += ExtH9;
+                        
+                        int ExtH10 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_10"))
+                            ExtH10 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_10"];
+                        item.H10 += ExtH10;
+                        
+                        int ExtH11 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_11"))
+                            ExtH11 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_11"];
+                        item.H11 += ExtH11;
+                        
+                        int ExtH12 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_12"))
+                            ExtH12 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_12"];
+                        item.H12 += ExtH12;
+                        
+                        int ExtH13 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_13"))
+                            ExtH13 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_13"];
+                        item.H13 += ExtH13;
+                        
+                        int ExtH14 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_14"))
+                            ExtH14 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_14"];
+                        item.H14 += ExtH14;
+                        
+                        int ExtH15 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_15"))
+                            ExtH15 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_15"];
+                        item.H15 += ExtH15;
+                        
+                        int ExtH16 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_16"))
+                            ExtH16 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_16"];
+                        item.H16 += ExtH16;
+                        
+                        int ExtH17 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_17"))
+                            ExtH17 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_17"];
+                        item.H17 += ExtH17;
+                        
+                        int ExtH18 = 0;
+                        if (LosExtrasDic.ContainsKey($"Extras_{item.UserId}_Hoyo_18"))
+                            ExtH18 = LosExtrasDic[$"Extras_{item.UserId}_Hoyo_18"];
+                        item.H18 += ExtH18;
+                    }
                 }
             }
         }
@@ -102,106 +160,3 @@ namespace GolfV12.Client.Pages.players
         }
     }
 }
-/*
-                                        int signo = padre.Hcp < hijo.Hcp ? -1 : 1;
-                                        int bolita = Math.Abs(padre.Hcp - hijo.Hcp) / 18;
-                                        bolita += Math.Abs(padre.Hcp - hijo.Hcp) % 18 > 
-                                                int.Parse(DatosDic[$"HoyoH_{h + 1}"]) ? 1 : 0;
-                                        bolita = PadreScore[h] - bolita * signo - HijoScore[h];
-                                        ElPadreScore[h] = bolita < 0 ? 1 : -1;
-                                        if (bolita == 0) ElPadreScore[h] = 0;   
-*/
-
-/*
-            protected void Calcular1()
-        {
-            List<TarjetaMolde> BList = new List<TarjetaMolde>();
-            if (LosScores != null )
-            {
-                foreach (var padre in LosScores)
-                {
-                    if (padre.UserId == ElPadreId)
-                    {
-                        int[] ElPadreScore = new int[18];
-                        int[] PadreScore = new int[] {padre.H1,padre.H2,padre.H3,padre.H4,padre.H5,padre.H6,padre.H7,
-                                            padre.H8,padre.H9,padre.H10,padre.H11,padre.H12,padre.H13,padre.H14,padre.H15,
-                                            padre.H16,padre.H17,padre.H18 };
-                        
-                        foreach (var hijo in LosScores)
-                        {
-                            if (padre.UserId != hijo.UserId)
-                            {
-                                TarjetaMolde ElPadre = new TarjetaMolde();
-                                ElPadre.UserId = padre.UserId;
-                                ElPadre.Hijo = hijo.UserId;
-                                ElPadre.Tarjeta = TarjetaId;
-
-                                int[] HijoScore = new int[18] {hijo.H1,hijo.H2,hijo.H3,hijo.H4,hijo.H5,hijo.H6,hijo.H7,
-                                            hijo.H8,hijo.H9,hijo.H10,hijo.H11,hijo.H12,hijo.H13,hijo.H14,hijo.H15,
-                                            hijo.H16,hijo.H17,hijo.H18};
-
-                                for (int h = 0; h < 18; h++)
-                                {
-                                    if (PadreScore[h] > 0 && HijoScore[h] > 0)
-                                    {
-                                        ElPadreScore[h] = ElCalculo.CalcularB(padre.Hcp, hijo.Hcp, int.Parse(DatosDic[$"HoyoH_{h + 1}"]),
-                                            PadreScore[h], HijoScore[h]);
-                                    }
-                                }
-// Alimentar ElPadre
-                                { 
-                                    ElPadre.H1 = ElPadreScore[0];
-                                    ElPadre.H2 = ElPadreScore[1];
-                                    ElPadre.H3 = ElPadreScore[2];
-                                    ElPadre.H4 = ElPadreScore[3];
-                                    ElPadre.H5 = ElPadreScore[4];
-                                    ElPadre.H6 = ElPadreScore[5];
-                                    ElPadre.H7 = ElPadreScore[6];
-                                    ElPadre.H8 = ElPadreScore[7];
-                                    ElPadre.H9 = ElPadreScore[8];
-                                    ElPadre.H10 = ElPadreScore[9];
-                                    ElPadre.H11 = ElPadreScore[10];
-                                    ElPadre.H12 = ElPadreScore[11];
-                                    ElPadre.H13 = ElPadreScore[12];
-                                    ElPadre.H14 = ElPadreScore[13];
-                                    ElPadre.H15 = ElPadreScore[14];
-                                    ElPadre.H16 = ElPadreScore[15];
-                                    ElPadre.H17 = ElPadreScore[16];
-                                    ElPadre.H18 = ElPadreScore[17];
-                                }        
-                                BList.Add(ElPadre);
-// Alimenta BolitasDic 
-                                if (!LasBolitasDic.ContainsKey(padre.UserId))
-                                {
-                                    G320Bolitas g32b = new G320Bolitas();
-                                    g32b.Tarjeta = ElPadre.Tarjeta;
-                                    g32b.Azar = "Bolitas";
-                                    g32b.J1 = ElPadre.UserId;
-                                    g32b.J2 = ElPadre.Hijo;
-                                    g32b.H1V = ElPadre.H1;
-                                    g32b.H2V = ElPadre.H1;
-                                    g32b.H3V = ElPadre.H1;
-                                    g32b.H1V = ElPadre.H1;
-                                    g32b.H1V = ElPadre.H1;
-                                    g32b.H1V = ElPadre.H1;
-                                    g32b.H1V = ElPadre.H1;
-                                    g32b.H1V = ElPadre.H1;
-                                    g32b.H1V = ElPadre.H1;
-                                    g32b.H1V = ElPadre.H1;
-                                    g32b.H1V = ElPadre.H1;
-                                    g32b.H1V = ElPadre.H1;
-                                    g32b.H1V = ElPadre.H1;
-                                    g32b.H1V = ElPadre.H1;
-                                    g32b.H1V = ElPadre.H1;
-                                    g32b.H1V = ElPadre.H1;
-
-                                    LasBolitasDic.Add(padre.UserId, g32b);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            LasBolitas = BList.AsEnumerable();
-        }
-        */

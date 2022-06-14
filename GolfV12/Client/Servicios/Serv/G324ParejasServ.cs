@@ -66,6 +66,11 @@ namespace GolfV12.Client.Servicios.Serv
                         resultado += "par2tarjeta_-_tarjeta_-_" + ParaDic["tarjeta"] + "_-_azar_-_" + ParaDic["azar"] + 
                                 "_-_status_-_true";
                         break;
+                    case "par3tarjeta":
+                        resultado += "par3tarjeta_-_tarjeta_-_" + ParaDic["tarjeta"] +
+                                "_-_status_-_true";
+                        break;
+
                     case "par1jugador":
                         resultado += "par1jugador_-_tarjeta_-_" + ParaDic["tarjeta"] + "_-_azar_-_" + ParaDic["azar"] +
                                 "_-_j1_-_" + ParaDic["j1"] +"_-_status_-_true";

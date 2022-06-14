@@ -29,11 +29,12 @@
             <RadzenDataGridColumn TItem="G242Extras" Property="Id" Title="Id" Width="60px" 
             Filterable="false" Sortable="false" >
                 <Template Context="datos">
-                    @datos.Id 
-
-                    @if (@DatosDic.ContainsKey($"PermisoEscribir_{TarjetaId}_Usuario_{datos.Player}"))
+                    
+                    @if (@DatosDic.ContainsKey($"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"))
                     {
-                        @if (@DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{datos.Player}"] != "0")
+                        @if (@DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" ||
+                            @DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" &&
+                            @datos.Player == UserIdLog)
                         {
                             <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" 
                                 Click="@(args => EditRow(datos))" @onclick:stopPropagation="true">

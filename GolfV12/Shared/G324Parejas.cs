@@ -34,6 +34,9 @@ namespace GolfV12.Shared
         public int H16V { get; set; } = 0;
         public int H17V { get; set; } = 0;
         public int H18V { get; set; } = 0;
+        public int F9V { get; set; } = 0;
+        public int B9V { get; set; } = 0;
+        public int TotalV { get; set; } = 0;
         public int Estado { get; set; } = 1;
         public bool Status { get; set; } = true;
     }

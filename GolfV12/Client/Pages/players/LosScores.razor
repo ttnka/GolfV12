@@ -46,8 +46,13 @@
                     </RadzenAccordionItem>
                     <RadzenAccordionItem Text="Bolitas" Icon="accessibility">
                     
-                        <GolfV12.Client.Pages.players.retos.LasBolitas DatosDic=@DatosDic TarjetaId=@TarjetaId JugadoresDic=@JugadoresDic 
-                                        LasBolitasDic=@LasBolitasDic />
+                        <GolfV12.Client.Pages.players.retos.LasBolitas DatosDic=@DatosDic 
+                                TarjetaId=@TarjetaId JugadoresDic=@JugadoresDic 
+                                LasBolitasDic=@LasBolitasDic LosExtrasDic=@LosExtrasDic />
+
+                    </RadzenAccordionItem>
+                    <RadzenAccordionItem Text="Parejas" Icon="add_circle_outline">
+
                     </RadzenAccordionItem>
                 </Items>
             </RadzenAccordion>
@@ -74,7 +79,7 @@
                 <Tabs>
                     <RadzenTabsItem Text="Detalle de Apuesta ">
                         <MisBolitas DatosDic=@DatosDic TarjetaId=@TarjetaId ElPadreId=@datos1.UserId 
-                                            LosScores=@LosScores LasBolitasDic=@LasBolitasDic />
+                                            LosScores=@LosScores LosExtrasDic=@LosExtrasDic />
                         
                     </RadzenTabsItem>
                     <RadzenTabsItem Text="Extras">
@@ -95,7 +100,6 @@
         <Columns>
 
             <RadzenDataGridColumn TItem="TarjetaMolde" Property="Hcp" Title="Hcp" Width="60px" Filterable=false >
-                
                 <Template Context="datos" > 
                     @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
                         (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
@@ -106,28 +110,14 @@
                     }
                     else
                     {
-                       <label style="
-    width: 34px;
-    height: 34px;
-    padding:10px;
-    background: #fff;
-    border: 1px solid #000;
-    color: #000;    
-    text-align: center;
-    font: 12px Arial, sans-serif;;">@datos.Hcp</label>
-                       
+                       <label style="">@datos.Hcp</label>   
                     }
-                    
-
                 </Template>
-                
             </RadzenDataGridColumn>
 
             <RadzenDataGridColumn TItem="TarjetaMolde" Property="UserId" Title="Jugador" Width="150px">
-                
                 <Template Context="datos">
                     @DatosDic[$"Nombre_{datos.UserId}"]
-
                 </Template>
                 <FooterTemplate>
                     <table>
@@ -156,15 +146,9 @@
                     else
                     {
                         <div></div> 
-                        <label style=" border-radius: 50%;
-    width: 34px;
-    height: 34px;
-    padding:10px;
-    background: #fff;
-    border: 1px solid #000;
-    color: #000;    
-    text-align: center;
-    font: 12px Arial, sans-serif;" >@datos.H1</label>
+                        
+
+                        <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_1"]), @datos.H1)"> @datos.H1</label>
                     }
                        
                 </Template>
@@ -197,15 +181,7 @@
                     }
                     else
                     {
-                        <label style=" border-radius: 50%;
-    width: 34px;
-    height: 34px;
-    padding:10px;
-    background: #fff;
-    border: 1px solid #000;
-    color: #02A30A;    
-    text-align: center;
-    font: 14px Arial, sans-serif;" > @datos.H2</label> 
+                        <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_2"]), @datos.H2)"> @datos.H2</label> 
                         
                     }
 
@@ -238,7 +214,7 @@
                     }
                     else
                     {
-                        <div> <label class="circulo">@datos.H3</label></div> 
+                        <div> <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_3"]), @datos.H3)">@datos.H3</label></div> 
                     }
                     
                 </Template>
@@ -268,7 +244,7 @@
                     }
                     else
                     {
-                        <label class="circulo">@datos.H4</label>
+                        <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_4"]), @datos.H4)">@datos.H4</label>
                     }
                     
                 </Template>
@@ -298,7 +274,7 @@
                     }
                     else
                     {
-                        @datos.H5
+                       <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_5"]), @datos.H5)"> @datos.H5</label>
                     }
                     
                 </Template>
@@ -328,7 +304,7 @@
                     }
                     else
                     {
-                        @datos.H6
+                       <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_6"]), @datos.H6)"> @datos.H6</label>
                     }
                     
                 </Template>
@@ -358,7 +334,7 @@
                     }
                     else
                     {
-                        @datos.H7
+                       <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_7"]), @datos.H7)"> @datos.H7</label>
                     }
                     
                 </Template>
@@ -388,7 +364,7 @@
                     }
                     else
                     {
-                        @datos.H8
+                       <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_8"]), @datos.H8)"> @datos.H8</label>
                     }
                     
                 </Template>
@@ -418,7 +394,7 @@
                     }
                     else
                     {
-                        @datos.H9
+                      <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_9"]), @datos.H9)"> @datos.H9</label>
                     }
                     
                 </Template>
@@ -455,7 +431,7 @@
                     }
                     else
                     {
-                        @datos.H10
+                      <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_10"]), @datos.H10)">  @datos.H10</label>
                     }
                     
                 </Template>
@@ -485,7 +461,7 @@
                     }
                     else
                     {
-                        @datos.H11
+                       <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_11"]), @datos.H11)"> @datos.H11</label>
                     }
                     
                 </Template>
@@ -515,7 +491,7 @@
                     }
                     else
                     {
-                        @datos.H12
+                      <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_12"]), @datos.H12)">  @datos.H12</label>
                     }
                     
                 </Template>
@@ -545,7 +521,7 @@
                     }
                     else
                     {
-                        @datos.H13
+                      <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_13"]), @datos.H13)">  @datos.H13</label>
                     }
                     
                 </Template>
@@ -575,7 +551,7 @@
                     }
                     else
                     {
-                        @datos.H14
+                      <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_14"]), @datos.H14)">  @datos.H14</label>
                     }
                     
                 </Template>
@@ -605,7 +581,7 @@
                     }
                     else
                     {
-                        @datos.H15
+                      <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_15"]), @datos.H15)">  @datos.H15</label>
                     }
                     
                 </Template>
@@ -635,7 +611,7 @@
                     }
                     else
                     {
-                        @datos.H16
+                      <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_16"]), @datos.H16)">  @datos.H16</label>
                     }
                     
                 </Template>
@@ -654,7 +630,8 @@
                 </FooterTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H17" Title="H17" FormatString="{0:d}" Width="60px" Filterable=false Sortable=false >
+            <RadzenDataGridColumn TItem="TarjetaMolde" Property="H17" Title="H17" FormatString="{0:d}" 
+                                    Width="60px" Filterable=false Sortable=false >
                 <Template Context="datos"> 
                      @if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "2" || 
                         (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] == "1" && 
@@ -665,7 +642,7 @@
                     }
                     else
                     {
-                        @datos.H17
+                      <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_17"]), @datos.H17)">  @datos.H17</label>
                     }
                     
                 </Template>
@@ -695,7 +672,7 @@
                     }
                     else
                     {
-                        @datos.H18
+                     <label style="@ElStyle(int.Parse(@DatosDic["HoyoPar_18"]), @datos.H18)">   @datos.H18 </label>
                     }
                     
                 </Template>
@@ -732,7 +709,7 @@
             </RadzenDataGridColumn>
         </Columns>
     </RadzenDataGrid>
-    <div> Birdie, Par, Bogie</div>
+    <div> Birdie<label style="@ElStyle(2,1)">0</label>, Bogie<label style="@ElStyle(1, 2)">0</label> </div>
     <RadzenCard>
         <RadzenFieldset AllowCollapse="true" Text="Agrega Extras a la tarjeta">
             <HeaderTemplate>
@@ -771,9 +748,9 @@ else
         {
             if (DatosDic[$"PermisoEscribir_{TarjetaId}_Usuario_{UserIdLog}"] != "0")
             {
-                Calculando = true;
+                Calculando = false;
                 G520Score scoreTemp = new();
-                scoreTemp.Estado = 2;
+                scoreTemp.Estado = 1;
                 scoreTemp.Player = jugadorIdd;
                 scoreTemp.Hoyo = hoyoT;
                 scoreTemp.Score = scoredd;
@@ -782,7 +759,7 @@ else
 
                 if (iddd.Count() < 10 )
                 {
-                    scoreTemp.Estado = 1;
+                    scoreTemp.Estado = 0;
                     scoreTemp.Id = ($"{TarjetaId}_{jugadorIdd}_{hoyoT}");   
                 }
 
@@ -796,9 +773,9 @@ else
                 ElMesage.Severity = NotificationSeverity.Warning;
                 ElMesage.Summary = "Tengo el dato!";
                 ElMesage.Detail = "Necesitas dar Guardar!!";
-                ElMesage.Duration = 1000;
+                ElMesage.Duration = 5000;
                 ShowNotification(ElMesage);
-                Calculando = false;
+                //Calculando = false;
             }
             else
             {
@@ -807,8 +784,6 @@ else
                 ElMesage.Detail = "No tienes permiso para escribir!";
                 ElMesage.Duration = 5000;
                 ShowNotification(ElMesage);
-
-                Calculando = false;
             }
         }
         else
@@ -818,12 +793,12 @@ else
             ElMesage.Detail = "Tarjeta Cerrada, no se actualiza!!!";
             ElMesage.Duration = 5000;
             ShowNotification(ElMesage);
-            Calculando = false;
         }
     }
 
     async void Guardar()
     {
+        Calculando = !Calculando;
         await UpDateWrite("Add");
     }
 
@@ -873,6 +848,39 @@ else
     void RowRender(RowRenderEventArgs<TarjetaMolde> args)
     {
         //args.Expandable = args.Data.ShipCountry == "France" || args.Data.ShipCountry == "Brazil";
+    }
+    
+    string ElStyle (int dificultad, int score)
+    {
+        if (score == 0) return "width: 34px; height: 34px; padding:10px; " +
+                    "color: #000; text-align: center; font: 12px Arial, sans-serif;";
+        switch (dificultad - score) {
+            case 0:
+                return "width: 34px; height: 34px; padding:10px; " +
+                    "color: #000; text-align: center; font: 12px Arial, sans-serif;";
+            case  1:
+                // Circle - Birdie;
+                return "border-radius: 50%; width: 34px; height: 34px; padding:10px; background: #fff;" +
+                        "border: 1px solid #000; color: #000; text-align: center; font: 12px Arial, sans-serif; ";
+           case > 1:
+                // Solid circle - Eagle or better;
+                return "width: 34px; height: 34px; padding:10px; background: #D0D0D0; border: 1px solid #000;" +
+                    "color: #000; text-align: center; font: 12px Arial, sans-serif;";
+           case < 1:
+                // Solid square - Double-bogey or worse
+                return "width: 34px; height: 34px; padding:10px; background: #fff; border: 1px solid #000;" +
+                    "color: #000; text-align: center; font: 12px Arial, sans-serif;";
+        }
+        
+
+
+        /*
+        No symbol - Par;
+        Circle - Birdie;
+        Solid circle - Eagle or better;
+        Square - Bogey;
+        Solid square - Double-bogey or worse.
+        */
     }
 }
 
